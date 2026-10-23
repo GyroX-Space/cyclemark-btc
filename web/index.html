@@ -110,7 +110,7 @@ lines.forEach(function(line){var p=document.createElement("p");p.textContent=lin
 }
 $("prevMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()-1);renderCalendar()});
 $("nextMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()+1);renderCalendar()});
-Promise.all([fetch("../data/signals/latest.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("Latest archive unavailable");return r.json()}),fetch("../data/signals/history.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("History archive unavailable");return r.json()}).catch(function(){return[]})])
+Promise.all([fetch("data/signals/latest.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("Latest archive unavailable");return r.json()}),fetch("data/signals/history.json",{cache:"no-store"}).then(function(r){if(!r.ok)throw Error("History archive unavailable");return r.json()}).catch(function(){return[]})])
 .then(function(data){renderLatest(data[0]);records=Array.isArray(data[1])?data[1]:[];if(!records.some(function(r){return r.date===data[0].date}))records.push(data[0]);records.sort(function(a,b){return a.date.localeCompare(b.date)});records.forEach(function(r){byDate[r.date]=r});if(records.length){var last=records[records.length-1];viewDate=new Date(last.date+"T00:00:00Z");viewDate.setDate(1);selectedDate=last.date}renderCalendar();if(selectedDate)showDetail(selectedDate,byDate[selectedDate])})
 .catch(function(err){text("connection","Archive unavailable");text("stateDescription","No published data archive could be loaded. The site will not invent a market state.");text("asOf",String(err.message||err));renderCalendar()});
 })();
