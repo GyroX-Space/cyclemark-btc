@@ -53,3 +53,8 @@ CycleMark's state is determined by its own documented model. Third-party indicat
 ## Initial release policy
 
 Until ingestion and validation are implemented, the application should show an explicit unavailable/not-yet-computed state. Do not substitute fabricated values or illustrative history for live data.
+
+
+## Historical research backfill
+
+The one-time script scripts/backfill_history.py can build a provisional daily research archive from available public price history and historical sentiment observations. These records are not original CycleMark decisions. Their source availability and revisions are not point-in-time verified, so the dashboard must label them as research backfill rather than validated historical states.
