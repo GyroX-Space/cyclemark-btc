@@ -1,6 +1,6 @@
 # CycleMark Methodology
 
-**Status:** Research proposal, version 0.1.0. Parameters are provisional and are not presented as validated predictive rules.
+**Status:** Research proposal, version 0.1.1. Parameters are provisional and are not presented as validated predictive rules.
 
 ## 1. Design goals
 
@@ -103,12 +103,11 @@ Every material change to features, weights, thresholds, data sources, or state l
 
 ## 10. Current prototype implementation
 
-The current daily pipeline publishes a **provisional BFS only**. It uses three available dimensions and preserves their configured weights: capitulation/panic (20%), cycle position (20%), and trend/price structure (20%). The 40% valuation and flow dimensions remain unavailable. The available 60% weight is renormalized for this provisional score and explicitly recorded in the daily JSON output.
+The current daily pipeline publishes a **provisional price-only BFS**. It uses two available dimensions: cycle position (20%) and trend/price structure (20%). The 25% valuation, 20% capitulation, and 15% flows dimensions remain unavailable in the core model. The available 40% configured weight is renormalized for this provisional score and explicitly recorded in the daily JSON output.
 
 Current hand-specified transforms are deliberately simple and are not trained or calibrated:
 
-- Capitulation/panic proxy: 100 minus the Alternative.me Fear & Greed value.
-- Cycle-position proxy: the close-to-all-time-high drawdown scaled linearly from 0 to 80% drawdown and clipped to the 0–100 range.
+- Cycle-position proxy: the close-to-observed-all-time-high drawdown scaled linearly from 0 to 80% drawdown and clipped to the 0–100 range.
 - Trend/price structure: the mean of clipped linear transforms of price relative to the 200-day moving average and 30/90-day momentum, plus a simple comparison of the most recent 30-day low with the prior 30-day low.
 
-These transforms are scaffolding for testing the data pipeline, not claims of statistical validity. The daily record marks BFS as provisional, records missing dimensions and feature values, and leaves BOS and the composite state unavailable. A future model version must replace or justify these transforms through predeclared walk-forward validation before production state labels are enabled.
+The observed all-time high depends on the available history and is not necessarily the full market-history ATH. These transforms are scaffolding for testing the data pipeline, not claims of statistical validity. Fear & Greed may be included in the daily record for auxiliary display, but it does not contribute to BFS. The daily record marks BFS as provisional, records missing dimensions and feature values, and leaves BOS and the composite state unavailable.
