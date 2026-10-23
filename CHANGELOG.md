@@ -1,16 +1,17 @@
 # Changelog
 
-All notable project changes are recorded here. This project is in an early research stage.
+Notable project changes are recorded here. This project is in early research development; entries do not imply predictive validity.
 
-## 0.1.0 — Research Foundation
+## Unreleased
 
-- Added English project documentation, methodology proposal, source governance, and backtesting protocol.
-- Added provisional weighted-score and four-state classification primitives.
-- Added tests for score validation, missing data, and state mapping.
-- Added public BTC spot candle and Alternative.me Fear & Greed adapters.
-- Added a daily market-context archive pipeline.
-- Added an English responsive dashboard with a historical archive calendar.
-- Added an AWS Linux daily runner and deployment guide.
-- Added GitHub Actions test and static-site deployment workflows.
-- Added MIT License.
-- Composite BFS/BOS outputs remain withheld pending implementation of required features and validation.
+- Established a raw-market-data-first governance rule for all core scores.
+- Removed Alternative.me Fear & Greed from BFS calculations; it is retained only as optional auxiliary display context.
+- Reduced prototype BFS configured-weight coverage from 60% to 40% because only price-derived cycle-position and trend dimensions are currently implemented.
+- Clarified that third-party calculated indicators, including provider-computed valuation metrics, are not core inputs by default.
+- Updated methodology and data-source documentation to require explicit exceptions, versioning, and validation before third-party derived indicators can affect scores.
+
+## 0.1.0
+
+- Added public BTC market-data ingestion and provisional BFS research scaffolding.
+- Added daily archive, historical research backfill, static dashboard, AWS runner, and documentation.
+- BOS and composite state remain withheld pending complete features and validation.
