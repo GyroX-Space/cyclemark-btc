@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "A transparent research framework for Bitcoin cycle states."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "Proprietary until a license is selected" }
+license = { text = "MIT" }
 authors = [{ name = "CycleMark Contributors" }]
 dependencies = []
 
