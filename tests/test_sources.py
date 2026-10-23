@@ -30,3 +30,18 @@ def test_fear_greed_normalizes_timestamp(monkeypatch):
     assert result["classification"] == "Extreme Fear"
     assert result["observation_timestamp_utc"].endswith("Z")
     assert result["source"] == "alternative_me_fear_greed_api"
+
+
+def test_fear_greed_history_sorts_observations(monkeypatch):
+    import cyclemark.sources as sources
+
+    monkeypatch.setattr(
+        sources,
+        "_get_json",
+        lambda url: {"data": [
+            {"value": "40", "timestamp": "1700086400", "value_classification": "Fear"},
+            {"value": "20", "timestamp": "1700000000", "value_classification": "Extreme Fear"},
+        ]},
+    )
+    result = sources.fetch_fear_greed_history()
+    assert [item["value"] for item in result] == [20, 40]
