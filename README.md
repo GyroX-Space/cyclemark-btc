@@ -19,7 +19,7 @@ CycleMark is an open-source research project for assessing Bitcoin's long-term m
 
 - Public BTC spot candle ingestion from the Binance market-data API.
 - Crypto Fear & Greed ingestion from Alternative.me.
-- Daily market-context archive, provisional BFS calculation, and JSON output.
+- Daily market-context archive, provisional BFS calculation, JSON output, and a clearly labeled historical research backfill.
 - Responsive English-language dashboard and historical calendar.
 - Provisional scoring primitives and chronological backtesting utilities with tests.
 - AWS Linux daily runner and deployment documentation.
@@ -59,6 +59,7 @@ Python 3.11 or later is recommended.
 
     python -m pip install -e ".[dev]"
     pytest
+    python scripts/backfill_history.py
     python scripts/run_daily.py
 
 The daily script makes outbound HTTPS requests to public data APIs. Review provider terms and source availability before relying on it operationally.
