@@ -8,6 +8,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from cyclemark.archive import build_daily_record, write_json
+from cyclemark.features import compute_provisional_bfs
 from cyclemark.sources import DataSourceError, fetch_binance_daily_klines, fetch_fear_greed, utc_now
 
 SIGNALS_DIR = ROOT / "data" / "signals"
@@ -23,6 +24,11 @@ def main() -> int:
     fear_greed = fetch_fear_greed()
     latest = finalized[-1]
     closes = [c["close"] for c in finalized]
+    highs = [c["high"] for c in finalized]
+    lows = [c["low"] for c in finalized]
+    bfs_result = compute_provisional_bfs(
+        closes=closes, highs=highs, lows=lows, fear_greed_value=fear_greed["value"]
+    )
     sma_200 = sum(closes[-200:]) / 200
     high_window = finalized[-365:]
     high_365 = max(c["high"] for c in high_window)
@@ -34,6 +40,7 @@ def main() -> int:
         "sma_200_usd": round(sma_200, 2),
         "price_vs_sma_200_pct": round((price / sma_200 - 1) * 100, 2),
         "drawdown_from_365d_high_pct": round((price / high_365 - 1) * 100, 2),
+        "drawdown_from_all_time_high_pct": bfs_result["feature_values"]["drawdown_from_all_time_high_pct"],
         "momentum_30d_pct": round((closes[-1] / closes[-31] - 1) * 100, 2),
         "momentum_90d_pct": round((closes[-1] / closes[-91] - 1) * 100, 2),
         "price_source": "Binance public spot market API", "history_candles": len(finalized),
@@ -48,11 +55,18 @@ def main() -> int:
             "sentiment": {"name": "Alternative.me Crypto Fear & Greed Index", "retrieved_at_utc": fear_greed["retrieved_at_utc"]},
         },
         notes=[
-            "BFS and BOS are withheld until the complete feature set and validation protocol are implemented.",
+            "BFS is provisional and uses only sentiment, cycle-position, and trend features; valuation and flow dimensions are missing.",
+            "BOS and the composite state are withheld until the complete model and validation protocol are implemented.",
             "Historical point-in-time source revisions have not been reconstructed.",
-            "This record is research context, not a trading signal.",
+            "This record is research context, not a validated trading signal.",
         ],
     )
+    record["bfs"] = bfs_result["bfs"]
+    record["bfs_status"] = bfs_result["bfs_status"]
+    record["score_coverage"] = {"configured_weight_coverage_pct": bfs_result["configured_weight_coverage_pct"]}
+    record["dimension_scores"] = bfs_result["dimension_scores"]
+    record["feature_values"] = bfs_result["feature_values"]
+    record["limitations"] = bfs_result["limitations"]
     SIGNALS_DIR.mkdir(parents=True, exist_ok=True)
     write_json(SIGNALS_DIR / "latest.json", record)
     write_json(SIGNALS_DIR / (record["date"] + ".json"), record)
@@ -65,7 +79,8 @@ def main() -> int:
     print(f"Updated CycleMark public data for {record['date']}")
     print(f"Price: USD {price:,.2f}")
     print(f"Fear & Greed: {fear_greed['value']} ({fear_greed['classification']})")
-    print("State and scores remain withheld pending model validation.")
+    print("Provisional BFS: " + str(bfs_result["bfs"]) + " (60% configured-weight coverage; not validated)")
+    print("BOS and the composite state remain withheld pending model validation.")
     return 0
 
 if __name__ == "__main__":
