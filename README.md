@@ -4,7 +4,7 @@
 
 CycleMark is an open-source research project for assessing Bitcoin's long-term market regime through a transparent, versioned framework. It combines a composite model with third-party context and a public daily history of its states.
 
-> **Research status:** Early-stage research foundation. Scores, weights, thresholds, and state rules are provisional and have not been validated as predictive. The initial pipeline publishes market context only; it does not invent live scores or historical signals.
+> **Research status:** Early-stage research foundation. The pipeline publishes public market context and a provisional BFS with 60% configured-weight coverage. BFS is not validated; BOS and composite state are withheld. No historical signals are fabricated.
 
 ## Product goals
 
@@ -19,13 +19,13 @@ CycleMark is an open-source research project for assessing Bitcoin's long-term m
 
 - Public BTC spot candle ingestion from the Binance market-data API.
 - Crypto Fear & Greed ingestion from Alternative.me.
-- Daily market-context archive schema and JSON output.
+- Daily market-context archive, provisional BFS calculation, and JSON output.
 - Responsive English-language dashboard and historical calendar.
-- Provisional scoring primitives with tests.
+- Provisional scoring primitives and chronological backtesting utilities with tests.
 - AWS Linux daily runner and deployment documentation.
 - GitHub Actions test workflow and static-site deployment workflow.
 
-The current data pipeline does **not** yet implement the complete on-chain and derivatives feature set or a validated forward-return BOS model. Until those are implemented and tested, the dashboard deliberately withholds composite scores and states.
+The current data pipeline does **not** yet implement the complete on-chain and derivatives feature set or a validated forward-return BOS model. BFS is a clearly marked heuristic research score, not a calibrated probability. The dashboard withholds BOS and composite state until the required model and validation work is complete.
 
 ## Four-state research framework
 
