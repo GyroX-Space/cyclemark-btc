@@ -31,7 +31,7 @@ Configure a secure credential store or an SSH deploy key. Do not embed a token i
     python scripts/run_daily.py
     git status --short
 
-Review the generated data before enabling automatic pushes. This initial pipeline intentionally withholds BFS, BOS, and a composite state until the full model is implemented and validated.
+Review the generated data before enabling automatic pushes. The current pipeline publishes a provisional BFS based on 60% of configured dimension weight. It intentionally withholds BOS and the composite state until the full model is implemented and validated.
 
 ## Schedule the daily job
 
