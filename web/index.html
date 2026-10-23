@@ -28,7 +28,7 @@ a{color:#91c5ff}button{font:inherit}.shell{max-width:1180px;margin:auto;padding:
 <section class="panel">
 <div class="eyebrow">Model scores</div>
 <div class="metric-grid" style="margin-top:12px">
-<div class="metric"><div class="metric-label">BFS · Bottom Formation</div><div class="metric-value" id="bfs">—</div><div class="metric-note">0–100 · Not yet validated</div></div>
+<div class="metric"><div class="metric-label">BFS · Bottom Formation</div><div class="metric-value" id="bfs">—</div><div class="metric-note" id="bfsNote">0–100 · Not yet validated</div></div>
 <div class="metric"><div class="metric-label">BOS · Buy Opportunity</div><div class="metric-value" id="bos">—</div><div class="metric-note">12–18 month horizon · Not yet validated</div></div>
 </div>
 </section>
@@ -70,7 +70,7 @@ var p=r.market_data&&r.market_data.price||{},f=r.market_data&&r.market_data.fear
 text("connection","Archive loaded · "+(r.status||"status unavailable"));
 text("version","Model v"+(r.model_version||"unknown"));
 text("asOf","Data date: "+dateLabel(r.date)+" · Generated: "+(r.generated_at_utc||"timestamp unavailable"));
-text("bfs",r.bfs==null?"Not available":fmt(r.bfs));text("bos",r.bos==null?"Not available":fmt(r.bos));
+text("bfs",r.bfs==null?"Not available":fmt(r.bfs));text("bos",r.bos==null?"Not available":fmt(r.bos));text("bfsNote",r.bfs==null?"Not available":(r.bfs_status==="provisional_unvalidated"?"Provisional · "+((r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0)+"% weight coverage":"0–100 · Not validated"));
 var state=r.state||"research";text("stateName",state==="research"?"Research Buildout":state.charAt(0).toUpperCase()+state.slice(1));
 $("stateDot").style.background=stateColors[state]||"#f4b740";
 text("stateDescription",r.state?"Published state from the versioned model archive.":"Public data is available, but validated composite state signals have not been released.");
@@ -103,6 +103,8 @@ var lines=r?[
 "BTC reference: "+(r.market_data&&r.market_data.price&&r.market_data.price.price_usd!=null?"$"+fmt(r.market_data.price.price_usd):"Unavailable"),
 "Fear & Greed: "+(r.market_data&&r.market_data.fear_greed&&r.market_data.fear_greed.value!=null?fmt(r.market_data.fear_greed.value)+"/100":"Unavailable"),
 "BFS: "+(r.bfs==null?"Not available":fmt(r.bfs))+" · BOS: "+(r.bos==null?"Not available":fmt(r.bos)),
+"BFS status: "+(r.bfs_status||"Unavailable")+" · Configured weight coverage: "+((r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0)+"%",
+"Dimension scores: "+JSON.stringify(r.dimension_scores||{}),
 "Model version: "+(r.model_version||"Unknown"),
 "Generated at: "+(r.generated_at_utc||"Unknown")
 ].concat(r.notes||[]):["No record exists for this date. The calendar does not infer missing observations."];
