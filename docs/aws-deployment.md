@@ -41,7 +41,7 @@ Example: run at 02:20 UTC daily. Confirm the server timezone before using cron.
 
 Add the following line, replacing the home path if necessary:
 
-    20 2 * * * CYCLEMARK_DIR=/home/ubuntu/cyclemark-btc /home/ubuntu/cyclemark-btc/scripts/run_daily.sh >> /home/ubuntu/cyclemark-btc/daily.log 2>&1
+    20 2 * * * CYCLEMARK_DIR=/home/ubuntu/cyclemark-btc bash /home/ubuntu/cyclemark-btc/scripts/run_daily.sh >> /home/ubuntu/cyclemark-btc/daily.log 2>&1
 
 Ensure cron can access Git credentials and Python. Rotate logs and alert on non-zero exit status or stale latest data. A systemd timer explicitly configured for UTC is another option.
 
