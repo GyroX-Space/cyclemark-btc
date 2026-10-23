@@ -28,10 +28,11 @@ Configure a secure credential store or an SSH deploy key. Do not embed a token i
     python -m pip install --upgrade pip
     python -m pip install -e ".[dev]"
     pytest
+    python scripts/backfill_history.py
     python scripts/run_daily.py
     git status --short
 
-Review the generated data before enabling automatic pushes. The current pipeline publishes a provisional BFS based on 60% of configured dimension weight. It intentionally withholds BOS and the composite state until the full model is implemented and validated.
+Run the historical backfill once before the first daily run if you want a calendar of provisional research records. Backfilled records are not historical published decisions and are not point-in-time validated. Review the generated data before enabling automatic pushes. The current pipeline publishes a provisional BFS based on 60% of configured dimension weight. It intentionally withholds BOS and the composite state until the full model is implemented and validated.
 
 ## Schedule the daily job
 
