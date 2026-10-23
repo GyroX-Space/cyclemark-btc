@@ -12,7 +12,8 @@ from cyclemark.features import compute_provisional_bfs
 from cyclemark.sources import DataSourceError, fetch_binance_daily_klines, fetch_fear_greed, utc_now
 
 SIGNALS_DIR = ROOT / "data" / "signals"
-MODEL_VERSION = "0.1.0"
+MODEL_VERSION = "0.1.1"
+
 
 def main() -> int:
     generated_at = utc_now()
@@ -21,14 +22,18 @@ def main() -> int:
     finalized = [c for c in candles if datetime.fromtimestamp(c["close_time_ms"] / 1000, timezone.utc) < now]
     if len(finalized) < 200:
         raise DataSourceError("At least 200 finalized daily candles are required.")
-    fear_greed = fetch_fear_greed()
+    # Optional third-party context: failure must not block raw-price scoring.
+    try:
+        fear_greed = fetch_fear_greed()
+    except DataSourceError as exc:
+        fear_greed = None
+        print(f"Auxiliary Fear & Greed data unavailable: {exc}", file=sys.stderr)
+
     latest = finalized[-1]
     closes = [c["close"] for c in finalized]
     highs = [c["high"] for c in finalized]
     lows = [c["low"] for c in finalized]
-    bfs_result = compute_provisional_bfs(
-        closes=closes, highs=highs, lows=lows, fear_greed_value=fear_greed["value"]
-    )
+    bfs_result = compute_provisional_bfs(closes=closes, highs=highs, lows=lows)
     sma_200 = sum(closes[-200:]) / 200
     high_window = finalized[-365:]
     high_365 = max(c["high"] for c in high_window)
@@ -45,17 +50,26 @@ def main() -> int:
         "momentum_90d_pct": round((closes[-1] / closes[-91] - 1) * 100, 2),
         "price_source": "Binance public spot market API", "history_candles": len(finalized),
     }
+    sources = {
+        "price": {"name": "Binance public spot market API", "retrieved_at_utc": generated_at, "point_in_time_history_verified": False},
+    }
+    market_data = {"price": price_context}
+    if fear_greed is not None:
+        market_data["fear_greed"] = fear_greed
+        sources["auxiliary_sentiment"] = {
+            "name": "Alternative.me Crypto Fear & Greed Index",
+            "retrieved_at_utc": fear_greed["retrieved_at_utc"],
+            "role": "display_only_excluded_from_core_scores",
+        }
     record = build_daily_record(
         as_of_date=datetime.fromtimestamp(latest["open_time_ms"] / 1000, timezone.utc).date(),
         generated_at_utc=generated_at, model_version=MODEL_VERSION,
         status="research_data_available_signals_not_yet_validated",
-        market_data={"price": price_context, "fear_greed": fear_greed},
-        sources={
-            "price": {"name": "Binance public spot market API", "retrieved_at_utc": generated_at, "point_in_time_history_verified": False},
-            "sentiment": {"name": "Alternative.me Crypto Fear & Greed Index", "retrieved_at_utc": fear_greed["retrieved_at_utc"]},
-        },
+        market_data=market_data,
+        sources=sources,
         notes=[
-            "BFS is provisional and uses only sentiment, cycle-position, and trend features; valuation and flow dimensions are missing.",
+            "BFS is provisional and uses price-derived cycle-position and trend features only; three dimensions are missing.",
+            "Third-party Fear & Greed is auxiliary display context and is excluded from BFS, BOS, and state assignment.",
             "BOS and the composite state are withheld until the complete model and validation protocol are implemented.",
             "Historical point-in-time source revisions have not been reconstructed.",
             "This record is research context, not a validated trading signal.",
@@ -78,10 +92,12 @@ def main() -> int:
     write_json(history_path, history)
     print(f"Updated CycleMark public data for {record['date']}")
     print(f"Price: USD {price:,.2f}")
-    print(f"Fear & Greed: {fear_greed['value']} ({fear_greed['classification']})")
-    print("Provisional BFS: " + str(bfs_result["bfs"]) + " (60% configured-weight coverage; not validated)")
+    if fear_greed is not None:
+        print(f"Auxiliary Fear & Greed: {fear_greed['value']} ({fear_greed['classification']}); excluded from scores")
+    print(f"Provisional BFS: {bfs_result['bfs']} (40% configured-weight coverage; not validated)")
     print("BOS and the composite state remain withheld pending model validation.")
     return 0
+
 
 if __name__ == "__main__":
     try:
