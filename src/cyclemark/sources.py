@@ -31,7 +31,7 @@ def _get_json(url: str, timeout: int = 20, retries: int = 3):
 def fetch_binance_daily_klines(start_time_ms: int | None = None) -> list[dict]:
     """Fetch BTCUSDT daily candles, retaining source close timestamps."""
     rows = []
-    cursor = start_time_ms
+    cursor = 0 if start_time_ms is None else start_time_ms
     while True:
         params = {"symbol": "BTCUSDT", "interval": "1d", "limit": 1000}
         if cursor is not None:
