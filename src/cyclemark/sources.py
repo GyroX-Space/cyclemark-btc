@@ -76,3 +76,35 @@ def fetch_fear_greed() -> dict:
         "observation_timestamp_utc": datetime.fromtimestamp(timestamp, timezone.utc).isoformat().replace("+00:00", "Z"),
         "retrieved_at_utc": utc_now(), "source": "alternative_me_fear_greed_api",
     }
+
+
+def fetch_fear_greed_history() -> list[dict]:
+    """Fetch the historical Alternative.me series for research backfill.
+
+    Historical values are not assumed to have been available to CycleMark at
+    their observation timestamps. Backfilled outputs must retain that caveat.
+    """
+    payload = _get_json("https://api.alternative.me/fng/?limit=0&format=json")
+    raw = payload.get("data")
+    if not isinstance(raw, list):
+        raise DataSourceError("Fear & Greed history response did not contain a data list.")
+    result = []
+    for item in raw:
+        try:
+            value = int(item["value"])
+            timestamp = int(item["timestamp"])
+            classification = str(item["value_classification"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise DataSourceError(f"Malformed Fear & Greed history row: {exc}") from exc
+        if not 0 <= value <= 100:
+            raise DataSourceError("Fear & Greed history value is outside [0, 100].")
+        result.append({
+            "value": value,
+            "classification": classification,
+            "observation_timestamp_utc": datetime.fromtimestamp(timestamp, timezone.utc).isoformat().replace("+00:00", "Z"),
+            "source": "alternative_me_fear_greed_api",
+        })
+    result.sort(key=lambda item: item["observation_timestamp_utc"])
+    if not result:
+        raise DataSourceError("Fear & Greed history is empty.")
+    return result
