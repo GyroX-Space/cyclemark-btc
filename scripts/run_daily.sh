@@ -2,7 +2,11 @@
 set -Eeuo pipefail
 PROJECT_DIR="${CYCLEMARK_DIR:-$HOME/cyclemark-btc}"
 cd "$PROJECT_DIR"
-git pull --ff-only origin main
+if ! git diff --quiet || ! git diff --cached --quiet; then
+  echo "Working tree is dirty; refusing to overwrite local changes."
+  exit 1
+fi
+git pull --rebase origin main
 python3 -m venv .venv 2>/dev/null || true
 source .venv/bin/activate
 python -m pip install --upgrade pip
