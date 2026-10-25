@@ -53,8 +53,17 @@ Ensure cron can access Git credentials and Python. Rotate logs and alert on non-
 - Review generated changes during the initial observation period.
 - Restrict the server account and repository credential to minimum required permissions.
 - Never commit credentials, prohibited raw data, or private server configuration.
-- If an API fails, the job must fail without pushing a fabricated signal.
+- If a core price API fails or core data fails quality checks, the job exits non-zero without publishing a record.
+- Optional source failures (Fear & Greed, funding) do not block the price-only record; check `data_quality.optional_sources` before assuming data is complete.
 - Consider a separate bot branch and reviewed pull requests if branch protection is enabled.
+
+## Rerun and recovery
+
+- Rerun the same date safely. Identical content is reported as `unchanged` and the date file is not rewritten.
+- Materially different content increments `revision`, preserves `first_published_at_utc`, and archives the previous version under `data/signals/revisions/`.
+- Writes are atomic (temporary file, flush, fsync, then replace), and `latest.json` is written after `history.json` so an interrupted run cannot expose an inconsistent newest record.
+- If a run is interrupted, inspect `data/signals/` for the expected date and rerun. Do not hand-edit `history.json`, `latest.json`, or revision files; rerun the pipeline instead.
+- If the local funding archive is corrupted, the daily record still publishes and the log reports `funding_archive.status=failed`. Repair the archive separately before relying on funding history.
 
 ## Current limitations
 

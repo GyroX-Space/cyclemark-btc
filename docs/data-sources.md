@@ -59,6 +59,21 @@ For historical simulation, use the value that was actually available at the simu
 7. Clearly distinguish observed values, estimates, third-party derived indicators, and unavailable data.
 8. Never use a third-party indicator to manually override a CycleMark state.
 
+## Core quality gates and optional-source isolation
+
+Every daily run writes a `data_quality` block into the published record:
+
+- `data_quality.core_price` summarizes the finalized candle series, including candle count, first and last dates, expected calendar days, missing dates (truncated), duplicate open timestamps, non-UTC-midnight opens, irregular close offsets, latest candle age, and explicit `fatal_issues` and `warnings`.
+- `data_quality.optional_sources` records whether each optional feed was `available`, `empty`, or `unavailable`, including an error string when retrieval failed.
+
+The following core conditions fail closed: fewer than 200 finalized candles, an empty series, duplicate or non-increasing open timestamps, opens that are not UTC midnight, irregular close offsets, calendar gaps beyond the allowed threshold, a latest candle older than the staleness window, or a future-dated candle. When a fatal core issue occurs, no daily record is published.
+
+Optional sources are isolated. A Fear & Greed or funding-rate failure is recorded as `unavailable` and the price-only record still publishes. A corrupted or unreadable local funding archive is logged as a non-blocking `funding_archive.status=failed`. Optional data must never be silently substituted for a core input.
+
+## Idempotent publication and revisions
+
+Publishing is deterministic on content: retrieval and generated timestamps are excluded from the fingerprint, so a rerun with identical observations is reported as `unchanged` and does not rewrite the date file. A material change for the same date increments `revision`, preserves `first_published_at_utc`, and archives the previous published version under `data/signals/revisions/<date>-r<revision>.json`. History holds one canonical record per date; `latest.json` is written last so an interrupted run cannot expose an inconsistent newest record.
+
 ## Historical research backfill
 
 The daily runner now archives the latest Binance USD-M BTCUSDT perpetual funding-rate page in `data/market/binance_funding_rates.json`, deduplicating unchanged observations while preserving changed values at the same timestamp as separate records. This archive starts when the runner is deployed unless a historical funding backfill is run separately. Funding data is not yet a core scoring input.
