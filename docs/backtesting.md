@@ -25,7 +25,7 @@ For signal date t:
 - 18-month forward return: close at t + 548 calendar days divided by close at t, minus 1.
 - Adverse excursion: the minimum future price relative to the entry price over a predeclared horizon.
 
-Define the price series, missing-day policy, horizon convention, and whether returns use close-to-close observations before running the evaluation. Do not label a signal using a future low and then imply the model knew that low at signal time.
+Define the price series, missing-day policy, horizon convention, and whether returns use close-to-close observations before running the evaluation. Do not label a signal using a future low and then imply the model knew that low at signal time. The current research utility in `src/cyclemark/research.py` uses the first available observation on or after the target calendar date; it records both the target calendar date and actual observation date, and preserves unobservable labels as null. Entry-relative adverse/favorable excursions use future lows/highs strictly after the signal date through the target observation. See [Forward Outcome Labels](forward-labels.md) for exact conventions.
 
 ## Chronological evaluation
 
