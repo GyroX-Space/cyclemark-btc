@@ -5,6 +5,7 @@ features to a live scoring pipeline. Dates are UTC calendar dates in ISO format.
 """
 from __future__ import annotations
 
+from bisect import bisect_left
 from datetime import date, timedelta
 from math import isfinite
 from typing import Sequence
@@ -54,6 +55,8 @@ def build_forward_labels(
         raise ValueError("Dates, closes, highs, and lows must have equal lengths.")
     if not count:
         raise ValueError("At least one observation is required.")
+    if not horizons_days:
+        raise ValueError("At least one horizon is required.")
     if any(not isinstance(h, int) or isinstance(h, bool) or h <= 0 for h in horizons_days):
         raise ValueError("Horizon values must be positive integer calendar days.")
     if len(set(horizons_days)) != len(horizons_days):
@@ -63,6 +66,8 @@ def build_forward_labels(
     if any(float(low) > float(high) or not float(low) <= float(close) <= float(high)
            for close, high, low in zip(closes, highs, lows)):
         raise ValueError("Each candle must satisfy low <= close <= high.")
+    if not adverse_thresholds:
+        raise ValueError("At least one adverse threshold is required.")
     if any(not isfinite(float(t)) or not 0 < float(t) < 1 for t in adverse_thresholds):
         raise ValueError("Adverse thresholds must be finite fractions between zero and one.")
     if len(set(adverse_thresholds)) != len(adverse_thresholds):
@@ -73,10 +78,8 @@ def build_forward_labels(
         horizon_labels: dict[str, dict | None] = {}
         for horizon in horizons_days:
             target_date = signal_date + timedelta(days=horizon)
-            target_index = next(
-                (j for j in range(i + 1, count) if parsed_dates[j] >= target_date),
-                None,
-            )
+            candidate = bisect_left(parsed_dates, target_date, lo=i + 1)
+            target_index = candidate if candidate < count else None
             if target_index is None:
                 horizon_labels[str(horizon)] = None
                 continue
