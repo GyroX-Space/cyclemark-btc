@@ -22,7 +22,7 @@ CycleMark is an open-source research project for assessing Bitcoin's long-term m
 - Alternative.me Crypto Fear & Greed ingestion for auxiliary display only; it does not enter BFS.
 - Daily market-context archive, JSON output, and a clearly labeled historical research backfill.
 - Responsive English-language dashboard and historical calendar.
-- Provisional scoring primitives and chronological backtesting utilities with tests.
+- Provisional scoring primitives, chronological split utilities, and research-only forward outcome labels with tests.
 - AWS Linux daily runner and deployment documentation.
 - GitHub Actions test workflow and static-site deployment workflow.
 
@@ -57,6 +57,7 @@ A score is not a probability unless a separate probability model is trained and 
 - [Methodology](docs/methodology.md)
 - [Data sources and governance](docs/data-sources.md)
 - [Backtesting protocol](docs/backtesting.md)
+- [Forward outcome labels and leakage boundary](docs/forward-labels.md)
 - [Engineering PRD and delivery acceptance](docs/implementation-prd.md)
 - [AWS Linux daily deployment](docs/aws-deployment.md)
 - [Static dashboard hosting](docs/site-hosting.md)
