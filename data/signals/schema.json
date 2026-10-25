@@ -3,20 +3,128 @@
   "$id": "https://github.com/GyroX-Space/cyclemark-btc/blob/main/data/signals/schema.json",
   "title": "CycleMark Daily Record",
   "type": "object",
-  "required": ["schema_version", "date", "generated_at_utc", "model_version", "status", "state", "bfs", "bos", "scores_are_validated", "market_data", "sources", "notes"],
+  "required": [
+    "schema_version",
+    "date",
+    "generated_at_utc",
+    "model_version",
+    "status",
+    "state",
+    "bfs",
+    "bos",
+    "scores_are_validated",
+    "market_data",
+    "sources",
+    "notes"
+  ],
   "properties": {
-    "schema_version": {"type": "string"},
-    "date": {"type": "string", "format": "date"},
-    "generated_at_utc": {"type": "string", "format": "date-time"},
-    "model_version": {"type": "string"},
-    "status": {"type": "string"},
-    "state": {"type": ["string", "null"], "enum": ["risk", "watch", "forming", "opportunity", null]},
-    "bfs": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
-    "bos": {"type": ["number", "null"], "minimum": 0, "maximum": 100},
-    "scores_are_validated": {"type": "boolean"},
-    "market_data": {"type": "object"},
-    "sources": {"type": "object"},
-    "notes": {"type": "array", "items": {"type": "string"}}
+    "schema_version": {
+      "type": "string"
+    },
+    "date": {
+      "type": "string",
+      "format": "date"
+    },
+    "generated_at_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "model_version": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "state": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "risk",
+        "watch",
+        "forming",
+        "opportunity",
+        null
+      ]
+    },
+    "bfs": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "bfs_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "bos": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 100
+    },
+    "scores_are_validated": {
+      "type": "boolean"
+    },
+    "score_coverage": {
+      "type": "object",
+      "properties": {
+        "configured_weight_coverage_pct": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      },
+      "additionalProperties": true
+    },
+    "dimension_scores": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "minimum": 0,
+        "maximum": 100
+      }
+    },
+    "feature_values": {
+      "type": "object",
+      "additionalProperties": {
+        "type": [
+          "number",
+          "integer",
+          "string",
+          "boolean",
+          "null"
+        ]
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "market_data": {
+      "type": "object"
+    },
+    "sources": {
+      "type": "object"
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
   },
   "additionalProperties": true
 }
