@@ -116,6 +116,46 @@
     "market_data": {
       "type": "object"
     },
+    "data_quality": {
+      "type": "object",
+      "description": "Per-run quality assessment. Core quality failures prevent publication; optional-source failures are isolated here.",
+      "properties": {
+        "core_price": {
+          "type": "object"
+        },
+        "optional_sources": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "status": {
+                "type": "string",
+                "enum": ["available", "empty", "unavailable"]
+              },
+              "error": {
+                "type": "string"
+              },
+              "observations_retrieved": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Publication revision for this date. The first publication is revision 1."
+    },
+    "first_published_at_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this date was first published, preserved across revisions."
+    },
     "sources": {
       "type": "object"
     },

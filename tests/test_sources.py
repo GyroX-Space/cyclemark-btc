@@ -1,8 +1,116 @@
 from datetime import datetime, timezone
+from email.message import Message
+from urllib.error import HTTPError, URLError
 
 import pytest
 
 from cyclemark.sources import DataSourceError, fetch_fear_greed
+
+
+class _Response:
+    status = 200
+
+    def __init__(self, payload: bytes = b'{"ok": true}'):
+        self.payload = payload
+
+    def read(self) -> bytes:
+        return self.payload
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        return False
+
+
+def test_get_json_retries_transient_errors_then_succeeds(monkeypatch):
+    import cyclemark.sources as sources
+
+    calls = {"count": 0}
+    sleeps: list[float] = []
+
+    def fake_urlopen(request, timeout):
+        calls["count"] += 1
+        if calls["count"] == 1:
+            raise URLError("temporary failure")
+        return _Response()
+
+    monkeypatch.setattr(sources, "urlopen", fake_urlopen)
+    monkeypatch.setattr(sources.time, "sleep", lambda seconds: sleeps.append(seconds))
+
+    assert sources._get_json("https://example.invalid") == {"ok": True}
+    assert calls["count"] == 2
+    assert sleeps == [1.0]
+
+
+def test_get_json_honors_bounded_retry_after(monkeypatch):
+    import cyclemark.sources as sources
+
+    calls = {"count": 0}
+    sleeps: list[float] = []
+
+    def fake_urlopen(request, timeout):
+        calls["count"] += 1
+        if calls["count"] == 1:
+            headers = Message()
+            headers["Retry-After"] = "7"
+            raise HTTPError("https://example.invalid", 429, "rate limited", headers, None)
+        return _Response()
+
+    monkeypatch.setattr(sources, "urlopen", fake_urlopen)
+    monkeypatch.setattr(sources.time, "sleep", lambda seconds: sleeps.append(seconds))
+
+    assert sources._get_json("https://example.invalid") == {"ok": True}
+    assert sleeps == [7.0]
+
+
+def test_get_json_does_not_retry_non_retryable_client_errors(monkeypatch):
+    import cyclemark.sources as sources
+
+    calls = {"count": 0}
+    sleeps: list[float] = []
+
+    def fake_urlopen(request, timeout):
+        calls["count"] += 1
+        raise HTTPError("https://example.invalid", 404, "not found", Message(), None)
+
+    monkeypatch.setattr(sources, "urlopen", fake_urlopen)
+    monkeypatch.setattr(sources.time, "sleep", lambda seconds: sleeps.append(seconds))
+
+    with pytest.raises(DataSourceError, match="Non-retryable HTTP 404"):
+        sources._get_json("https://example.invalid")
+    assert calls["count"] == 1
+    assert sleeps == []
+
+
+def test_get_json_backoff_is_bounded(monkeypatch):
+    import cyclemark.sources as sources
+
+    sleeps: list[float] = []
+
+    def fake_urlopen(request, timeout):
+        raise URLError("down")
+
+    monkeypatch.setattr(sources, "urlopen", fake_urlopen)
+    monkeypatch.setattr(sources.time, "sleep", lambda seconds: sleeps.append(seconds))
+
+    with pytest.raises(DataSourceError, match="Unable to retrieve"):
+        sources._get_json("https://example.invalid", retries=3)
+    assert sleeps == [1.0, 2.0]
+
+
+def test_candle_fetch_reports_duplicate_rows(monkeypatch):
+    import cyclemark.sources as sources
+
+    row = [0, "100", "110", "90", "105", "2", 86_399_999]
+    monkeypatch.setattr(sources, "_get_json", lambda url: [row, row])
+
+    rows, stats = sources.fetch_binance_daily_klines_with_stats()
+    assert len(rows) == 1
+    assert stats["duplicate_rows_dropped"] == 1
+    assert stats["raw_rows"] == 2
+    assert stats["pages"] == 1
+
 
 
 def test_fear_greed_rejects_out_of_range_value(monkeypatch):
@@ -130,3 +238,52 @@ def test_binance_funding_adapter_rejects_invalid_rates_and_time_ranges(monkeypat
 
     with pytest.raises(ValueError, match="must not precede"):
         sources.fetch_binance_funding_rates(start_time_ms=2000, end_time_ms=1000)
+
+
+def test_binance_funding_adapter_accepts_an_empty_page(monkeypatch):
+    import cyclemark.sources as sources
+
+    monkeypatch.setattr(sources, "_get_json", lambda url: [])
+    assert sources.fetch_binance_funding_rates() == []
+    assert sources.fetch_binance_funding_rates(start_time_ms=0) == []
+
+
+def test_binance_funding_pagination_rejects_a_repeated_page(monkeypatch):
+    import cyclemark.sources as sources
+
+    page = [
+        {"fundingTime": timestamp, "fundingRate": "0.0001"}
+        for timestamp in range(1000)
+    ]
+    monkeypatch.setattr(sources, "_get_json", lambda url: page)
+
+    with pytest.raises(DataSourceError, match="did not advance"):
+        sources.fetch_binance_funding_rates(start_time_ms=0)
+
+
+def test_binance_funding_pagination_has_a_safety_limit(monkeypatch):
+    import cyclemark.sources as sources
+
+    calls = {"count": 0}
+
+    def fake_get_json(url):
+        page = calls["count"]
+        calls["count"] += 1
+        return [
+            {"fundingTime": page * 1000 + offset, "fundingRate": "0.0001"}
+            for offset in range(1000)
+        ]
+
+    monkeypatch.setattr(sources, "_get_json", fake_get_json)
+    with pytest.raises(DataSourceError, match="safety limit"):
+        list(sources.iter_binance_funding_rate_pages(start_time_ms=0, max_pages=2))
+    assert calls["count"] == 2
+
+
+def test_binance_funding_adapter_rejects_malformed_records(monkeypatch):
+    import cyclemark.sources as sources
+
+    monkeypatch.setattr(sources, "_get_json", lambda url: [["not", "an", "object"]])
+    with pytest.raises(DataSourceError, match="Malformed"):
+        sources.fetch_binance_funding_rates()
+
