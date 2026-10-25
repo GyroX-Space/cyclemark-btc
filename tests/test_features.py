@@ -36,3 +36,16 @@ def test_provisional_bfs_rejects_non_positive_prices():
     closes[-1] = 0
     with pytest.raises(ValueError):
         compute_provisional_bfs(closes=closes, highs=highs, lows=lows)
+
+
+def test_provisional_bfs_rejects_misaligned_price_arrays():
+    closes, highs, lows = sample_prices()
+    with pytest.raises(ValueError, match="equal lengths"):
+        compute_provisional_bfs(closes=closes, highs=highs[:-1], lows=lows)
+
+
+def test_provisional_bfs_rejects_inconsistent_candles():
+    closes, highs, lows = sample_prices()
+    highs[-1] = closes[-1] - 1
+    with pytest.raises(ValueError, match="low <= close <= high"):
+        compute_provisional_bfs(closes=closes, highs=highs, lows=lows)
