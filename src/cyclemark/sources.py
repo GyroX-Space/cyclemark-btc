@@ -1,6 +1,7 @@
 """Public data adapters with explicit timestamps and defensive validation."""
 from __future__ import annotations
 import json
+from math import isfinite
 import time
 from datetime import datetime, timezone
 from urllib.error import HTTPError, URLError
@@ -121,3 +122,82 @@ def fetch_fear_greed_history() -> list[dict]:
     if not result:
         raise DataSourceError("Fear & Greed history is empty.")
     return result
+
+
+
+def fetch_binance_funding_rates(
+    start_time_ms: int | None = None,
+    end_time_ms: int | None = None,
+) -> list[dict]:
+    """Fetch raw Binance USD-M BTCUSDT perpetual funding-rate observations.
+
+    With no start time, fetch only the latest API page. When start_time_ms is
+    supplied, paginate forward from that timestamp. Funding rates are exchange
+    observations and are not by themselves a calibrated CycleMark signal.
+    """
+    if start_time_ms is not None and (not isinstance(start_time_ms, int) or start_time_ms < 0):
+        raise ValueError("start_time_ms must be a non-negative integer.")
+    if end_time_ms is not None and (not isinstance(end_time_ms, int) or end_time_ms < 0):
+        raise ValueError("end_time_ms must be a non-negative integer.")
+    if start_time_ms is not None and end_time_ms is not None and end_time_ms < start_time_ms:
+        raise ValueError("end_time_ms must not precede start_time_ms.")
+
+    endpoint = "https://fapi.binance.com/fapi/v1/fundingRate"
+    cursor = start_time_ms
+    rows: list[dict] = []
+    seen_timestamps: set[int] = set()
+    pages = 0
+
+    while True:
+        params = {"symbol": "BTCUSDT", "limit": 1000}
+        if cursor is not None:
+            params["startTime"] = cursor
+        if end_time_ms is not None:
+            params["endTime"] = end_time_ms
+        payload = _get_json(endpoint + "?" + urlencode(params))
+        if not isinstance(payload, list):
+            raise DataSourceError("Binance funding-rate response was not a list.")
+        if not payload:
+            break
+
+        page_timestamps = []
+        for item in payload:
+            if not isinstance(item, dict):
+                raise DataSourceError("Malformed Binance funding-rate record.")
+            try:
+                timestamp = int(item["fundingTime"])
+                rate = float(item["fundingRate"])
+                mark_raw = item.get("markPrice")
+                mark_price = float(mark_raw) if mark_raw not in (None, "") else None
+            except (KeyError, TypeError, ValueError) as exc:
+                raise DataSourceError(f"Invalid Binance funding-rate field: {exc}") from exc
+            if timestamp < 0 or not isfinite(rate):
+                raise DataSourceError("Funding timestamp and rate must be finite and valid.")
+            if mark_price is not None and (not isfinite(mark_price) or mark_price <= 0):
+                raise DataSourceError("Funding mark price must be finite and greater than zero.")
+            page_timestamps.append(timestamp)
+            if timestamp in seen_timestamps:
+                continue
+            seen_timestamps.add(timestamp)
+            rows.append({
+                "funding_time_ms": timestamp,
+                "funding_rate": rate,
+                "mark_price": mark_price,
+                "source": "binance_usdm_funding_rate_api",
+                "retrieved_at_utc": utc_now(),
+            })
+
+        pages += 1
+        if start_time_ms is None or len(payload) < 1000:
+            break
+        next_cursor = max(page_timestamps) + 1
+        if cursor is not None and next_cursor <= cursor:
+            raise DataSourceError("Binance funding pagination did not advance.")
+        if end_time_ms is not None and next_cursor > end_time_ms:
+            break
+        cursor = next_cursor
+        if pages > 100:
+            raise DataSourceError("Funding history exceeded the 100-page safety limit.")
+
+    rows.sort(key=lambda row: row["funding_time_ms"])
+    return rows
