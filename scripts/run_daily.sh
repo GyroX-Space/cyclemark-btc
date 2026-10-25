@@ -5,7 +5,7 @@ PROJECT_DIR="${CYCLEMARK_DIR:-$HOME/cyclemark-btc}"
 cd "$PROJECT_DIR"
 
 # Prevent overlapping cron/systemd invocations on this host.
-exec 9>"$PROJECT_DIR/.cyclemark-daily.lock"
+exec 9>"${TMPDIR:-/tmp}/cyclemark-daily-${USER:-cyclemark}.lock"
 if ! flock -n 9; then
   echo "Another CycleMark daily run is already active; exiting."
   exit 0
