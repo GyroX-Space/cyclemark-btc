@@ -28,7 +28,18 @@ BOS and formal market-state assignment remain withheld pending feature completio
 
 These PRs are not considered deployed until merged and verified in the target runtime. CI passing does not prove AWS scheduling, source availability, data integrity over time, or predictive value.
 
-## 3. Priority order
+## 3. GitHub issue queue
+
+Use these issues as the execution queue. Owners are role-based until the repository owner assigns a specific contributor.
+
+- [Issue #4 — P1: Harden daily ingestion and idempotent reruns](https://github.com/GyroX-Space/cyclemark-btc/issues/4)
+- [Issue #5 — P2: Resumable historical funding backfill](https://github.com/GyroX-Space/cyclemark-btc/issues/5)
+- [Issue #6 — P3: Walk-forward evaluation with purging and baselines](https://github.com/GyroX-Space/cyclemark-btc/issues/6)
+- [Issue #7 — P4: Verify AWS daily runner](https://github.com/GyroX-Space/cyclemark-btc/issues/7)
+
+The first two PRs under review are [PR #1](https://github.com/GyroX-Space/cyclemark-btc/pull/1) and [PR #2](https://github.com/GyroX-Space/cyclemark-btc/pull/2). The handoff document itself is proposed in [PR #3](https://github.com/GyroX-Space/cyclemark-btc/pull/3).
+
+## 4. Priority order
 
 ### P0 — Review and stabilize current data changes
 
@@ -137,7 +148,7 @@ Acceptance:
 
 **Human access required:** The engineer must run commands inside the user's AWS environment. Do not share AWS keys or private tokens with the architecture owner. Share only sanitized logs and outcomes through GitHub.
 
-## 4. Data and financial governance
+## 5. Data and financial governance
 
 - Raw observations are not automatically features; features are not automatically useful predictors.
 - Every feature must specify formula, units, directionality hypothesis, timestamp availability, missing-data policy, outlier handling, and version.
@@ -148,7 +159,7 @@ Acceptance:
 - Keep auxiliary third-party indicators out of core scoring unless a separate decision explicitly changes that policy.
 - Never change the methodology solely because it improves a retrospective chart.
 
-## 5. PR checklist
+## 6. PR checklist
 
 Every implementation PR should include:
 - [ ] Linked issue and scope summary.
@@ -162,7 +173,7 @@ Every implementation PR should include:
 - [ ] CI passed on the final commit.
 - [ ] Deployment-only claims separated from locally or CI-verified claims.
 
-## 6. Communication protocol
+## 7. Communication protocol
 
 Use GitHub Issues for tasks, blockers, questions, and acceptance evidence. Use PR review comments for line-specific implementation questions. When a decision affects financial meaning, record it in a linked design/methodology document before merging.
 
@@ -175,7 +186,7 @@ When blocked, the engineer should comment on the issue with:
 
 The architecture/research owner will respond in the issue or PR thread so the decision remains discoverable and auditable.
 
-## 7. Do not do yet
+## 8. Do not do yet
 
 - Do not add funding rates, Fear & Greed, or any third-party composite index to core scoring without a reviewed feature specification and evaluation.
 - Do not publish BOS as validated.
