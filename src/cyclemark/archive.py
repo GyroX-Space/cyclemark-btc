@@ -1,6 +1,7 @@
 """Daily record schema helpers for the CycleMark public archive."""
 from __future__ import annotations
 import json
+from math import isfinite
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -46,9 +47,9 @@ def merge_funding_rate_observations(existing: list[dict], incoming: list[dict]) 
             mark_price = float(mark_raw) if mark_raw is not None else None
         except (KeyError, TypeError, ValueError) as exc:
             raise ValueError(f"Malformed funding observation archive row: {exc}") from exc
-        if timestamp < 0 or not __import__("math").isfinite(rate):
+        if timestamp < 0 or not isfinite(rate):
             raise ValueError("Funding timestamps and rates must be finite and valid.")
-        if mark_price is not None and (not __import__("math").isfinite(mark_price) or mark_price <= 0):
+        if mark_price is not None and (not isfinite(mark_price) or mark_price <= 0):
             raise ValueError("Funding mark prices must be finite and greater than zero.")
         key = (timestamp, rate, mark_price)
         if key not in merged:
