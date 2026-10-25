@@ -32,7 +32,7 @@ Configure a secure credential store or an SSH deploy key. Do not embed a token i
     python scripts/run_daily.py
     git status --short
 
-Run the historical backfill once before the first daily run if you want a calendar of provisional research records. Backfilled records are not historical published decisions and are not point-in-time validated. Review the generated data before enabling automatic pushes. The current pipeline publishes a provisional BFS based on 60% of configured dimension weight. It intentionally withholds BOS and the composite state until the full model is implemented and validated.
+Run the historical backfill once before the first daily run if you want a calendar of provisional research records. Backfilled records are not historical published decisions and are not point-in-time validated. Review the generated data before enabling automatic pushes. The current pipeline publishes a provisional price-only BFS based on 40% of configured dimension weight. Third-party Fear & Greed data is auxiliary display context and does not contribute to the score. It intentionally withholds BOS and the composite state until the full model is implemented and validated.
 
 ## Schedule the daily job
 
@@ -48,7 +48,8 @@ Ensure cron can access Git credentials and Python. Rotate logs and alert on non-
 
 ## Safe operation
 
-- Prevent overlapping runs.
+- The daily script uses `flock` to prevent overlapping runs; ensure `flock` is available on the host.
+- Keep the repository working tree clean before the scheduled job; the script intentionally refuses to overwrite local changes.
 - Review generated changes during the initial observation period.
 - Restrict the server account and repository credential to minimum required permissions.
 - Never commit credentials, prohibited raw data, or private server configuration.
