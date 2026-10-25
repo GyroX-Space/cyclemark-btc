@@ -17,12 +17,13 @@ If a core feature cannot be derived from accessible raw inputs, mark it unavaila
 | BTC daily OHLCV | Exchange market-data APIs; cross-check with other public exchanges where practical | Price, returns, moving averages, drawdown, volatility | Core input; document exchange coverage and limitations |
 | Spot trade data | Public exchange trade or aggregate-trade endpoints | Volume profile, realized market activity, liquidity proxies | Core input only after robust definitions and quality checks |
 | On-chain raw observations | Public blockchain data and reproducible node-derived metrics | UTXO age/spending, realized value components, supply and transfer measures | Prefer reproducible raw observations; document node/indexing assumptions |
-| Derivatives market observations | Public exchange APIs | Funding rates, open interest, liquidations, basis | Core input only with venue coverage, timestamps, and cross-venue caveats |
+| Derivatives market observations | Binance USD-M Futures funding-rate endpoint; additional public exchange APIs to be evaluated | Raw exchange funding-rate observations with funding timestamps and optional mark price | Funding adapter and daily raw-observation archive implemented for research ingestion; not yet included in BFS/BOS. Require venue coverage, point-in-time handling, and cross-venue caveats before scoring |
 | Third-party sentiment | Alternative.me Crypto Fear & Greed Index | Optional reference panel in the dashboard | Auxiliary display only; excluded from core scores |
 | Third-party on-chain/valuation indicators | Glassnode MVRV, realized price, Mayer Multiple, or similar metrics | Optional reference panel when access permits | Auxiliary display only; excluded from core scores by default |
 
 Candidate source documentation:
 - Binance Spot API: https://github.com/binance/binance-spot-api-docs
+- Binance USD-M Futures API: https://developers.binance.com/docs/derivatives/usds-margined-futures/market-data/rest-api/Get-Funding-Rate-History
 - Coin Metrics API: https://docs.coinmetrics.io/api/v4/
 - Glassnode API documentation: https://docs.glassnode.com/
 - Alternative.me Fear & Greed API: https://alternative.me/crypto/fear-and-greed-index/
@@ -60,4 +61,6 @@ For historical simulation, use the value that was actually available at the simu
 
 ## Historical research backfill
 
-The one-time backfill script can build a provisional daily research archive from available public price history. It may attach historical third-party sentiment observations as auxiliary context, but those observations must not enter the core score. Backfilled outputs are not original CycleMark decisions. Historical source availability and revisions are not point-in-time verified, so the dashboard must label them as research backfill rather than validated historical states.
+The daily runner now archives the latest Binance USD-M BTCUSDT perpetual funding-rate page in `data/market/binance_funding_rates.json`, deduplicating unchanged observations while preserving changed values at the same timestamp as separate records. This archive starts when the runner is deployed unless a historical funding backfill is run separately. Funding data is not yet a core scoring input.
+
+The one-time price backfill script can build a provisional daily research archive from available public price history. It may attach historical third-party sentiment observations as auxiliary context, but those observations must not enter the core score. Backfilled outputs are not original CycleMark decisions. Historical source availability and revisions are not point-in-time verified, so the dashboard must label them as research backfill rather than validated historical states.
