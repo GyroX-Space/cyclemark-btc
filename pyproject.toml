@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cyclemark-btc"
-version = "0.1.0"
+version = "0.1.1"
 description = "A transparent research framework for Bitcoin cycle states."
 readme = "README.md"
 requires-python = ">=3.11"
