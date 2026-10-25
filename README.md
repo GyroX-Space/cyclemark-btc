@@ -57,6 +57,7 @@ A score is not a probability unless a separate probability model is trained and 
 - [Methodology](docs/methodology.md)
 - [Data sources and governance](docs/data-sources.md)
 - [Backtesting protocol](docs/backtesting.md)
+- [Engineering PRD and delivery acceptance](docs/implementation-prd.md)
 - [AWS Linux daily deployment](docs/aws-deployment.md)
 - [Static dashboard hosting](docs/site-hosting.md)
 
