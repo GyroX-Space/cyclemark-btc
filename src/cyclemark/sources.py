@@ -12,6 +12,14 @@ from urllib.request import Request, urlopen
 class DataSourceError(RuntimeError):
     """Raised when a public data source cannot provide valid data."""
 
+
+class PaginationLimitError(DataSourceError):
+    """Raised when a paginated source exhausts its bounded page budget.
+
+    Distinct from other source failures so a caller (for example a resumable
+    backfill) can treat the page budget as a checkpoint rather than a fault.
+    """
+
 # Transient failures are retried. Other 4xx responses fail immediately.
 RETRYABLE_HTTP_STATUS = frozenset({408, 425, 429, 500, 502, 503, 504})
 MAX_RETRY_AFTER_SECONDS = 60.0
@@ -332,6 +340,6 @@ def iter_binance_funding_rate_pages(
         if end_time_ms is not None and next_cursor > end_time_ms:
             return
         cursor = next_cursor
-    raise DataSourceError(
+    raise PaginationLimitError(
         f"Funding history exceeded the {max_pages}-page safety limit."
     )
