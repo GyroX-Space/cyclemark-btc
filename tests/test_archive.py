@@ -27,3 +27,23 @@ def test_write_json_creates_valid_json(tmp_path):
         "status": "research_only", "value": 42
     }
     assert not target.with_suffix(".json.tmp").exists()
+
+
+
+def test_merge_funding_observations_deduplicates_unchanged_rows_and_keeps_revisions():
+    from cyclemark.archive import merge_funding_rate_observations
+
+    first = {
+        "funding_time_ms": 1000,
+        "funding_rate": 0.0001,
+        "mark_price": 95000.0,
+        "retrieved_at_utc": "2026-01-01T00:00:00Z",
+    }
+    duplicate = {**first, "retrieved_at_utc": "2026-01-02T00:00:00Z"}
+    revision = {**first, "funding_rate": 0.0002, "retrieved_at_utc": "2026-01-03T00:00:00Z"}
+    later = {**first, "funding_time_ms": 2000}
+
+    result = merge_funding_rate_observations([first], [duplicate, revision, later])
+    assert len(result) == 3
+    assert [row["funding_time_ms"] for row in result] == [1000, 1000, 2000]
+    assert result[0]["retrieved_at_utc"] == "2026-01-01T00:00:00Z"
