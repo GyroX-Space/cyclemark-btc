@@ -76,6 +76,16 @@ Publishing is deterministic on content: retrieval and generated timestamps are e
 
 ## Historical research backfill
 
-The daily runner now archives the latest Binance USD-M BTCUSDT perpetual funding-rate page in `data/market/binance_funding_rates.json`, deduplicating unchanged observations while preserving changed values at the same timestamp as separate records. This archive starts when the runner is deployed unless a historical funding backfill is run separately. Funding data is not yet a core scoring input.
+The daily runner archives the latest Binance USD-M BTCUSDT perpetual funding-rate page in `data/market/binance_funding_rates.json`, deduplicating unchanged observations while preserving changed values at the same timestamp as separate records. Funding data is not yet a core scoring input.
+
+A resumable historical backfill fills the same archive for an explicit range:
+
+    python scripts/backfill_funding.py --start 2019-09-01 --end 2024-01-01
+
+- The range is explicit and validated; `--start` and `--end` accept epoch milliseconds or an ISO UTC date.
+- Endpoint limits: the funding API returns at most 1000 observations per page, and BTCUSDT perpetual funding settles every eight hours (three observations per day). Each invocation paginates at most `--max-pages` pages (default 100), which bounds one run to roughly ninety years of funding history in API-page terms; larger ranges simply require rerunning the command.
+- Resume: every page is merged and written to the archive before the resume cursor advances in `binance_funding_rates.backfill-state.json`, so an interrupted run loses at most the in-flight page and reruns deduplicate the overlap. Reaching the page budget reports `incomplete`, not an error; rerun the same command to continue. A completed range reruns as `already_complete` without network calls; use `--restart` to re-scan a range.
+- Provenance: each observation keeps `funding_time_ms`, `funding_rate`, optional `mark_price`, `symbol`, `source`, `schema_version`, and `retrieved_at_utc`. The state file records the requested range, cursor, page/observation counts, and timestamps.
+- Caveat: this dataset is **not** point-in-time reconstructed. `retrieved_at_utc` records when CycleMark collected an observation, not when the value was first knowable, and historical source revisions are not independently verified.
 
 The one-time price backfill script can build a provisional daily research archive from available public price history. It may attach historical third-party sentiment observations as auxiliary context, but those observations must not enter the core score. Backfilled outputs are not original CycleMark decisions. Historical source availability and revisions are not point-in-time verified, so the dashboard must label them as research backfill rather than validated historical states.
