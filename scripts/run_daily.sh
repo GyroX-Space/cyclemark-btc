@@ -26,7 +26,7 @@ source .venv/bin/activate
 python -m pip install -e .
 python scripts/run_daily.py
 
-git add data/signals/
+git add data/signals data/market/
 if git diff --cached --quiet; then
   echo "No signal archive changes to publish."
   exit 0
