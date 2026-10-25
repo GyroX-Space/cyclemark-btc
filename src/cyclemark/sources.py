@@ -44,12 +44,25 @@ def fetch_binance_daily_klines(start_time_ms: int | None = None) -> list[dict]:
         for item in payload:
             if not isinstance(item, list) or len(item) < 7:
                 raise DataSourceError("Malformed Binance kline record.")
-            rows.append({
-                "open_time_ms": int(item[0]), "open": float(item[1]),
-                "high": float(item[2]), "low": float(item[3]),
-                "close": float(item[4]), "volume": float(item[5]),
-                "close_time_ms": int(item[6]), "source": "binance_spot_api",
-            })
+            try:
+                row = {
+                    "open_time_ms": int(item[0]), "open": float(item[1]),
+                    "high": float(item[2]), "low": float(item[3]),
+                    "close": float(item[4]), "volume": float(item[5]),
+                    "close_time_ms": int(item[6]), "source": "binance_spot_api",
+                }
+            except (TypeError, ValueError) as exc:
+                raise DataSourceError(f"Invalid numeric value in Binance candle: {exc}") from exc
+            prices = (row["open"], row["high"], row["low"], row["close"])
+            if any(not (value > 0 and value < float("inf")) for value in prices):
+                raise DataSourceError("Binance candle prices must be finite and greater than zero.")
+            if row["low"] > row["high"] or not row["low"] <= row["open"] <= row["high"] or not row["low"] <= row["close"] <= row["high"]:
+                raise DataSourceError("Binance candle violates low/open/close/high bounds.")
+            if not (row["volume"] >= 0 and row["volume"] < float("inf")):
+                raise DataSourceError("Binance candle volume must be finite and non-negative.")
+            if row["close_time_ms"] < row["open_time_ms"]:
+                raise DataSourceError("Binance candle close time precedes open time.")
+            rows.append(row)
         next_cursor = int(payload[-1][6]) + 1
         if len(payload) < 1000 or (cursor is not None and next_cursor <= cursor):
             break
