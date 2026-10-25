@@ -23,10 +23,15 @@ def compute_provisional_bfs(
     Valuation, capitulation, and flow dimensions are unavailable. Third-party
     sentiment or valuation indicators must not be passed into this function.
     """
-    if len(closes) < 200 or len(highs) < 200 or len(lows) < 200:
+    if len(closes) != len(highs) or len(closes) != len(lows):
+        raise ValueError("Closes, highs, and lows must have equal lengths.")
+    if len(closes) < 200:
         raise ValueError("At least 200 daily observations are required.")
     if any(not isfinite(x) or x <= 0 for x in closes + highs + lows):
         raise ValueError("Price observations must be finite and greater than zero.")
+    if any(low > high or close < low or close > high
+           for close, high, low in zip(closes, highs, lows)):
+        raise ValueError("Each candle must satisfy low <= close <= high.");
 
     latest = closes[-1]
     sma_200 = sum(closes[-200:]) / 200
