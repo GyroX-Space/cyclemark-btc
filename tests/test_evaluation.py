@@ -66,12 +66,20 @@ def test_evaluation_is_deterministic_fingerprint_respects_wallclock():
     assert first["deterministic_fingerprint"] == second["deterministic_fingerprint"]
     # Full JSON differs because generated_at_utc differs — this is the intended contract.
     assert json.dumps(first, sort_keys=True) != json.dumps(second, sort_keys=True)
+    # But the two full reports are equal AFTER stripping the wall-clock field.
+    first_stripped = {k: v for k, v in first.items() if k != "generated_at_utc"}
+    second_stripped = {k: v for k, v in second.items() if k != "generated_at_utc"}
+    assert json.dumps(first_stripped, sort_keys=True) == json.dumps(second_stripped, sort_keys=True)
 
     # Audit: input fingerprints are properly split, not mixed together.
     assert first["inputs"]["ohlcv_fingerprint"] != first["inputs"]["signal_fingerprint"]
     assert first["inputs"]["ohlcv_time_range"][0] < first["inputs"]["ohlcv_time_range"][1]
     assert "fold_boundaries_hash" in first["inputs"]
     assert "ohlcv_time_range" in first["inputs"]
+    assert "feature_columns_hash" in first["inputs"]
+    assert "per_signal_file_hashes" in first["inputs"]
+    assert "evaluator_version" in first
+    assert "report_schema_version" in first
 
     assert set(first["results_by_stratum"]) == {"published", "reconstructed"}
     recon = first["results_by_stratum"]["reconstructed"]

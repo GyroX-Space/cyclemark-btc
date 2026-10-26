@@ -183,7 +183,10 @@ A single JSON document with:
 
 - Inputs are local files or fixtures; no live network calls during evaluation.
 - Bootstrap seed is fixed and recorded.
-- Output ordering is stable; the command is rerunnable and must reproduce byte-identical reports for identical inputs.
+- **Determinism contract (final audit item, settled):** the full report JSON is NOT required to be byte-identical across runs because `generated_at_utc` (wall-clock publication timestamp) legitimately differs. The contract is:
+  1. The report carries a **`deterministic_fingerprint`** which excludes `generated_at_utc`, `evaluator_version`, and inputs whose content we do not control.
+  2. When two runs share identical inputs (same OHLCV, same signals, same seed, same resample count, same evaluator version), `deterministic_fingerprint` is byte-identical across runs.
+  3. A unit test validates (a) `deterministic_fingerprint` equality when inputs are equal and wall clocks differ, and (b) the full JSON differs by `generated_at_utc`.
 - A small synthetic fixture exercises the full pipeline in CI, including the §4.5 reconstruction invariant and the missing-label coverage stats.
 
 ## 12. Review decisions (settled)

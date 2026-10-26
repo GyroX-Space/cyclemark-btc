@@ -221,7 +221,7 @@ def evaluate(
     generated_at_utc: str,
     resamples: int = DEFAULT_RESAMPLES,
     seed: int = DEFAULT_SEED,
-    signal_files: Sequence[str] = (),
+    signal_files: Sequence[str] | dict[str, Any] = (),
     ohlcv_source: str = "local_input",
 ) -> dict:
     """Run one horizon's evaluation. Raises ValueError on invalid input."""
@@ -402,7 +402,21 @@ def evaluate(
 
     ohlcv_fingerprint = _hash(rows)
     signal_fingerprint = _hash(signals)
+    signal_files_input = signal_files  # preserve original type for per-file hashes
+    # Per-file hashes: either the caller supplied {name: content_bytes_or_dict}
+    # or we derive hashes from the resolved signal records.
+    per_signal_file_hashes: dict[str, str] = {}
+    if isinstance(signal_files_dict := signal_files_input, dict):
+        for name, content in signal_files_dict.items():
+            if isinstance(content, (bytes, bytearray)):
+                per_signal_file_hashes[name] = hashlib.sha256(content).hexdigest()
+            else:
+                per_signal_file_hashes[name] = _hash(content)
+    else:
+        for idx, record in enumerate(signals):
+            per_signal_file_hashes[f"signal[{idx}]"] = _hash(record)
     feature_columns = ["bfs"]
+    feature_columns_hash = _hash(feature_columns)
     fold_boundaries: list[dict] = []
     for stratum, result in results_by_stratum.items():
         for fold in result.get("folds", []):
@@ -415,12 +429,17 @@ def evaluate(
                 "skip_reason": fold["skip_reason"],
             })
     ohlcv_dates = [r["date"] for r in rows]
+    EVALUATOR_VERSION = "0.1.1"  # bump whenever the algorithm or audit contract changes
     # Deterministic anchor — excludes generated_at_utc (wall-clock) and
     # bootstrap noise that varies with resample count, so that two runs with
     # identical inputs and fixed seed compare equal on this field.
     deterministic_fingerprint = _hash({
+        "evaluator_version": EVALUATOR_VERSION,
+        "report_schema_version": "1.2",
         "ohlcv_fingerprint": ohlcv_fingerprint,
         "signal_fingerprint": signal_fingerprint,
+        "per_signal_file_hashes": per_signal_file_hashes,
+        "feature_columns_hash": feature_columns_hash,
         "horizon_days": horizon_days,
         "seed": seed,
         "resamples": resamples,
@@ -430,6 +449,7 @@ def evaluate(
     })
     return {
         "report_schema_version": "1.2",
+        "evaluator_version": EVALUATOR_VERSION,
         "generated_at_utc": generated_at_utc,
         "deterministic_fingerprint": deterministic_fingerprint,
         "horizon_days": horizon_days,
@@ -442,12 +462,15 @@ def evaluate(
         "inputs": {
             "ohlcv_fingerprint": ohlcv_fingerprint,
             "signal_fingerprint": signal_fingerprint,
-            "signal_files": list(signal_files),
+            "per_signal_file_hashes": per_signal_file_hashes,
+            "feature_columns_hash": feature_columns_hash,
+            "signal_files": list(signal_files_input) if isinstance(signal_files_input, dict) else list(signal_files_input),
             "ohlcv_source": ohlcv_source,
             "ohlcv_time_range": [ohlcv_dates[0], ohlcv_dates[-1]] if ohlcv_dates else None,
             "fold_boundaries_hash": _hash(fold_boundaries),
         },
         "columns": {"features": feature_columns,
+                    "feature_columns_hash": feature_columns_hash,
                     "labels": [f"forward_return_{horizon_days}d"]},
         "coverage": {"excluded_no_candle": excluded_no_candle,
                      "excluded_no_bfs": excluded_no_bfs},
