@@ -8,6 +8,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from notify_telegram import (
+    SITE_URL,
     TAGLINE,
     bottom_indicator_label,
     build_message,
@@ -48,7 +49,8 @@ def test_message_format_is_fixed_english():
     assert "BFS 55.72/100" in lines[1]
     assert "provisional" in lines[1]
     assert lines[2] == "BTC: $80,154.09 | 2026-10-25 UTC"
-    assert lines[-1] == TAGLINE
+    assert lines[-2] == TAGLINE
+    assert lines[-1] == SITE_URL
     assert msg.isascii() or "—" in msg  # only the em dash is non-ASCII
 
 

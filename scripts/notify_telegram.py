@@ -28,6 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 LATEST_SIGNAL = ROOT / "data" / "signals" / "latest.json"
 
 TAGLINE = "BTC Cycle Intelligence — Know the cycle. Track every signal. Verify the history."
+SITE_URL = "https://cyclemarket.predi.org/"
 
 # Display-only banding of the provisional BFS score (0-100). Higher BFS means
 # deeper drawdown from the all-time high, i.e. deeper into bottom territory.
@@ -55,7 +56,8 @@ def build_message(record: dict) -> str:
         f"(BFS {bfs:.2f}/100, provisional, {coverage}% configured-weight coverage)\n"
         f"BTC: ${price:,.2f} | {date} UTC\n"
         f"\n"
-        f"{TAGLINE}"
+        f"{TAGLINE}\n"
+        f"{SITE_URL}"
     )
 
 
