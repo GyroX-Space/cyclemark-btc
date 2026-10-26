@@ -4,7 +4,7 @@
   "bos": null,
   "data_quality": {
     "core_price": {
-      "assessed_at_utc": "2026-10-26T05:12:48Z",
+      "assessed_at_utc": "2026-10-26T06:39:53Z",
       "duplicate_open_time_count": 0,
       "expected_calendar_days": 3357,
       "fatal_issues": [],
@@ -23,11 +23,11 @@
         "pages": 4,
         "raw_rows": 3358,
         "requested_start_time_ms": null,
-        "retrieved_at_utc": "2026-10-26T05:12:48Z",
+        "retrieved_at_utc": "2026-10-26T06:39:53Z",
         "source": "binance_spot_api"
       },
       "warnings": [
-        "Known anomaly: Binance unscheduled system maintenance on 2018-02-08 halted trading intraday; the daily candle closed at 00:28:14.788 UTC. Genuine market data, not corruption."
+        "Known anomaly: Binance unscheduled system maintenance on 2018-02-08 halted trading intraday; the daily candle closed at 00:28:14.788 UTC. Genuine market data, not corruption. Close offset = 1694788 ms (0h 28m 14.788s)."
       ]
     },
     "optional_sources": {
@@ -57,7 +57,7 @@
     "recent_30d_low_usd": 79220.74
   },
   "first_published_at_utc": "2026-10-26T05:11:31Z",
-  "generated_at_utc": "2026-10-26T05:12:48Z",
+  "generated_at_utc": "2026-10-26T06:39:53Z",
   "limitations": [
     "Valuation, capitulation, and flows dimensions are unavailable in core scoring.",
     "Third-party calculated indicators are auxiliary context only and are excluded from BFS.",
@@ -72,7 +72,7 @@
         "funding_rate": 1.713e-05,
         "funding_time_ms": 1792972800000,
         "mark_price": 80114.4,
-        "retrieved_at_utc": "2026-10-26T05:12:49Z",
+        "retrieved_at_utc": "2026-10-26T06:39:54Z",
         "schema_version": "1.0",
         "source": "binance_usdm_funding_rate_api",
         "symbol": "BTCUSDT"
@@ -81,7 +81,7 @@
     "fear_greed": {
       "classification": "Neutral",
       "observation_timestamp_utc": "2026-10-26T00:00:00Z",
-      "retrieved_at_utc": "2026-10-26T05:12:49Z",
+      "retrieved_at_utc": "2026-10-26T06:39:54Z",
       "source": "alternative_me_fear_greed_api",
       "value": 50
     },
@@ -109,7 +109,7 @@
     "Historical point-in-time source revisions have not been reconstructed.",
     "This record is research context, not a validated trading signal."
   ],
-  "revision": 3,
+  "revision": 4,
   "schema_version": "1.0",
   "score_coverage": {
     "configured_weight_coverage_pct": 40.0
@@ -118,19 +118,19 @@
   "sources": {
     "auxiliary_sentiment": {
       "name": "Alternative.me Crypto Fear & Greed Index",
-      "retrieved_at_utc": "2026-10-26T05:12:49Z",
+      "retrieved_at_utc": "2026-10-26T06:39:54Z",
       "role": "display_only_excluded_from_core_scores"
     },
     "derivatives_funding": {
       "archive_path": "data/market/binance_funding_rates.json",
       "name": "Binance USD-M BTCUSDT perpetual funding-rate API",
-      "retrieved_at_utc": "2026-10-26T05:12:49Z",
+      "retrieved_at_utc": "2026-10-26T06:39:54Z",
       "role": "raw_exchange_observation_archived_not_used_in_core_scores"
     },
     "price": {
       "name": "Binance public spot market API",
       "point_in_time_history_verified": false,
-      "retrieved_at_utc": "2026-10-26T05:12:48Z"
+      "retrieved_at_utc": "2026-10-26T06:39:53Z"
     }
   },
   "state": null,
