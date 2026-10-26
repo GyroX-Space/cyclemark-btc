@@ -58,6 +58,28 @@ def test_stale_series_fails_closed():
     assert any("days old" in issue for issue in result["fatal_issues"])
 
 
+ANOMALY_NOW = datetime(2018, 2, 10, 2, 0, tzinfo=timezone.utc)
+
+
+def test_known_exchange_maintenance_anomaly_warns_not_fails():
+    """2018-02-08 Binance maintenance candle: exact date+offset -> warning."""
+    candles = _series(date(2018, 2, 6), 5)
+    candles[2]["close_time_ms"] = candles[2]["open_time_ms"] + 1_694_788  # 00:28:14.788
+    assert datetime.fromtimestamp(candles[2]["open_time_ms"] / 1000, timezone.utc).date() == date(2018, 2, 8)
+    result = summarize_candle_quality(candles, now_utc=ANOMALY_NOW)
+    assert result["fatal_issues"] == []
+    assert result["irregular_close_time_count"] == 0
+    assert any("Known anomaly" in w and "2018-02-08" in w for w in result["warnings"])
+
+
+def test_new_irregular_close_offset_still_fatal():
+    """Same date as a known anomaly but a different offset is still fatal."""
+    candles = _series(date(2018, 2, 6), 5)
+    candles[2]["close_time_ms"] = candles[2]["open_time_ms"] + 1_000_000  # not documented
+    result = summarize_candle_quality(candles, now_utc=ANOMALY_NOW)
+    assert any("irregular close-time offset" in i for i in result["fatal_issues"])
+
+
 def test_future_dated_candle_fails_closed():
     result = summarize_candle_quality(
         _series(date(2026, 1, 1), 5), now_utc=datetime(2026, 1, 1, 2, 0, tzinfo=timezone.utc)

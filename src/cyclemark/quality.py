@@ -7,6 +7,17 @@ MS_PER_DAY = 86_400_000
 DAILY_CLOSE_OFFSET_MS = 86_399_999
 MAX_REPORTED_MISSING_DATES = 120
 
+# Documented historical exchange events. A candle is exempted from the fatal
+# close-offset rule only when BOTH its UTC date and its exact close offset
+# match a registry entry; any new irregular candle remains fatal.
+KNOWN_CANDLE_ANOMALIES = {
+    ("2018-02-08", 1_694_788): (
+        "Binance unscheduled system maintenance on 2018-02-08 halted trading "
+        "intraday; the daily candle closed at 00:28:14.788 UTC. Genuine market "
+        "data, not corruption."
+    ),
+}
+
 
 def _utc_date(timestamp_ms: int) -> date:
     return datetime.fromtimestamp(timestamp_ms / 1000, timezone.utc).date()
@@ -59,12 +70,21 @@ def summarize_candle_quality(
     non_midnight = sum(1 for value in opens if value % MS_PER_DAY != 0)
     if non_midnight:
         fatal.append(f"{non_midnight} candles do not open at UTC midnight.")
-    irregular_close = sum(
-        1 for open_ms, close_ms in zip(opens, closes)
-        if close_ms - open_ms != DAILY_CLOSE_OFFSET_MS
-    )
+    irregular_close = 0
+    known_anomalies: list[str] = []
+    for open_ms, close_ms in zip(opens, closes):
+        if close_ms - open_ms == DAILY_CLOSE_OFFSET_MS:
+            continue
+        reason = KNOWN_CANDLE_ANOMALIES.get(
+            (_utc_date(open_ms).isoformat(), close_ms % MS_PER_DAY)
+        )
+        if reason is None:
+            irregular_close += 1
+        else:
+            known_anomalies.append(reason)
     if irregular_close:
         fatal.append(f"{irregular_close} candles have an irregular close-time offset.")
+    warnings.extend(f"Known anomaly: {reason}" for reason in known_anomalies)
 
     dates = [_utc_date(value) for value in opens]
     first_date, last_date = dates[0], dates[-1]
