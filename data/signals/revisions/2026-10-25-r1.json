@@ -1,0 +1,138 @@
+{
+  "bfs": 55.72,
+  "bfs_status": "provisional_unvalidated",
+  "bos": null,
+  "data_quality": {
+    "core_price": {
+      "assessed_at_utc": "2026-10-26T05:11:31Z",
+      "duplicate_open_time_count": 0,
+      "expected_calendar_days": 3357,
+      "fatal_issues": [],
+      "finalized_candle_count": 3357,
+      "first_candle_date_utc": "2017-08-17",
+      "irregular_close_time_count": 0,
+      "is_stale": false,
+      "last_candle_date_utc": "2026-10-25",
+      "latest_candle_age_days": 1,
+      "missing_date_count": 0,
+      "missing_dates_truncated": false,
+      "missing_dates_utc": [],
+      "non_utc_midnight_open_time_count": 0,
+      "source_fetch": {
+        "duplicate_rows_dropped": 0,
+        "pages": 4,
+        "raw_rows": 3358,
+        "requested_start_time_ms": null,
+        "retrieved_at_utc": "2026-10-26T05:11:31Z",
+        "source": "binance_spot_api"
+      },
+      "warnings": [
+        "Known anomaly: Binance unscheduled system maintenance on 2018-02-08 halted trading intraday; the daily candle closed at 00:28:14.788 UTC. Genuine market data, not corruption."
+      ]
+    },
+    "optional_sources": {
+      "fear_greed": {
+        "status": "available"
+      },
+      "funding": {
+        "observations_retrieved": 500,
+        "status": "available"
+      }
+    }
+  },
+  "date": "2026-10-25",
+  "dimension_scores": {
+    "capitulation_panic": null,
+    "cycle_position": 45.61,
+    "flows_market_structure": null,
+    "trend_price_structure": 65.83,
+    "valuation_cost_basis": null
+  },
+  "feature_values": {
+    "drawdown_from_all_time_high_pct": -36.49,
+    "momentum_30d_pct": -4.69,
+    "momentum_90d_pct": 25.72,
+    "price_vs_sma_200_pct": 9.82,
+    "prior_30d_low_usd": 74967.97,
+    "recent_30d_low_usd": 79220.74
+  },
+  "first_published_at_utc": "2026-10-26T05:11:31Z",
+  "generated_at_utc": "2026-10-26T05:11:31Z",
+  "limitations": [
+    "Valuation, capitulation, and flows dimensions are unavailable in core scoring.",
+    "Third-party calculated indicators are auxiliary context only and are excluded from BFS.",
+    "Feature transforms are hand-specified and not calibrated.",
+    "BOS and the composite market state remain unavailable."
+  ],
+  "market_data": {
+    "derivatives": {
+      "core_score_role": "research_archive_only_excluded_from_core_scores",
+      "funding_observations_retrieved": 500,
+      "latest_funding_rate": {
+        "funding_rate": 1.713e-05,
+        "funding_time_ms": 1792972800000,
+        "mark_price": 80114.4,
+        "retrieved_at_utc": "2026-10-26T05:11:32Z",
+        "schema_version": "1.0",
+        "source": "binance_usdm_funding_rate_api",
+        "symbol": "BTCUSDT"
+      }
+    },
+    "fear_greed": {
+      "classification": "Neutral",
+      "observation_timestamp_utc": "2026-10-26T00:00:00Z",
+      "retrieved_at_utc": "2026-10-26T05:11:32Z",
+      "source": "alternative_me_fear_greed_api",
+      "value": 50
+    },
+    "price": {
+      "candle_close_time_utc": "2026-10-25T23:59:59.999000Z",
+      "candle_date_utc": "2026-10-25",
+      "drawdown_from_365d_high_pct": -31.14,
+      "drawdown_from_all_time_high_pct": -36.49,
+      "history_candles": 3357,
+      "momentum_30d_pct": -4.69,
+      "momentum_90d_pct": 25.72,
+      "price_source": "Binance public spot market API",
+      "price_usd": 80154.09,
+      "price_vs_sma_200_pct": 9.82,
+      "sma_200_usd": 72987.78,
+      "symbol": "BTCUSDT"
+    }
+  },
+  "model_version": "0.1.1",
+  "notes": [
+    "BFS is provisional and uses price-derived cycle-position and trend features only; three dimensions are missing.",
+    "Third-party Fear & Greed is auxiliary display context and is excluded from BFS, BOS, and state assignment.",
+    "Perpetual funding rates are archived as raw exchange observations for research and are not yet used in BFS, BOS, or state assignment.",
+    "BOS and the composite state are withheld until the complete model and validation protocol are implemented.",
+    "Historical point-in-time source revisions have not been reconstructed.",
+    "This record is research context, not a validated trading signal."
+  ],
+  "revision": 1,
+  "schema_version": "1.0",
+  "score_coverage": {
+    "configured_weight_coverage_pct": 40.0
+  },
+  "scores_are_validated": false,
+  "sources": {
+    "auxiliary_sentiment": {
+      "name": "Alternative.me Crypto Fear & Greed Index",
+      "retrieved_at_utc": "2026-10-26T05:11:32Z",
+      "role": "display_only_excluded_from_core_scores"
+    },
+    "derivatives_funding": {
+      "archive_path": "data/market/binance_funding_rates.json",
+      "name": "Binance USD-M BTCUSDT perpetual funding-rate API",
+      "retrieved_at_utc": "2026-10-26T05:11:32Z",
+      "role": "raw_exchange_observation_archived_not_used_in_core_scores"
+    },
+    "price": {
+      "name": "Binance public spot market API",
+      "point_in_time_history_verified": false,
+      "retrieved_at_utc": "2026-10-26T05:11:31Z"
+    }
+  },
+  "state": null,
+  "status": "research_data_available_signals_not_yet_validated"
+}
