@@ -37,6 +37,8 @@ def main() -> int:
         if p.name not in {"history.json", "latest.json"} and p.parent.name != "revisions"
     )
     signals = [_load_json(p) for p in signal_files]
+    # Pass as dict so per_signal_file_hashes map filenames to content hashes (audit trail).
+    signal_files_dict: dict[str, dict] = {p.name: _load_json(p) for p in signal_files}
 
     report = evaluate(
         signals=signals,
@@ -45,7 +47,7 @@ def main() -> int:
         generated_at_utc=utc_now(),
         resamples=args.resamples,
         seed=args.seed,
-        signal_files=[p.name for p in signal_files],
+        signal_files=signal_files_dict,
     )
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

@@ -145,14 +145,25 @@ A single JSON document with:
 ```json
 {
   "report_schema_version": "1.2",
+  "evaluator_version": "0.1.1",
   "generated_at_utc": "...",
+  "deterministic_fingerprint": "sha256(evaluator_version, report_schema_version, ohlcv_fingerprint, signal_fingerprint, per_signal_file_hashes, feature_columns_hash, horizon_days, seed, resamples, fold_boundaries_hash)",
   "horizon_days": 365,
   "co_primary_horizons": [365, 548],
   "primary_statistic": "spearman",
   "fold": {"block_days": 365, "min_train_samples": 200, "min_eval_coverage_pct": 80, "min_valid_folds": 3},
   "purge_rule": "training target_observation_date < eval_start",
-  "inputs": {"ohlcv_fingerprint": "sha256", "signal_files": ["..."], "ohlcv_source": "...", "ohlcv_time_range": ["...", "..."]},
-  "columns": {"features": ["bfs"], "labels": ["forward_return_365d", "mfe_365d", "mae_365d"]},
+  "inputs": {
+    "ohlcv_fingerprint": "sha256",
+    "signal_fingerprint": "sha256",
+    "per_signal_file_hashes": {"2026-10-25.json": "sha256", "...": "..."},
+    "feature_columns_hash": "sha256",
+    "signal_files": ["2026-10-25.json", "..."],
+    "ohlcv_source": "...",
+    "ohlcv_time_range": ["...", "..."],
+    "fold_boundaries_hash": "sha256"
+  },
+  "columns": {"features": ["bfs"], "feature_columns_hash": "sha256", "labels": ["forward_return_365d", "mfe_365d", "mae_365d"]},
   "bfs_buckets": [0, 20, 40, 60, 80, 100],
   "bootstrap": {"resamples": 2000, "block_days": 365, "seed": 0, "frame": "per_stratum_pooled_valid_eval_sample",
     "per_fold_intervals": "not_reported", "truncation": "final_block_truncated_to_sample_length"},
@@ -184,9 +195,9 @@ A single JSON document with:
 - Inputs are local files or fixtures; no live network calls during evaluation.
 - Bootstrap seed is fixed and recorded.
 - **Determinism contract (final audit item, settled):** the full report JSON is NOT required to be byte-identical across runs because `generated_at_utc` (wall-clock publication timestamp) legitimately differs. The contract is:
-  1. The report carries a **`deterministic_fingerprint`** which excludes `generated_at_utc`, `evaluator_version`, and inputs whose content we do not control.
-  2. When two runs share identical inputs (same OHLCV, same signals, same seed, same resample count, same evaluator version), `deterministic_fingerprint` is byte-identical across runs.
-  3. A unit test validates (a) `deterministic_fingerprint` equality when inputs are equal and wall clocks differ, and (b) the full JSON differs by `generated_at_utc`.
+  1. The report carries a **`deterministic_fingerprint`** which excludes only `generated_at_utc` (wall-clock) and other non-deterministic inputs. It **includes** `evaluator_version` and `report_schema_version` so that different evaluator implementations or protocol revisions produce distinct fingerprints — this prevents accidental conflation of results from different algorithm versions.
+  2. When two runs share identical inputs (same OHLCV, same signals, same seed, same resample count, same evaluator version, same protocol version), `deterministic_fingerprint` is byte-identical across runs.
+  3. A unit test validates (a) `deterministic_fingerprint` equality when inputs are equal and wall clocks differ, (b) the full JSON differs by `generated_at_utc`, and (c) stripping `generated_at_utc` from both full reports yields byte-identical JSON — proving the report content is fully deterministic without the wall-clock field.
 - A small synthetic fixture exercises the full pipeline in CI, including the §4.5 reconstruction invariant and the missing-label coverage stats.
 
 ## 12. Review decisions (settled)
