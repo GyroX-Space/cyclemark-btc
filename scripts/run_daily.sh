@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
-PROJECT_DIR="${CYCLEMARK_DIR:-$HOME/cyclemark-btc}"
+PROJECT_DIR="${CYCLEMARK_DIR:-$HOME/simon/cyclemark-btc}"
+if [[ ! -d "$PROJECT_DIR/.git" ]]; then
+  echo "CycleMark project not found at $PROJECT_DIR. Set CYCLEMARK_DIR or clone the repo there." >&2
+  exit 1
+fi
 cd "$PROJECT_DIR"
 
 # Prevent overlapping cron/systemd invocations on this host.
