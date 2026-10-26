@@ -57,7 +57,7 @@ For fold `k`:
 - Training set = signals whose label target observation date is observed and strictly earlier than `eval_start`. Any sample whose label is incomplete (target date not yet reached) is excluded from training and counted in coverage.
 - **Coverage gate:** an evaluation fold is skipped unless at least 80% of the expected calendar dates in its window carry a usable signal. The 200-sample training minimum is only a mechanical floor, not evidence of 200 independent observations.
 - A fold is also skipped if the training count is below the floor.
-- If fewer than three valid evaluation folds exist for a horizon, the pooled conclusion for that horizon is `inconclusive`.
+- **Skipped folds (review item B, settled):** a skipped fold is recorded with its reason but does not automatically void the whole horizon. Skipped folds are never included in pooled metric computation. The horizon is `inconclusive` only when **fewer than three valid (non-skipped) folds** remain.
 
 ## 4. Leakage guards
 
@@ -73,6 +73,13 @@ The evaluation fails closed if any guard fails:
 ## 5. Metrics
 
 The primary analysis is the association between the continuous BFS and forward returns. Do not fabricate market-state events; `state` is not approved as an event definition yet.
+
+**Locked primary statistic (review item A, settled):**
+
+1. The primary statistic is the **Spearman rank correlation** between BFS and the forward return. No other statistic may be substituted after seeing results.
+2. The **365-day and 548-day horizons are co-primary**: both are always reported, each with its own report run. Declaring one as "primary" after seeing results is prohibited; neither may be dropped because it is unfavourable.
+3. The rank correlation is reported with a **block-bootstrap 95% confidence interval** (rules in §7). Interpretation rule, predeclared: a correlation whose 95% CI excludes zero is "directional evidence" for that horizon; a CI including zero is `inconclusive` for that horizon. Correlation alone does not establish a tradable signal.
+4. No metric, horizon, or bucket boundary may be changed in response to observed results.
 
 Per horizon and per fold:
 
@@ -98,6 +105,13 @@ Buy-and-hold BTC may be reported as a reference return over the same interval, b
 ## 7. Statistical uncertainty
 
 - Use fixed-seed block bootstrap, 2,000 resamples. Block length must be at least the label horizon `H` (365 or 548 days), so overlapping daily samples are not treated as independent.
+
+**Sampling unit (review item C, settled):**
+
+1. Resampling draws **contiguous blocks of consecutive signal dates**, each of length `H` calendar days, sampled uniformly with replacement over all valid block start positions, until the resampled series reaches the original sample length.
+2. Blocks must not span a **discontinuity**: a block may not cross a date gap in the joined signal/label sample (any pair of consecutive signal dates more than one calendar day apart is a gap boundary), may not cross a stratum boundary (published vs. reconstructed), and is drawn within a single fold's evaluation sample when computing per-fold intervals and within the pooled valid sample when computing pooled intervals. Blocks are never stitched across folds or across gaps into a fabricated continuous series.
+3. The seed, block length, number of resamples, and the count of usable block start positions are recorded in the report. If usable block start positions are fewer than 10, intervals are marked weak/exploratory.
+
 - Report per-fold results alongside pooled estimates.
 - If the number of effective independent blocks or cycles is fewer than 10, mark interval estimates as **weak / exploratory**. The report must not claim predictive ability is established in that case.
 - If fewer than three valid folds exist, conclusion is `inconclusive` regardless of point estimates.
@@ -126,12 +140,14 @@ A single JSON document with:
   "report_schema_version": "1.1",
   "generated_at_utc": "...",
   "horizon_days": 365,
+  "co_primary_horizons": [365, 548],
+  "primary_statistic": "spearman",
   "fold": {"block_days": 365, "min_train_samples": 200, "min_eval_coverage_pct": 80, "min_valid_folds": 3},
   "purge_rule": "training target_observation_date < eval_start",
   "inputs": {"ohlcv_fingerprint": "sha256", "signal_files": ["..."], "ohlcv_source": "...", "ohlcv_time_range": ["...", "..."]},
   "columns": {"features": ["bfs"], "labels": ["forward_return_365d", "mfe_365d", "mae_365d"]},
   "bfs_buckets": [0, 20, 40, 60, 80, 100],
-  "bootstrap": {"resamples": 2000, "block_days": 365, "seed": 0},
+  "bootstrap": {"resamples": 2000, "block_days": 365, "seed": 0, "usable_block_starts": 0, "weak_evidence": true},
   "strata": ["published", "reconstructed"],
   "folds": [
     {"index": 0, "eval_start": "...", "eval_end": "...", "train_count": 0, "eval_count": 0,
@@ -145,7 +161,7 @@ A single JSON document with:
 }
 ```
 
-`conclusion` is derived by a predeclared rule, not by post-hoc judgement. Rule: `inconclusive` whenever any fold is skipped, fewer than three valid folds exist, fewer than 10 effective blocks, or the pooled confidence interval includes the baseline.
+`conclusion` is derived by a predeclared rule, not by post-hoc judgement. Rule (review item B, settled): skipped folds are recorded with reasons and excluded from pooling, but do not by themselves void the horizon. `inconclusive` applies to a horizon only when (a) fewer than three valid folds remain, (b) fewer than 10 usable bootstrap block-start positions exist, or (c) the pooled Spearman 95% confidence interval includes zero.
 
 ## 11. Determinism and CI
 
@@ -166,3 +182,6 @@ The following are no longer open questions; implementation must follow them exac
 6. Bootstrap: fixed seed, 2000 resamples, block ≥ horizon; <10 blocks → weak/exploratory.
 7. Reconstruction stratum separate from published records.
 8. Incomplete labels retained in stats; metrics use only observed labels.
+9. Primary statistic is Spearman rank correlation between BFS and forward return; 365-day and 548-day horizons are co-primary; block-bootstrap 95% CI with the predeclared interpretation rule; no post-hoc metric/horizon/bucket changes.
+10. A skipped fold is recorded with its reason and excluded from pooling; the horizon is `inconclusive` only when fewer than three valid folds remain.
+11. Block bootstrap draws contiguous `H`-day blocks of consecutive signal dates, never crossing date gaps, strata, or folds; usable block-start count and seed are recorded; fewer than 10 usable starts marks intervals as weak/exploratory.
