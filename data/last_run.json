@@ -1,0 +1,12 @@
+{
+  "run_at_utc": "2026-10-26T07:49:27Z",
+  "host": "ip-172-31-28-76.ap-northeast-2.compute.internal",
+  "repo_commit": "5a382c50079a4a2d1df04e38421bc844b23ca659",
+  "exit_code": 0,
+  "outcome": "success",
+  "record_date": 2026-10-25,
+  "revision": 4,
+  "price_usd": 80154.09,
+  "bfs": 55.72,
+  "configured_weight_coverage_pct": 40.0
+}
