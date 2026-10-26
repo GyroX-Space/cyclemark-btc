@@ -91,6 +91,10 @@ git push origin main || { echo "Push failed (non-fatal); marker written locally.
 WEB_ROOT="${CYCLEMARK_WEB_ROOT:-/srv/cyclemark}"
 if [[ -d "$WEB_ROOT" && -w "$WEB_ROOT" ]]; then
   install -m 644 web/index.html "$WEB_ROOT/index.html"
+  if [[ -d web/i18n ]]; then
+    install -d "$WEB_ROOT/i18n"
+    install -m 644 web/i18n/*.json "$WEB_ROOT/i18n/"
+  fi
   install -d "$WEB_ROOT/data/signals"
   install -m 644 data/signals/latest.json "$WEB_ROOT/data/signals/latest.json"
   install -m 644 data/signals/history.json "$WEB_ROOT/data/signals/history.json"

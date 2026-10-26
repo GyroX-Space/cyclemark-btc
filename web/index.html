@@ -10,123 +10,151 @@
 :root{color-scheme:dark;--bg:#0b1020;--panel:#121a2d;--panel2:#182238;--line:#2a3650;--text:#f4f7fb;--muted:#a7b3c8;--slate:#778397;--amber:#f4b740;--blue:#5ba8ff;--green:#45d6a0;--red:#ff7185}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3152 0,transparent 48%),var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 a{color:#91c5ff}button{font:inherit}.shell{max-width:1180px;margin:auto;padding:28px 22px 56px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border:1px solid #47678d;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#1d3e63,#142138);font-weight:900;color:#9dd3ff;font-size:20px}.brand h1{font-size:18px;letter-spacing:.08em;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}.pill{border:1px solid var(--line);border-radius:99px;padding:7px 11px;color:var(--muted);font-size:12px;white-space:nowrap}.eyebrow{color:#90b9e8;text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:750}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:16px}.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(24,34,56,.96),rgba(16,24,41,.96));padding:22px;min-width:0}.state-panel{min-height:245px;display:flex;flex-direction:column;justify-content:space-between}.state-line{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.state-name{font-size:clamp(30px,5vw,48px);font-weight:800;letter-spacing:-.04em;margin:8px 0 2px}.state-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--amber);margin-right:9px;vertical-align:middle}.sub{color:var(--muted);max-width:600px}.timestamp{color:var(--muted);font-size:12px}.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.metric{padding:17px;border-radius:14px;background:rgba(6,11,22,.3);border:1px solid var(--line)}.metric-label{color:var(--muted);font-size:12px}.metric-value{font-size:clamp(22px,3vw,32px);font-weight:750;margin:5px 0}.metric-note{font-size:11px;color:var(--muted)}.section{margin-top:18px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:12px}.section h2{font-size:17px;margin:0}.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.data-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.data-card{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.data-card span{display:block;color:var(--muted);font-size:12px}.data-card strong{display:block;font-size:21px;margin:7px 0}.data-card small{color:var(--muted)}.calendar-panel{padding:20px}.calendar-controls{display:flex;gap:8px;align-items:center}.calendar-controls button{border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);padding:7px 11px;cursor:pointer}.calendar-controls button:focus-visible,.day:focus-visible{outline:2px solid #91c5ff;outline-offset:2px}.month-label{min-width:130px;text-align:center;font-weight:700}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.weekday{text-align:center;color:var(--muted);font-size:11px;padding:8px 0}.day{border:1px solid #29344a;border-radius:8px;min-height:54px;padding:7px;background:#151e30;color:var(--text);text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between}.day .num{font-size:12px}.day .tiny{font-size:10px;color:#e6eefc;font-weight:650;line-height:1.2}.day.empty{visibility:hidden}.day.available{border-color:#47668b;background:#192d45}.day.selected{outline:2px solid #a8d5ff;outline-offset:1px}.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;color:var(--muted);font-size:11px}.legend i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:5px}.detail{margin-top:12px;padding:16px;border-radius:12px;background:#0c1424;border:1px solid var(--line);min-height:90px}.detail h3{margin:0 0 8px;font-size:14px}.detail p{margin:4px 0;color:var(--muted);font-size:13px}.notice{border-left:3px solid var(--amber);padding:12px 14px;background:#201d19;border-radius:0 10px 10px 0;color:#e5d8bf;font-size:12px;margin-top:16px}.footer{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:11px}.footer a{text-decoration:none}.loading{color:var(--muted)}@media(max-width:760px){.hero{grid-template-columns:1fr}.data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{padding:18px 12px 40px}.panel{padding:16px}.top{align-items:flex-start}.pill{white-space:normal;text-align:center}.day{min-height:43px;padding:5px}.day .tiny{font-size:8px}.calendar-grid{gap:3px}}@media print{body{background:#fff;color:#111}.panel,.data-card,.detail{background:#fff;border-color:#bbb;color:#111}.sub,.timestamp,.metric-label,.metric-note,.data-card span,.data-card small,.section-head p,.legend,.detail p,.footer{color:#444}.pill{color:#333;border-color:#aaa}.notice{background:#fff8e8;color:#333}.calendar-controls{display:none}.shell{max-width:none;padding:12px}}
+.lang{border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);padding:7px 9px;font-size:12px;cursor:pointer}.top-right{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap}.lang:focus-visible{outline:2px solid #91c5ff;outline-offset:2px}html[dir=rtl] .day{text-align:right}
 </style>
 </head>
 <body>
 <div class="shell">
 <header class="top">
-<div class="brand"><div class="mark">C</div><div><h1>CYCLEMARK BTC</h1><p>BTC Cycle Intelligence</p></div></div>
-<div class="pill" id="connection">Loading public data…</div>
+<div class="brand"><div class="mark">C</div><div><h1>CYCLEMARK BTC</h1><p data-i18n="brandSub">BTC Cycle Intelligence</p></div></div>
+<div class="top-right"><div class="pill" id="connection">Loading public data…</div><select class="lang" id="langSelect" aria-label="Language" data-i18n-aria="languageLabel"></select></div>
 </header>
 <main>
-<div class="eyebrow">Daily research snapshot</div>
+<div class="eyebrow" data-i18n="eyebrowDaily">Daily research snapshot</div>
 <div class="hero">
 <section class="panel state-panel">
-<div class="state-line"><div><div class="eyebrow">Current model status</div><div class="state-name"><span class="state-dot" id="stateDot"></span><span id="stateName">Research Buildout</span></div><div class="sub" id="stateDescription">Live context is loading. Validated composite signals are not available yet.</div></div><div class="pill" id="version">Model v0.1.0</div></div>
-<div class="timestamp" id="asOf">Waiting for the latest archive record</div>
+<div class="state-line"><div><div class="eyebrow" data-i18n="currentStatus">Current model status</div><div class="state-name"><span class="state-dot" id="stateDot"></span><span id="stateName" data-i18n="stateResearch">Research Buildout</span></div><div class="sub" id="stateDescription" data-i18n="stateLoadingDesc">Live context is loading. Validated composite signals are not available yet.</div></div><div class="pill" id="version">Model v0.1.0</div></div>
+<div class="timestamp" id="asOf" data-i18n="asOfWaiting">Waiting for the latest archive record</div>
 </section>
 <section class="panel">
-<div class="eyebrow">Model scores</div>
+<div class="eyebrow" data-i18n="scoresEyebrow">Model scores</div>
 <div class="metric-grid" style="margin-top:12px">
-<div class="metric"><div class="metric-label">BFS · Bottom Formation</div><div class="metric-value" id="bfs">—</div><div class="metric-note" id="bfsNote">0–100 · Not yet validated</div></div>
-<div class="metric"><div class="metric-label">BOS · Buy Opportunity</div><div class="metric-value" id="bos">—</div><div class="metric-note">12–18 month horizon · Not yet validated</div></div>
+<div class="metric"><div class="metric-label" data-i18n="bfsLabel">BFS · Bottom Formation</div><div class="metric-value" id="bfs">—</div><div class="metric-note" id="bfsNote" data-i18n="bfsNote">0–100 · Not yet validated</div></div>
+<div class="metric"><div class="metric-label" data-i18n="bosLabel">BOS · Buy Opportunity</div><div class="metric-value" id="bos">—</div><div class="metric-note" data-i18n="bosNote">12–18 month horizon · Not yet validated</div></div>
 </div>
 </section>
 </div>
 <section class="section">
-<div class="section-head"><div><h2>Market Context</h2><p>Public source observations; not a composite market signal.</p></div><div class="timestamp" id="sourceTime"></div></div>
+<div class="section-head"><div><h2 data-i18n="marketTitle">Market Context</h2><p data-i18n="marketSub">Public source observations; not a composite market signal.</p></div><div class="timestamp" id="sourceTime"></div></div>
 <div class="data-grid">
-<div class="data-card"><span>BTC Spot Reference</span><strong id="price">—</strong><small id="priceDate">Awaiting data</small></div>
-<div class="data-card"><span>Fear &amp; Greed Index</span><strong id="fear">—</strong><small id="fearClass">Awaiting data</small></div>
-<div class="data-card"><span>Price vs. 200-Day Average</span><strong id="sma">—</strong><small>Daily close reference</small></div>
-<div class="data-card"><span>Drawdown from 365-Day High</span><strong id="drawdown">—</strong><small>Rolling price context</small></div>
+<div class="data-card"><span data-i18n="priceLabel">BTC Spot Reference</span><strong id="price">—</strong><small id="priceDate" data-i18n="awaitingData">Awaiting data</small></div>
+<div class="data-card"><span data-i18n="fearLabel">Fear &amp; Greed Index</span><strong id="fear">—</strong><small id="fearClass" data-i18n="awaitingData">Awaiting data</small></div>
+<div class="data-card"><span data-i18n="smaLabel">Price vs. 200-Day Average</span><strong id="sma">—</strong><small data-i18n="smaNote">Daily close reference</small></div>
+<div class="data-card"><span data-i18n="drawdownLabel">Drawdown from 365-Day High</span><strong id="drawdown">—</strong><small data-i18n="drawdownNote">Rolling price context</small></div>
 </div>
 </section>
 <section class="section">
-<div class="section-head"><div><h2>Historical Daily Calendar</h2><p>Cell number is the provisional BFS score; colour follows the same bands. Not a validated market state.</p></div></div>
+<div class="section-head"><div><h2 data-i18n="calTitle">Historical Daily Calendar</h2><p data-i18n="calSub">Cell number is the provisional BFS score; colour follows the same bands. Not a validated market state.</p></div></div>
 <div class="panel calendar-panel">
-<div class="section-head"><div class="calendar-controls"><button id="prevMonth" aria-label="Previous month">←</button><div class="month-label" id="monthLabel">—</div><button id="nextMonth" aria-label="Next month">→</button></div><div class="timestamp" id="calendarCount">0 archived days</div></div>
-<div class="calendar-grid" id="calendarGrid" aria-label="Daily archive calendar"></div>
-<div class="legend"><span>Provisional BFS band</span><span><i style="background:#45d6a0"></i>≥80 deep value</span><span><i style="background:#5ba8ff"></i>60–80 approaching</span><span><i style="background:#f4b740"></i>40–60 neutral</span><span><i style="background:#8f9bb0"></i>20–40 elevated</span><span><i style="background:#ff7185"></i>&lt;20 euphoria</span><span><i style="background:#29344a"></i>no score</span></div>
-<div class="detail" id="dayDetail" aria-live="polite"><h3>Select an archived day</h3><p>Daily source data and model status will appear here.</p></div>
+<div class="section-head"><div class="calendar-controls"><button id="prevMonth" aria-label="Previous month" data-i18n-aria="prevMonth">←</button><div class="month-label" id="monthLabel">—</div><button id="nextMonth" aria-label="Next month" data-i18n-aria="nextMonth">→</button></div><div class="timestamp" id="calendarCount"></div></div>
+<div class="calendar-grid" id="calendarGrid"></div>
+<div class="legend"><span data-i18n="legendTitle">Provisional BFS band</span><span><i style="background:#45d6a0"></i><span data-i18n="bandDeep">≥80 deep value</span></span><span><i style="background:#5ba8ff"></i><span data-i18n="bandApproaching">60–80 approaching</span></span><span><i style="background:#f4b740"></i><span data-i18n="bandNeutral">40–60 neutral</span></span><span><i style="background:#8f9bb0"></i><span data-i18n="bandElevated">20–40 elevated</span></span><span><i style="background:#ff7185"></i><span data-i18n="bandEuphoria">&lt;20 euphoria</span></span><span><i style="background:#29344a"></i><span data-i18n="bandNone">no score</span></span></div>
+<div class="detail" id="dayDetail" aria-live="polite"><h3 data-i18n="selectArchivedDay">Select an archived day</h3><p data-i18n="detailPlaceholder">Daily source data and model status will appear here.</p></div>
 </div>
 </section>
-<div class="notice"><strong>Research notice:</strong> CycleMark is under active development. BFS, BOS, and the four-state model are not currently validated and are intentionally withheld. Market context is informational, not investment advice. Bitcoin is highly volatile.</div>
+<div class="notice"><strong data-i18n="noticeTitle">Research notice:</strong> <span data-i18n="noticeBody">CycleMark is under active development. BFS, BOS, and the four-state model are not currently validated and are intentionally withheld. Market context is informational, not investment advice. Bitcoin is highly volatile.</span></div>
 </main>
-<footer class="footer"><span>CycleMark BTC · A Predi Group product</span><span><a href="https://github.com/GyroX-Space/cyclemark-btc">Source repository</a> · <a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/methodology.md">Methodology</a> · <a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/data-sources.md">Data sources</a></span></footer>
+<footer class="footer"><span data-i18n="footerOrg">CycleMark BTC · A Predi Group product</span><span><a href="https://github.com/GyroX-Space/cyclemark-btc" data-i18n="footerRepo">Source repository</a> · <a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/methodology.md" data-i18n="footerMethod">Methodology</a> · <a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/data-sources.md" data-i18n="footerSources">Data sources</a></span></footer>
 </div>
 <script>
 (function(){
 "use strict";
-var records=[],byDate={},viewDate=new Date();viewDate.setDate(1);var selectedDate=null;
+var records=[],byDate={},viewDate=new Date(),selectedDate=null,latestRecord=null,dataError=null,lang="en",pack=null;
 var $=function(id){return document.getElementById(id)};
 var fmt=function(v){return Number.isFinite(Number(v))?Number(v).toLocaleString("en-US",{maximumFractionDigits:2}):"—"};
 var signed=function(v){return Number.isFinite(Number(v))?(Number(v)>0?"+":"")+fmt(v)+"%":"—"};
 var stateColors={risk:"#778397",watch:"#f4b740",forming:"#5ba8ff",opportunity:"#45d6a0"};
+var LOCALES=["en","zh-Hans","zh-Hant","ja","ko","fr","ru","es","ar","th","bn","id"];
+var NATIVE={en:"English","zh-Hans":"简体中文","zh-Hant":"繁體中文",ja:"日本語",ko:"한국어",fr:"Français",ru:"Русский",es:"Español",ar:"العربية",th:"ไทย",bn:"বাংলা",id:"Bahasa Indonesia"};
+var I18N_BASES=["i18n/","https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/web/i18n/"];
+var DATA_SOURCES=["data/signals/","../data/signals/","https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/data/signals/"];
+var CACHE_BUST="?_t="+new Date().toISOString().slice(0,10).replace(/-/g,"");
+var FG_KEYS={"Extreme Fear":"ExtremeFear","Fear":"Fear","Neutral":"Neutral","Greed":"Greed","Extreme Greed":"ExtremeGreed"};
+var EN_DYNAMIC={loadingData:"Loading public data…",archiveLoaded:"Archive loaded",statusUnavailable:"status unavailable",modelVersion:"Model v{version}",asOfWaiting:"Waiting for the latest archive record",asOfLine:"Data date: {date} · Generated: {ts}",notAvailable:"Not available",provisionalCoverage:"Provisional · {pct}% weight coverage",bfsNote:"0–100 · Not yet validated",stateResearch:"Research Buildout",stateLoadingDesc:"Live context is loading. Validated composite signals are not available yet.",statePublishedDesc:"Published state from the versioned model archive.",statePublicOnlyDesc:"Public data is available, but validated composite state signals have not been released.",updatedAt:"Updated {ts}",timeUnavailable:"time unavailable",timestampUnavailable:"timestamp unavailable",noFinalizedCandle:"No finalized candle",awaitingData:"Awaiting data",archivedDays:"{n} archived days",archivedRecordAria:"archived record",noArchivedRecordAria:"no archived record",dateUnavailable:"Date unavailable",dataAvailable:"Data available",noArchivedRecord:"No archived record",detailStatus:"Status: {status}",detailBtc:"BTC reference: {value}",detailFear:"Fear & Greed: {value}",detailScores:"BFS: {bfs} · BOS: {bos}",detailBfsStatus:"BFS status: {status} · Configured weight coverage: {pct}%",detailDimensions:"Dimension scores: {json}",detailModelVersion:"Model version: {version}",detailGenerated:"Generated at: {ts}",unavailable:"Unavailable",unknown:"Unknown",noRecordForDate:"No record exists for this date. The calendar does not infer missing observations.",archiveUnavailable:"Archive unavailable",archiveUnavailableDesc:"No published data archive could be loaded. The site will not invent a market state.",fear:{ExtremeFear:"Extreme fear",Fear:"Fear",Neutral:"Neutral",Greed:"Greed",ExtremeGreed:"Extreme greed"},status:{research_data_available_signals_not_yet_validated:"research data; signals not yet validated",historical_research_backfill_not_point_in_time:"historical backfill; not point-in-time",historical_research_backfill:"historical backfill"}};
+function fetchJson(url){return fetch(url,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error(url+" unavailable ("+r.status+")");return r.json()})}
+function lookup(obj,key){var parts=key.split(".");for(var i=0;i<parts.length;i++){if(obj==null)return null;obj=obj[parts[i]]}return typeof obj==="string"?obj:null}
+function t(key,params){var v=lookup(pack,key);if(v==null)v=lookup(EN_DYNAMIC,key);if(v==null)return key;return String(v).replace(/\{(\w+)\}/g,function(m,k){return params&&params[k]!=null?params[k]:m})}
+function localeTag(){return lang==="zh-Hans"?"zh-CN":lang==="zh-Hant"?"zh-TW":lang==="id"?"id-ID":lang}
 function text(id,value){$(id).textContent=value}
-function dateLabel(s){if(!s)return"Date unavailable";var d=new Date(s+"T00:00:00Z");return d.toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"})}
+function dateLabel(s){if(!s)return t("dateUnavailable");return new Date(s+"T00:00:00Z").toLocaleDateString(localeTag(),{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"})}
+function statusLabel(s){if(!s)return t("statusUnavailable");var v=lookup(pack,"status."+s)||lookup(EN_DYNAMIC,"status."+s);return v||s.replace(/_/g," ")}
+function fearLabel(c){if(!c)return t("notAvailable");var k=FG_KEYS[c];var v=k&&(lookup(pack,"fear."+k)||lookup(EN_DYNAMIC,"fear."+k));return v||c}
 function renderLatest(r){
+latestRecord=r;
 var p=r.market_data&&r.market_data.price||{},f=r.market_data&&r.market_data.fear_greed||{};
-text("connection","Archive loaded · "+(r.status||"status unavailable"));
-text("version","Model v"+(r.model_version||"unknown"));
-text("asOf","Data date: "+dateLabel(r.date)+" · Generated: "+(r.generated_at_utc||"timestamp unavailable"));
-text("bfs",r.bfs==null?"Not available":fmt(r.bfs));text("bos",r.bos==null?"Not available":fmt(r.bos));text("bfsNote",r.bfs==null?"Not available":(r.bfs_status==="provisional_unvalidated"?"Provisional · "+((r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0)+"% weight coverage":"0–100 · Not validated"));
-var state=r.state||"research";text("stateName",state==="research"?"Research Buildout":state.charAt(0).toUpperCase()+state.slice(1));
+text("connection",t("archiveLoaded")+" · "+statusLabel(r.status));
+text("version",t("modelVersion",{version:r.model_version||t("unknown")}));
+text("asOf",t("asOfLine",{date:dateLabel(r.date),ts:r.generated_at_utc||t("timestampUnavailable")}));
+text("bfs",r.bfs==null?t("notAvailable"):fmt(r.bfs));text("bos",r.bos==null?t("notAvailable"):fmt(r.bos));text("bfsNote",r.bfs==null?t("notAvailable"):(r.bfs_status==="provisional_unvalidated"?t("provisionalCoverage",{pct:(r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0}):t("bfsNote")));
+var state=r.state||"research";text("stateName",state==="research"?t("stateResearch"):state.charAt(0).toUpperCase()+state.slice(1));
 $("stateDot").style.background=stateColors[state]||"#f4b740";
-text("stateDescription",r.state?"Published state from the versioned model archive.":"Public data is available, but validated composite state signals have not been released.");
-text("price",p.price_usd==null?"—":"$"+fmt(p.price_usd));text("priceDate",p.candle_date_utc?dateLabel(p.candle_date_utc):"No finalized candle");
-text("fear",f.value==null?"—":fmt(f.value)+"/100");text("fearClass",f.classification||"Not available");
+text("stateDescription",r.state?t("statePublishedDesc"):t("statePublicOnlyDesc"));
+text("price",p.price_usd==null?"—":"$"+fmt(p.price_usd));text("priceDate",p.candle_date_utc?dateLabel(p.candle_date_utc):t("noFinalizedCandle"));
+text("fear",f.value==null?"—":fmt(f.value)+"/100");text("fearClass",f.classification?fearLabel(f.classification):t("notAvailable"));
 text("sma",signed(p.price_vs_sma_200_pct));text("drawdown",signed(p.drawdown_from_365d_high_pct));
-text("sourceTime","Updated "+(r.generated_at_utc||"time unavailable"));
+text("sourceTime",t("updatedAt",{ts:r.generated_at_utc||t("timeUnavailable")}));
 }
 var BFS_BANDS=[{min:80,color:"#45d6a0",bg:"rgba(69,214,160,.22)"},{min:60,color:"#5ba8ff",bg:"rgba(91,168,255,.22)"},{min:40,color:"#f4b740",bg:"rgba(244,183,64,.22)"},{min:20,color:"#8f9bb0",bg:"rgba(143,155,176,.22)"},{min:-Infinity,color:"#ff7185",bg:"rgba(255,113,133,.22)"}];
 function bfsBand(v){if(v==null||!isFinite(Number(v)))return null;var x=Number(v);for(var i=0;i<BFS_BANDS.length;i++){if(x>=BFS_BANDS[i].min)return BFS_BANDS[i]}return BFS_BANDS[BFS_BANDS.length-1]}
 function renderCalendar(){
 var grid=$("calendarGrid");grid.innerHTML="";var year=viewDate.getFullYear(),month=viewDate.getMonth();
-text("monthLabel",viewDate.toLocaleDateString("en-US",{month:"long",year:"numeric"}));
-["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].forEach(function(d){var e=document.createElement("div");e.className="weekday";e.textContent=d;grid.appendChild(e)});
+text("monthLabel",new Date(Date.UTC(year,month,1)).toLocaleDateString(localeTag(),{month:"long",year:"numeric",timeZone:"UTC"}));
+for(var w=0;w<7;w++){var e=document.createElement("div");e.className="weekday";e.textContent=new Date(Date.UTC(2024,0,7+w)).toLocaleDateString(localeTag(),{weekday:"short",timeZone:"UTC"});grid.appendChild(e)}
 var first=new Date(Date.UTC(year,month,1)),days=new Date(Date.UTC(year,month+1,0)).getUTCDate();
 for(var i=0;i<first.getUTCDay();i++){var blank=document.createElement("div");blank.className="day empty";grid.appendChild(blank)}
 for(var day=1;day<=days;day++){
 var key=year+"-"+String(month+1).padStart(2,"0")+"-"+String(day).padStart(2,"0"),r=byDate[key],button=document.createElement("button");
-button.type="button";button.className="day"+(r?" available":"")+(selectedDate===key?" selected":"");button.setAttribute("aria-label",key+(r?", archived record":" , no archived record"));
+button.type="button";button.className="day"+(r?" available":"")+(selectedDate===key?" selected":"");button.setAttribute("aria-label",key+", "+(r?t("archivedRecordAria"):t("noArchivedRecordAria")));
 var band=r?bfsBand(r.bfs):null;button.style.borderTop="3px solid "+(band?band.color:"#29344a");if(band)button.style.background=band.bg;
 var num=document.createElement("span");num.className="num";num.textContent=day;button.appendChild(num);
 var tiny=document.createElement("span");tiny.className="tiny";tiny.textContent=r?(r.bfs==null?"—":Number(r.bfs).toFixed(1)):"";button.appendChild(tiny);
 button.addEventListener("click",(function(k,rec){return function(){selectedDate=k;renderCalendar();showDetail(k,rec)}})(key,r));
 grid.appendChild(button);
 }
-text("calendarCount",records.length+" archived days");
+text("calendarCount",t("archivedDays",{n:records.length}));
 }
 function showDetail(key,r){
-var box=$("dayDetail");box.innerHTML="";var h=document.createElement("h3");h.textContent=dateLabel(key)+" · "+(r?(r.state||"Data available"):"No archived record");box.appendChild(h);
+var box=$("dayDetail");box.innerHTML="";var h=document.createElement("h3");h.textContent=dateLabel(key)+" · "+(r?t("dataAvailable"):t("noArchivedRecord"));box.appendChild(h);
 var lines=r?[
-"Status: "+(r.status||"Not specified"),
-"BTC reference: "+(r.market_data&&r.market_data.price&&r.market_data.price.price_usd!=null?"$"+fmt(r.market_data.price.price_usd):"Unavailable"),
-"Fear & Greed: "+(r.market_data&&r.market_data.fear_greed&&r.market_data.fear_greed.value!=null?fmt(r.market_data.fear_greed.value)+"/100":"Unavailable"),
-"BFS: "+(r.bfs==null?"Not available":fmt(r.bfs))+" · BOS: "+(r.bos==null?"Not available":fmt(r.bos)),
-"BFS status: "+(r.bfs_status||"Unavailable")+" · Configured weight coverage: "+((r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0)+"%",
-"Dimension scores: "+JSON.stringify(r.dimension_scores||{}),
-"Model version: "+(r.model_version||"Unknown"),
-"Generated at: "+(r.generated_at_utc||"Unknown")
-].concat(r.notes||[]):["No record exists for this date. The calendar does not infer missing observations."];
+t("detailStatus",{status:statusLabel(r.status)}),
+t("detailBtc",{value:r.market_data&&r.market_data.price&&r.market_data.price.price_usd!=null?"$"+fmt(r.market_data.price.price_usd):t("unavailable")}),
+t("detailFear",{value:r.market_data&&r.market_data.fear_greed&&r.market_data.fear_greed.value!=null?fmt(r.market_data.fear_greed.value)+"/100":t("unavailable")}),
+t("detailScores",{bfs:r.bfs==null?t("notAvailable"):fmt(r.bfs),bos:r.bos==null?t("notAvailable"):fmt(r.bos)}),
+t("detailBfsStatus",{status:r.bfs_status||t("unavailable"),pct:(r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0}),
+t("detailDimensions",{json:JSON.stringify(r.dimension_scores||{})}),
+t("detailModelVersion",{version:r.model_version||t("unknown")}),
+t("detailGenerated",{ts:r.generated_at_utc||t("unknown")})
+].concat(r.notes||[]):[t("noRecordForDate")];
 lines.forEach(function(line){var p=document.createElement("p");p.textContent=line;box.appendChild(p)});
 }
 $("prevMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()-1);renderCalendar()});
 $("nextMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()+1);renderCalendar()});
-var DATA_SOURCES=["data/signals/","../data/signals/","https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/data/signals/"];
-var CACHE_BUST="?_t="+new Date().toISOString().slice(0,10).replace(/-/g,"");
-function fetchJson(url){return fetch(url+CACHE_BUST,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error(url+" unavailable ("+r.status+")");return r.json()})}
 function loadArchive(index){
-if(index>=DATA_SOURCES.length)return Promise.reject(Error("No published data archive could be loaded"));
+if(index>=DATA_SOURCES.length)return Promise.reject(Error(t("archiveUnavailableDesc")));
 var base=DATA_SOURCES[index];
-return fetchJson(base+"latest.json").then(function(latest){
-return fetchJson(base+"history.json").catch(function(){return[]}).then(function(history){return{latest:latest,history:history,base:base}})
+return fetchJson(base+"latest.json"+CACHE_BUST).then(function(latest){
+return fetchJson(base+"history.json"+CACHE_BUST).catch(function(){return[]}).then(function(history){return{latest:latest,history:history,base:base}})
 }).catch(function(){return loadArchive(index+1)})
 }
+function buildLangSelect(){var sel=$("langSelect");if(!sel)return;sel.innerHTML="";LOCALES.forEach(function(l){var o=document.createElement("option");o.value=l;o.textContent=NATIVE[l]||l;sel.appendChild(o)});sel.value=lang;sel.addEventListener("change",function(){setLocale(this.value,true)})}
+function applyPack(p,loc,save){pack=p;lang=(p&&p._locale)||loc;if(save){try{localStorage.setItem("cyclemark.lang",lang)}catch(e){}}if($("langSelect"))$("langSelect").value=lang;applyStatic()}
+function loadPack(loc,base){base=base||0;return fetchJson(I18N_BASES[base]+loc+".json"+CACHE_BUST).catch(function(err){if(base+1<I18N_BASES.length)return loadPack(loc,base+1);throw err})}
+function setLocale(loc,save){if(LOCALES.indexOf(loc)<0)loc="en";return loadPack(loc).then(function(p){applyPack(p,loc,save)}).catch(function(){if(loc!=="en")return loadPack("en").then(function(p){applyPack(p,"en",save)}).catch(function(){return null});return null})}
+function detectLocale(){var q=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}if(q&&LOCALES.indexOf(q)>=0)return q;try{var s=localStorage.getItem("cyclemark.lang");if(s&&LOCALES.indexOf(s)>=0)return s}catch(e){}var navs=navigator.languages||[navigator.language||"en"];for(var i=0;i<navs.length;i++){var l=(navs[i]||"").toLowerCase();if(l.indexOf("zh")===0)return/hant|tw|hk|mo/.test(l)?"zh-Hant":"zh-Hans";if(l.indexOf("ja")===0)return"ja";if(l.indexOf("ko")===0)return"ko";if(l.indexOf("fr")===0)return"fr";if(l.indexOf("ru")===0)return"ru";if(l.indexOf("es")===0)return"es";if(l.indexOf("ar")===0)return"ar";if(l.indexOf("th")===0)return"th";if(l.indexOf("bn")===0)return"bn";if(l.indexOf("id")===0||l.indexOf("in-")===0)return"id"}return"en"}
+function applyStatic(){
+var nodes=document.querySelectorAll("[data-i18n]");for(var i=0;i<nodes.length;i++)nodes[i].textContent=t(nodes[i].getAttribute("data-i18n"));
+var arias=document.querySelectorAll("[data-i18n-aria]");for(var j=0;j<arias.length;j++)arias[j].setAttribute("aria-label",t(arias[j].getAttribute("data-i18n-aria")));
+document.documentElement.lang=localeTag();document.documentElement.dir=(pack&&pack._dir==="rtl")?"rtl":"ltr";
+if(latestRecord){renderLatest(latestRecord);if(selectedDate)showDetail(selectedDate,byDate[selectedDate])}
+else if(dataError){text("connection",t("archiveUnavailable"));text("stateDescription",t("archiveUnavailableDesc"));text("asOf",String(dataError.message||dataError));text("bfs",t("notAvailable"));text("bos",t("notAvailable"))}
+else{text("connection",t("loadingData"));text("asOf",t("asOfWaiting"));text("stateName",t("stateResearch"));text("stateDescription",t("stateLoadingDesc"))}
+if(records.length||dataError)renderCalendar();
+}
+buildLangSelect();
+setLocale(detectLocale(),false);
 loadArchive(0)
 .then(function(archive){var latest=archive.latest;renderLatest(latest);$("connection").title="Data source: "+archive.base;records=Array.isArray(archive.history)?archive.history:[];if(!records.some(function(r){return r.date===latest.date}))records.push(latest);records.sort(function(a,b){return a.date.localeCompare(b.date)});records.forEach(function(r){byDate[r.date]=r});if(records.length){var last=records[records.length-1];viewDate=new Date(last.date+"T00:00:00Z");viewDate.setDate(1);selectedDate=last.date}renderCalendar();if(selectedDate)showDetail(selectedDate,byDate[selectedDate])})
-.catch(function(err){text("connection","Archive unavailable");text("stateDescription","No published data archive could be loaded. The site will not invent a market state.");text("asOf",String(err.message||err));renderCalendar()});
+.catch(function(err){dataError=err;text("connection",t("archiveUnavailable"));text("stateDescription",t("archiveUnavailableDesc"));text("asOf",String(err.message||err));renderCalendar()});
 })();
 </script>
 </body>

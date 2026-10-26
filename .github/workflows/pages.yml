@@ -30,6 +30,7 @@ jobs:
         run: |
           mkdir -p site/data
           cp web/index.html site/index.html
+          cp -R web/i18n site/i18n
           cp -R data/signals site/data/signals
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

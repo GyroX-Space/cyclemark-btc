@@ -17,7 +17,7 @@ The current page is in the web directory, so a workflow or a deliberate site-roo
 Production serves the dashboard from the daily-refresh host as a static site.
 
 - Web root: `/srv/cyclemark` on the EC2 instance, owned by the cron user.
-- After every refresh, `scripts/run_daily.sh` copies `web/index.html` and `data/signals/{latest,history}.json` into that directory, so the site matches the 05:05 UTC run without a build or deploy step. The step is skipped on hosts without that directory.
+- After every refresh, `scripts/run_daily.sh` copies `web/index.html`, `web/i18n/*.json`, and `data/signals/{latest,history}.json` into that directory, so the site matches the 05:05 UTC run without a build or deploy step. The step is skipped on hosts without that directory.
 - The nginx site block lives in `/etc/nginx/conf.d/zz-cyclemark.conf`. The `zz-` prefix matters: nginx makes the first `listen 80` block the default server, so an alphabetically earlier file would capture unmatched hosts, including load-balancer health checks.
 - TLS and host routing are handled by the `*.predi.org` load balancer in front of the instance; nginx listens on port 80 only.
 - DNS: `cyclemarket.predi.org` must resolve to the same load balancer as `predi.org`.
@@ -44,6 +44,10 @@ SELinux (Amazon Linux runs it in enforcing mode) must allow nginx to read the we
 Without that rule the site returns 403/404 while file permissions look correct. It also labels files written by later cron runs.
 
 Cache freshness: nginx sends `Cache-Control: no-cache`, and the page requests JSON with `cache: "no-store"` plus a `?_t=YYYYMMDD` token, so browsers never serve yesterday's archive. `history.json` is about 7.5 MB raw and about 370 KB gzipped, so keep gzip enabled.
+
+## Languages
+
+All interface text lives in `web/i18n/<locale>.json`; English is the reference pack. To add a language, add a pack with the same keys and register its locale code in `LOCALES` in `web/index.html`. The page follows the browser language on first visit, accepts `?lang=<locale>`, and remembers the choice in localStorage. Packs marked `"_dir": "rtl"` (Arabic) flip the document direction.
 
 ## Data paths
 
