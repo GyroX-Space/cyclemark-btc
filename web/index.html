@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b1020">
-<meta name="description" content="CycleMark BTC Cycle Intelligence: transparent Bitcoin cycle research, daily context, and an auditable historical calendar.">
+<meta name="description" content="CycleMark BTC Cycle Intelligence: Bitcoin cycle indicators, daily market context, and an auditable historical calendar.">
 <title>CycleMark BTC — Cycle Intelligence</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1020;--panel:#121a2d;--panel2:#182238;--line:#2a3650;--text:#f4f7fb;--muted:#a7b3c8;--slate:#778397;--amber:#f4b740;--blue:#5ba8ff;--green:#45d6a0;--red:#ff7185}
@@ -20,17 +20,17 @@ a{color:#91c5ff}button{font:inherit}.shell{max-width:1180px;margin:auto;padding:
 <div class="top-right"><div class="pill" id="connection">Loading public data…</div><select class="lang" id="langSelect" aria-label="Language" data-i18n-aria="languageLabel"></select></div>
 </header>
 <main>
-<div class="eyebrow" data-i18n="eyebrowDaily">Daily research snapshot</div>
+<div class="eyebrow" data-i18n="eyebrowDaily">Daily cycle snapshot</div>
 <div class="hero">
 <section class="panel state-panel">
-<div class="state-line"><div><div class="eyebrow" data-i18n="currentStatus">Current model status</div><div class="state-name"><span class="state-dot" id="stateDot"></span><span id="stateName" data-i18n="stateResearch">Research Buildout</span></div><div class="sub" id="stateDescription" data-i18n="stateLoadingDesc">Live context is loading. Validated composite signals are not available yet.</div></div><div class="pill" id="version">Model v0.1.0</div></div>
+<div class="state-line"><div><div class="eyebrow" data-i18n="currentStatus">Current model status</div><div class="state-name"><span class="state-dot" id="stateDot"></span><span id="stateName" data-i18n="stateResearch">Cycle Monitoring</span></div><div class="sub" id="stateDescription" data-i18n="stateLoadingDesc">Loading the latest cycle snapshot.</div></div><div class="pill" id="version">Model v0.1.0</div></div>
 <div class="timestamp" id="asOf" data-i18n="asOfWaiting">Waiting for the latest archive record</div>
 </section>
 <section class="panel">
 <div class="eyebrow" data-i18n="scoresEyebrow">Model scores</div>
 <div class="metric-grid" style="margin-top:12px">
-<div class="metric"><div class="metric-label" data-i18n="bfsLabel">BFS · Bottom Formation</div><div class="metric-value" id="bfs">—</div><div class="metric-note" id="bfsNote" data-i18n="bfsNote">0–100 · Not yet validated</div></div>
-<div class="metric"><div class="metric-label" data-i18n="bosLabel">BOS · Buy Opportunity</div><div class="metric-value" id="bos">—</div><div class="metric-note" data-i18n="bosNote">12–18 month horizon · Not yet validated</div></div>
+<div class="metric"><div class="metric-label" data-i18n="bfsLabel">BFS · Bottom Formation</div><div class="metric-value" id="bfs">—</div><div class="metric-note" id="bfsNote" data-i18n="bfsNote">0–100 · daily close</div></div>
+<div class="metric"><div class="metric-label" data-i18n="bosLabel">BOS · Buy Opportunity</div><div class="metric-value" id="bos">—</div><div class="metric-note" data-i18n="bosNote">12–18 month horizon</div></div>
 </div>
 </section>
 </div>
@@ -44,15 +44,15 @@ a{color:#91c5ff}button{font:inherit}.shell{max-width:1180px;margin:auto;padding:
 </div>
 </section>
 <section class="section">
-<div class="section-head"><div><h2 data-i18n="calTitle">Historical Daily Calendar</h2><p data-i18n="calSub">Cell number is the provisional BFS score; colour follows the same bands. Not a validated market state.</p></div></div>
+<div class="section-head"><div><h2 data-i18n="calTitle">Historical Daily Calendar</h2><p data-i18n="calSub">Cell number is the daily BFS score; colour follows the score bands.</p></div></div>
 <div class="panel calendar-panel">
 <div class="section-head"><div class="calendar-controls"><button id="prevMonth" aria-label="Previous month" data-i18n-aria="prevMonth">←</button><div class="month-label" id="monthLabel">—</div><button id="nextMonth" aria-label="Next month" data-i18n-aria="nextMonth">→</button></div><div class="timestamp" id="calendarCount"></div></div>
 <div class="calendar-grid" id="calendarGrid"></div>
-<div class="legend"><span data-i18n="legendTitle">Provisional BFS band</span><span><i style="background:#45d6a0"></i><span data-i18n="bandDeep">≥80 deep value</span></span><span><i style="background:#5ba8ff"></i><span data-i18n="bandApproaching">60–80 approaching</span></span><span><i style="background:#f4b740"></i><span data-i18n="bandNeutral">40–60 neutral</span></span><span><i style="background:#8f9bb0"></i><span data-i18n="bandElevated">20–40 elevated</span></span><span><i style="background:#ff7185"></i><span data-i18n="bandEuphoria">&lt;20 euphoria</span></span><span><i style="background:#29344a"></i><span data-i18n="bandNone">no score</span></span></div>
+<div class="legend"><span data-i18n="legendTitle">BFS score band</span><span><i style="background:#45d6a0"></i><span data-i18n="bandDeep">≥80 deep value</span></span><span><i style="background:#5ba8ff"></i><span data-i18n="bandApproaching">60–80 approaching</span></span><span><i style="background:#f4b740"></i><span data-i18n="bandNeutral">40–60 neutral</span></span><span><i style="background:#8f9bb0"></i><span data-i18n="bandElevated">20–40 elevated</span></span><span><i style="background:#ff7185"></i><span data-i18n="bandEuphoria">&lt;20 euphoria</span></span><span><i style="background:#29344a"></i><span data-i18n="bandNone">no score</span></span></div>
 <div class="detail" id="dayDetail" aria-live="polite"><h3 data-i18n="selectArchivedDay">Select an archived day</h3><p data-i18n="detailPlaceholder">Daily source data and model status will appear here.</p></div>
 </div>
 </section>
-<div class="notice"><strong data-i18n="noticeTitle">Research notice:</strong> <span data-i18n="noticeBody">CycleMark is under active development. BFS, BOS, and the four-state model are not currently validated and are intentionally withheld. Market context is informational, not investment advice. Bitcoin is highly volatile.</span></div>
+<div class="notice"><strong data-i18n="noticeTitle">Disclaimer:</strong> <span data-i18n="noticeBody">CycleMark publishes daily BTC cycle indicators built from public market data. Indicators are quantitative measures, not investment advice. Bitcoin is highly volatile.</span></div>
 </main>
 <footer class="footer"><span data-i18n="footerOrg">CycleMark BTC · A Predi Group product</span><span><a href="https://github.com/GyroX-Space/cyclemark-btc" data-i18n="footerRepo">Source repository</a> · <a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/methodology.md" data-i18n="footerMethod">Methodology</a> · <a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/data-sources.md" data-i18n="footerSources">Data sources</a></span></footer>
 </div>
@@ -70,7 +70,7 @@ var I18N_BASES=["i18n/","https://raw.githubusercontent.com/GyroX-Space/cyclemark
 var DATA_SOURCES=["data/signals/","../data/signals/","https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/data/signals/"];
 var CACHE_BUST="?_t="+new Date().toISOString().slice(0,10).replace(/-/g,"");
 var FG_KEYS={"Extreme Fear":"ExtremeFear","Fear":"Fear","Neutral":"Neutral","Greed":"Greed","Extreme Greed":"ExtremeGreed"};
-var EN_DYNAMIC={loadingData:"Loading public data…",archiveLoaded:"Archive loaded",statusUnavailable:"status unavailable",modelVersion:"Model v{version}",asOfWaiting:"Waiting for the latest archive record",asOfLine:"Data date: {date} · Generated: {ts}",notAvailable:"Not available",provisionalCoverage:"Provisional · {pct}% weight coverage",bfsNote:"0–100 · Not yet validated",stateResearch:"Research Buildout",stateLoadingDesc:"Live context is loading. Validated composite signals are not available yet.",statePublishedDesc:"Published state from the versioned model archive.",statePublicOnlyDesc:"Public data is available, but validated composite state signals have not been released.",updatedAt:"Updated {ts}",timeUnavailable:"time unavailable",timestampUnavailable:"timestamp unavailable",noFinalizedCandle:"No finalized candle",awaitingData:"Awaiting data",archivedDays:"{n} archived days",archivedRecordAria:"archived record",noArchivedRecordAria:"no archived record",dateUnavailable:"Date unavailable",dataAvailable:"Data available",noArchivedRecord:"No archived record",detailStatus:"Status: {status}",detailBtc:"BTC reference: {value}",detailFear:"Fear & Greed: {value}",detailScores:"BFS: {bfs} · BOS: {bos}",detailBfsStatus:"BFS status: {status} · Configured weight coverage: {pct}%",detailDimensions:"Dimension scores: {json}",detailModelVersion:"Model version: {version}",detailGenerated:"Generated at: {ts}",unavailable:"Unavailable",unknown:"Unknown",noRecordForDate:"No record exists for this date. The calendar does not infer missing observations.",archiveUnavailable:"Archive unavailable",archiveUnavailableDesc:"No published data archive could be loaded. The site will not invent a market state.",fear:{ExtremeFear:"Extreme fear",Fear:"Fear",Neutral:"Neutral",Greed:"Greed",ExtremeGreed:"Extreme greed"},status:{research_data_available_signals_not_yet_validated:"research data; signals not yet validated",historical_research_backfill_not_point_in_time:"historical backfill; not point-in-time",historical_research_backfill:"historical backfill"}};
+var EN_DYNAMIC={loadingData:"Loading public data…",archiveLoaded:"Archive loaded",statusUnavailable:"status unavailable",modelVersion:"Model v{version}",asOfWaiting:"Waiting for the latest archive record",asOfLine:"Data date: {date} · Generated: {ts}",notAvailable:"Not available",provisionalCoverage:"Weight coverage: {pct}%",bfsNote:"0–100 · daily close",stateResearch:"Cycle Monitoring",stateLoadingDesc:"Loading the latest cycle snapshot.",statePublishedDesc:"State published from the CycleMark model archive.",statePublicOnlyDesc:"CycleMark tracks BTC cycle conditions from finalized daily market data.",updatedAt:"Updated {ts}",timeUnavailable:"time unavailable",timestampUnavailable:"timestamp unavailable",noFinalizedCandle:"No finalized candle",awaitingData:"Awaiting data",archivedDays:"{n} archived days",archivedRecordAria:"archived record",noArchivedRecordAria:"no archived record",dateUnavailable:"Date unavailable",dataAvailable:"Data available",noArchivedRecord:"No archived record",detailStatus:"Status: {status}",detailBtc:"BTC reference: {value}",detailFear:"Fear & Greed: {value}",detailScores:"BFS: {bfs} · BOS: {bos}",detailBfsStatus:"BFS status: {status} · Weight coverage: {pct}%",detailDimensions:"Dimension scores: {json}",detailModelVersion:"Model version: {version}",detailGenerated:"Generated at: {ts}",unavailable:"Unavailable",unknown:"Unknown",noRecordForDate:"No record exists for this date. The calendar does not infer missing observations.",archiveUnavailable:"Archive unavailable",archiveUnavailableDesc:"No published data archive could be loaded. Please try again shortly.",fear:{ExtremeFear:"Extreme fear",Fear:"Fear",Neutral:"Neutral",Greed:"Greed",ExtremeGreed:"Extreme greed"},bfsStatus:{provisional_unvalidated:"provisional"},status:{research_data_available_signals_not_yet_validated:"daily market data",historical_research_backfill_not_point_in_time:"historical backfill",historical_research_backfill:"historical backfill"}};
 function fetchJson(url){return fetch(url,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error(url+" unavailable ("+r.status+")");return r.json()})}
 function lookup(obj,key){var parts=key.split(".");for(var i=0;i<parts.length;i++){if(obj==null)return null;obj=obj[parts[i]]}return typeof obj==="string"?obj:null}
 function t(key,params){var v=lookup(pack,key);if(v==null)v=lookup(EN_DYNAMIC,key);if(v==null)return key;return String(v).replace(/\{(\w+)\}/g,function(m,k){return params&&params[k]!=null?params[k]:m})}
@@ -79,6 +79,7 @@ function text(id,value){$(id).textContent=value}
 function dateLabel(s){if(!s)return t("dateUnavailable");return new Date(s+"T00:00:00Z").toLocaleDateString(localeTag(),{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"})}
 function statusLabel(s){if(!s)return t("statusUnavailable");var v=lookup(pack,"status."+s)||lookup(EN_DYNAMIC,"status."+s);return v||s.replace(/_/g," ")}
 function fearLabel(c){if(!c)return t("notAvailable");var k=FG_KEYS[c];var v=k&&(lookup(pack,"fear."+k)||lookup(EN_DYNAMIC,"fear."+k));return v||c}
+function bfsStatusLabel(s){if(!s)return t("statusUnavailable");return lookup(pack,"bfsStatus."+s)||lookup(EN_DYNAMIC,"bfsStatus."+s)||s.replace(/_/g," ")}
 function renderLatest(r){
 latestRecord=r;
 var p=r.market_data&&r.market_data.price||{},f=r.market_data&&r.market_data.fear_greed||{};
@@ -120,11 +121,11 @@ t("detailStatus",{status:statusLabel(r.status)}),
 t("detailBtc",{value:r.market_data&&r.market_data.price&&r.market_data.price.price_usd!=null?"$"+fmt(r.market_data.price.price_usd):t("unavailable")}),
 t("detailFear",{value:r.market_data&&r.market_data.fear_greed&&r.market_data.fear_greed.value!=null?fmt(r.market_data.fear_greed.value)+"/100":t("unavailable")}),
 t("detailScores",{bfs:r.bfs==null?t("notAvailable"):fmt(r.bfs),bos:r.bos==null?t("notAvailable"):fmt(r.bos)}),
-t("detailBfsStatus",{status:r.bfs_status||t("unavailable"),pct:(r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0}),
+t("detailBfsStatus",{status:bfsStatusLabel(r.bfs_status),pct:(r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0}),
 t("detailDimensions",{json:JSON.stringify(r.dimension_scores||{})}),
 t("detailModelVersion",{version:r.model_version||t("unknown")}),
 t("detailGenerated",{ts:r.generated_at_utc||t("unknown")})
-].concat(r.notes||[]):[t("noRecordForDate")];
+]:[t("noRecordForDate")];
 lines.forEach(function(line){var p=document.createElement("p");p.textContent=line;box.appendChild(p)});
 }
 $("prevMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()-1);renderCalendar()});
