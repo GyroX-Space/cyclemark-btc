@@ -7,7 +7,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from notify_telegram import TAGLINE, bottom_indicator_label, build_message
+from notify_telegram import (
+    TAGLINE,
+    bottom_indicator_label,
+    build_message,
+    parse_chat_ids,
+)
+
+
+def test_parse_chat_ids():
+    assert parse_chat_ids("") == []
+    assert parse_chat_ids("  ") == []
+    assert parse_chat_ids("-1002197243810") == ["-1002197243810"]
+    assert parse_chat_ids("6668296090,-1002197243810") == ["6668296090", "-1002197243810"]
+    assert parse_chat_ids(" 6668296090 , -1002197243810 ") == ["6668296090", "-1002197243810"]
 
 
 def _record(bfs: float) -> dict:

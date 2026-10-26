@@ -5,11 +5,14 @@ posts it via the Telegram Bot API. Credentials come from environment variables
 and are never stored in the repository:
 
   CYCLEMARK_TELEGRAM_BOT_TOKEN  bot token from @BotFather
-  CYCLEMARK_TELEGRAM_CHAT_ID    target chat (personal id or group id)
+  CYCLEMARK_TELEGRAM_CHAT_IDS   comma/space-separated target chats (personal
+                                ids or group ids; any group that adds the bot
+                                as an admin with post permission can receive)
 
 If either variable is missing the script logs a skip notice and exits 0, so
-local runs and servers without Telegram configured are unaffected. Network
-failures are reported on stderr and exit 1 so the caller can decide policy.
+local runs and servers without Telegram configured are unaffected. Delivery is
+attempted per chat: per-chat failures are logged on stderr, and the script
+exits 1 only if every chat failed.
 """
 from __future__ import annotations
 
@@ -64,25 +67,40 @@ def send_message(token: str, chat_id: str, text: str, *, timeout: float = 15.0) 
         return json.loads(resp.read().decode("utf-8"))
 
 
+def parse_chat_ids(raw: str) -> list[str]:
+    """Split a comma/space-separated chat id list, dropping empty entries."""
+    return [c for c in raw.replace(",", " ").split() if c]
+
+
 def main() -> int:
     token = os.environ.get("CYCLEMARK_TELEGRAM_BOT_TOKEN", "").strip()
-    chat_id = os.environ.get("CYCLEMARK_TELEGRAM_CHAT_ID", "").strip()
-    if not token or not chat_id:
+    chat_ids = parse_chat_ids(os.environ.get("CYCLEMARK_TELEGRAM_CHAT_IDS", ""))
+    if not token or not chat_ids:
         print("Telegram credentials not set; skipping notification.", file=sys.stderr)
         return 0
 
     record = json.loads(LATEST_SIGNAL.read_text(encoding="utf-8"))
     message = build_message(record)
     print(message)
-    try:
-        result = send_message(token, chat_id, message)
-    except (HTTPError, URLError, OSError) as exc:
-        print(f"Telegram notification failed: {exc}", file=sys.stderr)
+
+    delivered = 0
+    for chat_id in chat_ids:
+        try:
+            result = send_message(token, chat_id, message)
+        except (HTTPError, URLError, OSError) as exc:
+            print(f"Telegram send to {chat_id} failed: {exc}", file=sys.stderr)
+            continue
+        if not result.get("ok"):
+            print(f"Telegram API rejected chat {chat_id}: {result}", file=sys.stderr)
+            continue
+        print(f"Telegram message delivered to chat {chat_id}.")
+        delivered += 1
+
+    if delivered == 0:
+        print(f"Telegram notification failed for all {len(chat_ids)} chat(s).", file=sys.stderr)
         return 1
-    if not result.get("ok"):
-        print(f"Telegram API rejected the message: {result}", file=sys.stderr)
-        return 1
-    print(f"Telegram message delivered to chat {chat_id}.")
+    if delivered < len(chat_ids):
+        print(f"Delivered to {delivered}/{len(chat_ids)} chats; see stderr for failures.")
     return 0
 
 
