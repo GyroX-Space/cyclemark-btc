@@ -118,6 +118,7 @@ Buy-and-hold BTC may be reported as a reference return over the same interval, b
 **Low-information rule (unified):**
 - If a stratum's `usable_block_starts` < 10: set `weak_evidence: true` **and** force that stratum-horizon conclusion to `inconclusive`. Both always fire together.
 - If a stratum's `effective_blocks_or_cycles` < 10: set `weak_evidence: true` at minimum, and the report must not state that predictive ability is established — the strongest allowed phrasing remains "directional evidence", explicitly labelled weak/exploratory.
+- `effective_blocks_or_cycles` is a mechanical non-overlapping block count, **not** a verified count of independent cycles. Even when it reaches 10, predictive ability is not thereby established; it only removes the automatic weak-evidence flag.
 
 - Report per-fold point estimates alongside per-stratum pooled estimates and per-stratum pooled CIs. A pooled point estimate without fold dispersion is not reportable; fold dispersion is conveyed by per-fold point estimates, not intervals.
 - If fewer than three valid folds exist in a stratum, that stratum's conclusion is `inconclusive` regardless of point estimates.
@@ -143,7 +144,7 @@ A single JSON document with:
 
 ```json
 {
-  "report_schema_version": "1.1",
+  "report_schema_version": "1.2",
   "generated_at_utc": "...",
   "horizon_days": 365,
   "co_primary_horizons": [365, 548],
@@ -160,24 +161,21 @@ A single JSON document with:
   "results_by_stratum": {
     "published": {
       "usable_block_starts": 0, "effective_blocks_or_cycles": 0, "weak_evidence": true,
-      "pooled_spearman": null, "spearman_ci_95": null, "conclusion": "inconclusive"
+      "pooled_spearman": null, "spearman_ci_95": null, "conclusion": "inconclusive",
+      "folds": [
+        {"index": 0, "eval_start": "...", "eval_end": "...", "train_count": 0, "eval_count": 0,
+         "eval_coverage_pct": 0.0, "skipped": false, "skip_reason": null,
+         "metrics": {}, "baselines": {}, "warnings": []}
+      ]
     },
-    "reconstructed": {
-      "usable_block_starts": 0, "effective_blocks_or_cycles": 0, "weak_evidence": true,
-      "pooled_spearman": null, "spearman_ci_95": null, "conclusion": "inconclusive"
-    }
+    "reconstructed": { "... same shape ..." }
   },
-  "folds": [
-    {"index": 0, "eval_start": "...", "eval_end": "...", "train_count": 0, "eval_count": 0,
-     "eval_coverage_pct": 0.0, "skipped": false, "skip_reason": null,
-     "metrics": {}, "baselines": {}, "warnings": []}
-  ],
-  "pooled": {},
   "guard_results": {},
-  "conclusion": "inconclusive | directional | rejected",
   "limitations": ["..."]
 }
 ```
+
+**No top-level `pooled` or `conclusion` field exists** (final-review boundary condition): every conclusion lives inside `results_by_stratum.<stratum>.conclusion` and `folds` live inside each stratum, so no code path can silently merge strata into one result.
 
 `conclusion` is derived per stratum and per horizon by a predeclared rule, not by post-hoc judgement. Rule (unified): skipped folds are recorded with reasons and excluded from pooling, but do not by themselves void the horizon. A stratum-horizon conclusion is `inconclusive` when (a) fewer than three valid folds remain in that stratum, (b) that stratum's usable bootstrap block-start count is below 10 (this also sets `weak_evidence: true`; both always fire together), or (c) the stratum's pooled Spearman 95% confidence interval includes zero. `weak_evidence: true` is additionally set whenever `effective_blocks_or_cycles` < 10. No combined cross-stratum conclusion is produced.
 
