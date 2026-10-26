@@ -73,9 +73,18 @@ def test_known_exchange_maintenance_anomaly_warns_not_fails():
 
 
 def test_new_irregular_close_offset_still_fatal():
-    """Same date as a known anomaly but a different offset is still fatal."""
+    """Same date as a known anomaly but a different full offset is still fatal."""
     candles = _series(date(2018, 2, 6), 5)
-    candles[2]["close_time_ms"] = candles[2]["open_time_ms"] + 1_000_000  # not documented
+    candles[2]["close_time_ms"] = candles[2]["open_time_ms"] + 1_000_000
+    result = summarize_candle_quality(candles, now_utc=ANOMALY_NOW)
+    assert any("irregular close-time offset" in i for i in result["fatal_issues"])
+
+
+def test_whitelist_requires_full_offset_not_intraday_only():
+    """2018-02-08 + one extra day but same intra-day offset must be fatal."""
+    candles = _series(date(2018, 2, 6), 5)
+    # 24h + 28m14.788s — intra-day offset matches but full duration does not.
+    candles[2]["close_time_ms"] = candles[2]["open_time_ms"] + 86_400_000 + 1_694_788
     result = summarize_candle_quality(candles, now_utc=ANOMALY_NOW)
     assert any("irregular close-time offset" in i for i in result["fatal_issues"])
 

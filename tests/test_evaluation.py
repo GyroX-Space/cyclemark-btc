@@ -54,14 +54,24 @@ def test_spearman_monotonic_and_ties():
     assert spearman([1], [2]) is None
 
 
-def test_evaluation_is_deterministic_and_stratified():
+def test_evaluation_is_deterministic_fingerprint_respects_wallclock():
+    """deterministic_fingerprint ignores generated_at_utc; full JSON does not."""
     candles = make_candles(2600)
-    signals = make_signals(candles, drop=548)  # ensure complete 548d labels exist
-    kwargs = dict(candles=candles, horizon_days=365,
-                  generated_at_utc="2026-10-26T00:00:00Z", resamples=200, seed=0)
-    first = evaluate(signals=signals, **kwargs)
-    second = evaluate(signals=signals, **kwargs)
-    assert json.dumps(first, sort_keys=True) == json.dumps(second, sort_keys=True)
+    signals = make_signals(candles, drop=548)
+    first = evaluate(signals=signals, candles=candles, horizon_days=365,
+                      generated_at_utc="2026-10-26T00:00:00Z", resamples=200, seed=0)
+    second = evaluate(signals=signals, candles=candles, horizon_days=365,
+                       generated_at_utc="2026-10-27T03:15:00Z", resamples=200, seed=0)
+    # Deterministic anchor is byte-identical across wall-clock differences.
+    assert first["deterministic_fingerprint"] == second["deterministic_fingerprint"]
+    # Full JSON differs because generated_at_utc differs — this is the intended contract.
+    assert json.dumps(first, sort_keys=True) != json.dumps(second, sort_keys=True)
+
+    # Audit: input fingerprints are properly split, not mixed together.
+    assert first["inputs"]["ohlcv_fingerprint"] != first["inputs"]["signal_fingerprint"]
+    assert first["inputs"]["ohlcv_time_range"][0] < first["inputs"]["ohlcv_time_range"][1]
+    assert "fold_boundaries_hash" in first["inputs"]
+    assert "ohlcv_time_range" in first["inputs"]
 
     assert set(first["results_by_stratum"]) == {"published", "reconstructed"}
     recon = first["results_by_stratum"]["reconstructed"]

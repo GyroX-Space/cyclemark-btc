@@ -257,8 +257,9 @@ def evaluate(
     baselines = _baseline_values(rows)
 
     per_stratum: dict[str, list[dict]] = {"published": [], "reconstructed": []}
-    excluded_no_candle = 0
+    excluded_no_candle = 0  # counted inside per-stratum loop below
     excluded_no_bfs = 0
+
     for record in signals:
         day = record.get("date")
         if not isinstance(day, str) or day not in candle_dates:
@@ -392,12 +393,45 @@ def evaluate(
             "folds": folds,
         }
 
-    fingerprint = hashlib.sha256(json.dumps(
-        {"signals": signals, "candles": rows, "horizon": horizon_days},
-        sort_keys=True, default=str).encode()).hexdigest()
+    # Audit fingerprints — each covers exactly one input category so reviewers
+    # can locate which input changed across runs. Nothing is mixed together.
+    def _hash(obj: Any) -> str:
+        return hashlib.sha256(
+            json.dumps(obj, sort_keys=True, default=str).encode("utf-8")
+        ).hexdigest()
+
+    ohlcv_fingerprint = _hash(rows)
+    signal_fingerprint = _hash(signals)
+    feature_columns = ["bfs"]
+    fold_boundaries: list[dict] = []
+    for stratum, result in results_by_stratum.items():
+        for fold in result.get("folds", []):
+            fold_boundaries.append({
+                "stratum": stratum,
+                "index": fold["index"],
+                "eval_start": fold["eval_start"],
+                "eval_end": fold["eval_end"],
+                "skipped": fold["skipped"],
+                "skip_reason": fold["skip_reason"],
+            })
+    ohlcv_dates = [r["date"] for r in rows]
+    # Deterministic anchor — excludes generated_at_utc (wall-clock) and
+    # bootstrap noise that varies with resample count, so that two runs with
+    # identical inputs and fixed seed compare equal on this field.
+    deterministic_fingerprint = _hash({
+        "ohlcv_fingerprint": ohlcv_fingerprint,
+        "signal_fingerprint": signal_fingerprint,
+        "horizon_days": horizon_days,
+        "seed": seed,
+        "resamples": resamples,
+        "fold_boundaries": fold_boundaries,
+        "feature_columns": feature_columns,
+        "conclusions": {s: r["conclusion"] for s, r in results_by_stratum.items()},
+    })
     return {
         "report_schema_version": "1.2",
         "generated_at_utc": generated_at_utc,
+        "deterministic_fingerprint": deterministic_fingerprint,
         "horizon_days": horizon_days,
         "co_primary_horizons": [365, 548],
         "primary_statistic": "spearman",
@@ -405,9 +439,16 @@ def evaluate(
         "fold": {"block_days": EVAL_BLOCK_DAYS, "min_train_samples": MIN_TRAIN_SAMPLES,
                  "min_eval_coverage_pct": 80, "min_valid_folds": MIN_VALID_FOLDS},
         "purge_rule": "training target_observation_date < eval_start",
-        "inputs": {"ohlcv_fingerprint": fingerprint, "signal_files": list(signal_files),
-                   "ohlcv_source": ohlcv_source},
-        "columns": {"features": ["bfs"], "labels": [f"forward_return_{horizon_days}d"]},
+        "inputs": {
+            "ohlcv_fingerprint": ohlcv_fingerprint,
+            "signal_fingerprint": signal_fingerprint,
+            "signal_files": list(signal_files),
+            "ohlcv_source": ohlcv_source,
+            "ohlcv_time_range": [ohlcv_dates[0], ohlcv_dates[-1]] if ohlcv_dates else None,
+            "fold_boundaries_hash": _hash(fold_boundaries),
+        },
+        "columns": {"features": feature_columns,
+                    "labels": [f"forward_return_{horizon_days}d"]},
         "coverage": {"excluded_no_candle": excluded_no_candle,
                      "excluded_no_bfs": excluded_no_bfs},
         "bfs_buckets": list(BFS_BUCKETS),
@@ -423,5 +464,6 @@ def evaluate(
             "Historical price data may have been revised by the source.",
             "effective_blocks_or_cycles is a mechanical non-overlapping block count, not verified independent cycles.",
             "No joint or independence claim is made across horizons or strata.",
+            "deterministic_fingerprint excludes generated_at_utc so wall-clock differences do not break reruns.",
         ],
     }

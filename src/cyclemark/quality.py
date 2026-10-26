@@ -8,13 +8,17 @@ DAILY_CLOSE_OFFSET_MS = 86_399_999
 MAX_REPORTED_MISSING_DATES = 120
 
 # Documented historical exchange events. A candle is exempted from the fatal
-# close-offset rule only when BOTH its UTC date and its exact close offset
-# match a registry entry; any new irregular candle remains fatal.
+# close-offset rule only when BOTH its UTC date AND its full close-offset
+# duration (close_ms - open_ms) match a registry entry. Modulo-MS_PER_DAY is
+# deliberately NOT used: a candle that closed a full day later with the same
+# intra-day offset must still be fatal so that new exchange anomalies cannot
+# silently slip past the whitelist. Any genuinely new anomaly requires a
+# code review to be added here.
 KNOWN_CANDLE_ANOMALIES = {
     ("2018-02-08", 1_694_788): (
         "Binance unscheduled system maintenance on 2018-02-08 halted trading "
         "intraday; the daily candle closed at 00:28:14.788 UTC. Genuine market "
-        "data, not corruption."
+        "data, not corruption. Close offset = 1694788 ms (0h 28m 14.788s)."
     ),
 }
 
@@ -73,11 +77,10 @@ def summarize_candle_quality(
     irregular_close = 0
     known_anomalies: list[str] = []
     for open_ms, close_ms in zip(opens, closes):
-        if close_ms - open_ms == DAILY_CLOSE_OFFSET_MS:
+        offset = close_ms - open_ms
+        if offset == DAILY_CLOSE_OFFSET_MS:
             continue
-        reason = KNOWN_CANDLE_ANOMALIES.get(
-            (_utc_date(open_ms).isoformat(), close_ms % MS_PER_DAY)
-        )
+        reason = KNOWN_CANDLE_ANOMALIES.get((_utc_date(open_ms).isoformat(), offset))
         if reason is None:
             irregular_close += 1
         else:
