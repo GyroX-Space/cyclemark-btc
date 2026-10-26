@@ -12,38 +12,44 @@ The English-language dashboard is in the web directory and reads JSON records fr
 
 The current page is in the web directory, so a workflow or a deliberate site-root layout is required before Pages can serve it directly. Do not announce a live URL until the deployment has been verified.
 
-## Server hosting on a subdomain
+## Server hosting (cyclemarket.predi.org)
 
-The production plan is to serve the dashboard from the daily-refresh server on its own subdomain, with no GitHub Actions involved. The repository remains the single source of truth: the cron job pulls, generates, and pushes every day, and the web server reads the same `data/signals/` files in place.
+Production serves the dashboard from the daily-refresh host as a static site.
 
-Recommended nginx layout (the page is served at the subdomain root, data at `/data/signals/`):
+- Web root: `/srv/cyclemark` on the EC2 instance, owned by the cron user.
+- After every refresh, `scripts/run_daily.sh` copies `web/index.html` and `data/signals/{latest,history}.json` into that directory, so the site matches the 05:05 UTC run without a build or deploy step. The step is skipped on hosts without that directory.
+- The nginx site block lives in `/etc/nginx/conf.d/zz-cyclemark.conf`. The `zz-` prefix matters: nginx makes the first `listen 80` block the default server, so an alphabetically earlier file would capture unmatched hosts, including load-balancer health checks.
+- TLS and host routing are handled by the `*.predi.org` load balancer in front of the instance; nginx listens on port 80 only.
+- DNS: `cyclemarket.predi.org` must resolve to the same load balancer as `predi.org`.
 
     server {
         listen 80;
-        server_name btc.example.com;
-        root /home/ec2-user/simon/cyclemark-btc;
-
-        location = / { try_files /web/index.html =404; }
-        location /web/ { try_files $uri =404; }
-        location /data/signals/ {
-            add_header Cache-Control "no-cache" always;
-            try_files $uri =404;
-        }
-        location / { return 404; }
+        server_name cyclemarket.predi.org;
+        root /srv/cyclemark;
+        index index.html;
+        access_log /var/log/nginx/cyclemark.access.log;
+        error_log  /var/log/nginx/cyclemark.error.log notice;
+        gzip on;
+        gzip_types application/json application/javascript text/css image/svg+xml;
+        gzip_min_length 512;
+        add_header Cache-Control "no-cache" always;
+        location / { try_files $uri $uri/ =404; }
     }
 
-Notes:
+SELinux (Amazon Linux runs it in enforcing mode) must allow nginx to read the web root:
 
-- Set `root` to the checkout used by `run_daily.sh` so every cron run refreshes the served JSON with no copy or build step.
-- Serve the JSON with a revalidating cache header; the dashboard itself already requests it with `cache: "no-store"`.
-- Enable TLS (for example with certbot) and gzip for `application/json`; `history.json` is several megabytes uncompressed.
-- The daily job runs at 05:05 UTC. `data/signals/latest.json` always carries `generated_at_utc`, which the dashboard displays as its "Updated" timestamp.
+    sudo semanage fcontext -a -t httpd_sys_content_t '/srv/cyclemark(/.*)?'
+    sudo restorecon -Rv /srv/cyclemark
+
+Without that rule the site returns 403/404 while file permissions look correct. It also labels files written by later cron runs.
+
+Cache freshness: nginx sends `Cache-Control: no-cache`, and the page requests JSON with `cache: "no-store"` plus a `?_t=YYYYMMDD` token, so browsers never serve yesterday's archive. `history.json` is about 7.5 MB raw and about 370 KB gzipped, so keep gzip enabled.
 
 ## Data paths
 
 The dashboard resolves its data from the first source that answers, in this order:
 
-1. `data/signals/` — same-origin path, used when the page is served at the subdomain root or with an nginx `/data/` mapping
+1. `data/signals/` — same-origin, served from `/srv/cyclemark/data/signals/`
 2. `../data/signals/` — used when the page is served under `/web/` with the repository root as document root
 3. `https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/data/signals/` — fallback when only the HTML is deployed
 
