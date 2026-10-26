@@ -77,7 +77,7 @@ The primary analysis is the association between the continuous BFS and forward r
 **Locked primary statistic (review item A, settled):**
 
 1. The primary statistic is the **Spearman rank correlation** between BFS and the forward return. No other statistic may be substituted after seeing results.
-2. The **365-day and 548-day horizons are co-primary**: both are always reported, each with its own report run. Declaring one as "primary" after seeing results is prohibited; neither may be dropped because it is unfavourable. **Multiplicity handling (review item A follow-up, settled):** each horizon produces its own conclusion and its own 95% CI; the report makes **no joint statistical claim** across horizons, so no familywise adjustment is applied. If both horizons are directional, that is reported as two independent per-horizon findings, never as a combined significance claim.
+2. The **365-day and 548-day horizons are co-primary**: both are always reported, each with its own report run. Declaring one as "primary" after seeing results is prohibited; neither may be dropped because it is unfavourable. **Multiplicity wording (review item A, round 3, settled):** the two horizons are reported as **two separate per-horizon conclusions**. Because the 365-day and 548-day forward returns of the same dates are strongly overlapping, the report must **not** claim the two findings are statistically independent and must **not** claim joint significance; no familywise adjustment is applied because no joint claim is made.
 3. The rank correlation is reported with a **block-bootstrap 95% confidence interval** (rules in §7). Interpretation rule, predeclared: a correlation whose 95% CI excludes zero is "directional evidence" for that horizon; a CI including zero is `inconclusive` for that horizon. Correlation alone does not establish a tradable signal.
 4. No metric, horizon, or bucket boundary may be changed in response to observed results.
 
@@ -106,17 +106,21 @@ Buy-and-hold BTC may be reported as a reference return over the same interval, b
 
 - Use fixed-seed block bootstrap, 2,000 resamples. Block length must be at least the label horizon `H` (365 or 548 days), so overlapping daily samples are not treated as independent.
 
-**Sampling frame (review item C, settled):**
+**Sampling frame (review item C, settled; round 3: per-stratum):**
 
-1. **The pooled evaluation sample is the bootstrap sampling frame.** It is the union of all valid (non-skipped) evaluation-fold dates, ordered chronologically. Because valid folds partition a continuous timeline, blocks may span adjacent valid-fold boundaries within the same stratum; the pooled sample is treated as one time series, except where a skipped fold or a date gap interrupts continuity.
-2. A bootstrap block is a contiguous run of exactly `H` consecutive *sample dates* starting at a valid block start. A start is **usable** if the block remains within one stratum and does not cross a discontinuity (a date gap > 1 calendar day, or a skipped-fold boundary). Per-fold usable starts are computed the same way within each fold's own window. With `E = 365`-day folds, an `H = 548` block can never fit inside one fold, and an `H = 365` block fits at most once; **therefore per-fold bootstrap intervals are not reported** — only per-fold point estimates. Confidence intervals come from the pooled bootstrap only.
+1. **Bootstrap, correlation, CI, and conclusion are computed separately per stratum** (`published`, `reconstructed`). Within a stratum, the sampling frame is the union of all valid (non-skipped) evaluation-fold dates of that stratum, ordered chronologically. Because valid folds partition a continuous timeline, blocks may span adjacent valid-fold boundaries **within the same stratum**; blocks never cross strata, and strata are never pooled into one combined result or combined conclusion.
+2. A bootstrap block is a contiguous run of exactly `H` consecutive *sample dates* starting at a valid block start. A start is **usable** if the block remains within the stratum and does not cross a discontinuity (a date gap > 1 calendar day, or a skipped-fold boundary). Per-fold usable starts are computed the same way within each fold's own window. With `E = 365`-day folds, an `H = 548` block can never fit inside one fold, and an `H = 365` block fits at most once; **therefore per-fold bootstrap intervals are not reported** — only per-fold point estimates. Confidence intervals come from the per-stratum pooled bootstrap only.
 3. Resampling draws usable starts uniformly with replacement and concatenates blocks; when the resampled series reaches the original sample length, **the final block is truncated** so the resampled length exactly equals the original sample length.
-4. The seed, block length, number of resamples, and pooled usable-start count are recorded in the report.
+4. The seed, block length, number of resamples, and per-stratum usable-start count are recorded in the report.
 
-**Low-start rule (review item B, settled — one rule):** if the pooled usable block-start count is below 10, the report sets `weak_evidence: true` **and** the horizon conclusion is forced to `inconclusive`. Both effects always fire together; there is no configuration where one fires without the other.
+**Candidate blocks vs. effective information (review item B, round 3, settled):** `usable_block_starts` counts candidate (overlapping) block start positions; it is not a measure of independent information. The report additionally records `effective_blocks_or_cycles`, estimated deterministically as: within each contiguous run of the stratum's valid sample (bounded by gaps, skipped folds, and stratum boundaries), count the maximum number of **non-overlapping** blocks of length `H` that fit (`floor(run_length / H)`), then sum across runs. 
 
-- Report per-fold point estimates alongside pooled estimates and the pooled CI. A pooled point estimate without fold dispersion is not reportable; fold dispersion is conveyed by per-fold point estimates, not intervals.
-- If fewer than three valid folds exist, conclusion is `inconclusive` regardless of point estimates.
+**Low-information rule (unified):**
+- If a stratum's `usable_block_starts` < 10: set `weak_evidence: true` **and** force that stratum-horizon conclusion to `inconclusive`. Both always fire together.
+- If a stratum's `effective_blocks_or_cycles` < 10: set `weak_evidence: true` at minimum, and the report must not state that predictive ability is established — the strongest allowed phrasing remains "directional evidence", explicitly labelled weak/exploratory.
+
+- Report per-fold point estimates alongside per-stratum pooled estimates and per-stratum pooled CIs. A pooled point estimate without fold dispersion is not reportable; fold dispersion is conveyed by per-fold point estimates, not intervals.
+- If fewer than three valid folds exist in a stratum, that stratum's conclusion is `inconclusive` regardless of point estimates.
 
 ## 8. Backfill and reconstruction stratum
 
@@ -149,11 +153,20 @@ A single JSON document with:
   "inputs": {"ohlcv_fingerprint": "sha256", "signal_files": ["..."], "ohlcv_source": "...", "ohlcv_time_range": ["...", "..."]},
   "columns": {"features": ["bfs"], "labels": ["forward_return_365d", "mfe_365d", "mae_365d"]},
   "bfs_buckets": [0, 20, 40, 60, 80, 100],
-  "bootstrap": {"resamples": 2000, "block_days": 365, "seed": 0, "frame": "pooled_valid_eval_sample",
-    "per_fold_intervals": "not_reported", "truncation": "final_block_truncated_to_sample_length",
-    "usable_block_starts": 0, "weak_evidence": true},
-  "multiplicity": "per_horizon_conclusions_no_joint_claim",
+  "bootstrap": {"resamples": 2000, "block_days": 365, "seed": 0, "frame": "per_stratum_pooled_valid_eval_sample",
+    "per_fold_intervals": "not_reported", "truncation": "final_block_truncated_to_sample_length"},
+  "multiplicity": "per_horizon_conclusions_no_independence_or_joint_claim",
   "strata": ["published", "reconstructed"],
+  "results_by_stratum": {
+    "published": {
+      "usable_block_starts": 0, "effective_blocks_or_cycles": 0, "weak_evidence": true,
+      "pooled_spearman": null, "spearman_ci_95": null, "conclusion": "inconclusive"
+    },
+    "reconstructed": {
+      "usable_block_starts": 0, "effective_blocks_or_cycles": 0, "weak_evidence": true,
+      "pooled_spearman": null, "spearman_ci_95": null, "conclusion": "inconclusive"
+    }
+  },
   "folds": [
     {"index": 0, "eval_start": "...", "eval_end": "...", "train_count": 0, "eval_count": 0,
      "eval_coverage_pct": 0.0, "skipped": false, "skip_reason": null,
@@ -166,7 +179,7 @@ A single JSON document with:
 }
 ```
 
-`conclusion` is derived by a predeclared rule, not by post-hoc judgement. Rule (review item B, settled — one rule): skipped folds are recorded with reasons and excluded from pooling, but do not by themselves void the horizon. `inconclusive` applies to a horizon only when (a) fewer than three valid folds remain, (b) the pooled usable bootstrap block-start count is below 10 (this also sets `weak_evidence: true`; both always fire together), or (c) the pooled Spearman 95% confidence interval includes zero.
+`conclusion` is derived per stratum and per horizon by a predeclared rule, not by post-hoc judgement. Rule (unified): skipped folds are recorded with reasons and excluded from pooling, but do not by themselves void the horizon. A stratum-horizon conclusion is `inconclusive` when (a) fewer than three valid folds remain in that stratum, (b) that stratum's usable bootstrap block-start count is below 10 (this also sets `weak_evidence: true`; both always fire together), or (c) the stratum's pooled Spearman 95% confidence interval includes zero. `weak_evidence: true` is additionally set whenever `effective_blocks_or_cycles` < 10. No combined cross-stratum conclusion is produced.
 
 ## 11. Determinism and CI
 
@@ -187,6 +200,7 @@ The following are no longer open questions; implementation must follow them exac
 6. Bootstrap: fixed seed, 2000 resamples, block ≥ horizon; low usable-start rule unified in item 11.
 7. Reconstruction stratum separate from published records.
 8. Incomplete labels retained in stats; metrics use only observed labels.
-9. Primary statistic is Spearman rank correlation between BFS and forward return; 365-day and 548-day horizons are co-primary with separate per-horizon conclusions and no joint significance claim; block-bootstrap 95% CI with the predeclared interpretation rule; no post-hoc metric/horizon/bucket changes.
-10. A skipped fold is recorded with its reason and excluded from pooling; the horizon is `inconclusive` only when fewer than three valid folds remain.
-11. Bootstrap sampling frame is the pooled valid evaluation sample; blocks of `H` consecutive sample dates may span valid-fold boundaries within a stratum but never cross date gaps, skipped-fold boundaries, or strata; the final resampled block is truncated to the original sample length; per-fold intervals are not reported (only point estimates); pooled usable block starts < 10 sets `weak_evidence: true` and forces the horizon to `inconclusive` (both always together).
+9. Primary statistic is Spearman rank correlation between BFS and forward return; 365-day and 548-day horizons are co-primary with separate per-horizon conclusions; no claim of statistical independence between horizons and no joint significance claim; block-bootstrap 95% CI with the predeclared interpretation rule; no post-hoc metric/horizon/bucket changes.
+10. A skipped fold is recorded with its reason and excluded from pooling; the stratum-horizon is `inconclusive` only when fewer than three valid folds remain.
+11. Bootstrap is computed separately per stratum (correlation, CI, conclusion); within a stratum the frame is the pooled valid evaluation sample; blocks of `H` consecutive sample dates may span valid-fold boundaries within the stratum but never cross date gaps, skipped-fold boundaries, or strata; the final resampled block is truncated to the original sample length; per-fold intervals are not reported (only point estimates).
+12. `usable_block_starts` (candidate starts) and `effective_blocks_or_cycles` (sum over contiguous runs of `floor(run_length / H)`) are reported separately; usable starts < 10 sets `weak_evidence: true` and forces `inconclusive` (both always together); effective cycles < 10 sets `weak_evidence: true` at minimum and predictive ability may never be claimed established.
