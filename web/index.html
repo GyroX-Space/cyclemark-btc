@@ -113,7 +113,8 @@ lines.forEach(function(line){var p=document.createElement("p");p.textContent=lin
 $("prevMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()-1);renderCalendar()});
 $("nextMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()+1);renderCalendar()});
 var DATA_SOURCES=["data/signals/","../data/signals/","https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/data/signals/"];
-function fetchJson(url){return fetch(url,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error(url+" unavailable ("+r.status+")");return r.json()})}
+var CACHE_BUST="?_t="+new Date().toISOString().slice(0,10).replace(/-/g,"");
+function fetchJson(url){return fetch(url+CACHE_BUST,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error(url+" unavailable ("+r.status+")");return r.json()})}
 function loadArchive(index){
 if(index>=DATA_SOURCES.length)return Promise.reject(Error("No published data archive could be loaded"));
 var base=DATA_SOURCES[index];

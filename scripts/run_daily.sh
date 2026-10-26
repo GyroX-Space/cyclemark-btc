@@ -85,6 +85,20 @@ git config user.email "${GIT_AUTHOR_EMAIL:-cyclemark-bot@users.noreply.github.co
 git commit -m "data: refresh daily BTC market context" || true
 git push origin main || { echo "Push failed (non-fatal); marker written locally." >&2; }
 
+# Publish the public one-page dashboard plus its JSON to the web root read by
+# nginx. Copying the already-written files keeps the site in sync with every
+# run; the step is skipped on hosts that do not host the site.
+WEB_ROOT="${CYCLEMARK_WEB_ROOT:-/srv/cyclemark}"
+if [[ -d "$WEB_ROOT" && -w "$WEB_ROOT" ]]; then
+  install -m 644 web/index.html "$WEB_ROOT/index.html"
+  install -d "$WEB_ROOT/data/signals"
+  install -m 644 data/signals/latest.json "$WEB_ROOT/data/signals/latest.json"
+  install -m 644 data/signals/history.json "$WEB_ROOT/data/signals/history.json"
+  echo "Published dashboard to $WEB_ROOT"
+else
+  echo "Web root $WEB_ROOT is missing or not writable; dashboard not published." >&2
+fi
+
 # Telegram notification (optional, non-fatal). Credentials live in an env file
 # on the host, never in the repo.
 if [[ $DAILY_EXIT -eq 0 && -f "${CYCLEMARK_TELEGRAM_ENV:-$HOME/simon/cyclemark-telegram.env}" ]]; then
