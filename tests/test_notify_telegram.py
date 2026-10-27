@@ -46,8 +46,7 @@ def test_message_format_is_fixed_english():
     msg = build_message(_record(55.72))
     lines = msg.split("\n")
     assert lines[0] == "Cycle Bottom Indicator: NO — Neutral Zone"
-    assert "BFS 55.72/100" in lines[1]
-    assert "provisional" in lines[1]
+    assert lines[1] == "(BFS 55.72/100 · daily close)"
     assert lines[2] == "BTC: $80,154.09 | 2026-10-25 UTC"
     assert lines[-2] == TAGLINE
     assert lines[-1] == SITE_URL
