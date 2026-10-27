@@ -4498,5 +4498,50 @@
     "schema_version": "1.0",
     "source": "binance_usdm_funding_rate_api",
     "symbol": "BTCUSDT"
+  },
+  {
+    "funding_rate": 7.945e-05,
+    "funding_time_ms": 1793001600000,
+    "mark_price": 80002.0,
+    "retrieved_at_utc": "2026-10-27T16:36:14Z",
+    "schema_version": "1.0",
+    "source": "binance_usdm_funding_rate_api",
+    "symbol": "BTCUSDT"
+  },
+  {
+    "funding_rate": 0.0001,
+    "funding_time_ms": 1793030400000,
+    "mark_price": 80398.4,
+    "retrieved_at_utc": "2026-10-27T16:36:14Z",
+    "schema_version": "1.0",
+    "source": "binance_usdm_funding_rate_api",
+    "symbol": "BTCUSDT"
+  },
+  {
+    "funding_rate": 0.0001,
+    "funding_time_ms": 1793059200001,
+    "mark_price": 80116.0,
+    "retrieved_at_utc": "2026-10-27T16:36:14Z",
+    "schema_version": "1.0",
+    "source": "binance_usdm_funding_rate_api",
+    "symbol": "BTCUSDT"
+  },
+  {
+    "funding_rate": 8.696e-05,
+    "funding_time_ms": 1793088000001,
+    "mark_price": 79770.0,
+    "retrieved_at_utc": "2026-10-27T16:36:14Z",
+    "schema_version": "1.0",
+    "source": "binance_usdm_funding_rate_api",
+    "symbol": "BTCUSDT"
+  },
+  {
+    "funding_rate": 0.0001,
+    "funding_time_ms": 1793116800002,
+    "mark_price": 80533.34005797,
+    "retrieved_at_utc": "2026-10-27T16:36:14Z",
+    "schema_version": "1.0",
+    "source": "binance_usdm_funding_rate_api",
+    "symbol": "BTCUSDT"
   }
 ]
