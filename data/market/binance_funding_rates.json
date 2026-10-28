@@ -4543,5 +4543,14 @@
     "schema_version": "1.0",
     "source": "binance_usdm_funding_rate_api",
     "symbol": "BTCUSDT"
+  },
+  {
+    "funding_rate": 5.373e-05,
+    "funding_time_ms": 1793145600001,
+    "mark_price": 80868.4,
+    "retrieved_at_utc": "2026-10-28T05:05:06Z",
+    "schema_version": "1.0",
+    "source": "binance_usdm_funding_rate_api",
+    "symbol": "BTCUSDT"
   }
 ]
