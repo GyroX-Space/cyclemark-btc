@@ -18,9 +18,7 @@
   "modelVersion": "โมเดล v{version}",
   "scoresEyebrow": "คะแนนโมเดล",
   "bfsLabel": "BFS · การก่อตัวของจุดต่ำสุด",
-  "bosLabel": "BOS · โอกาสซื้อ",
   "bfsNote": "0–100 · ราคาปิดรายวัน",
-  "bosNote": "กรอบ 12–18 เดือน",
   "provisionalCoverage": "ความครอบคลุมน้ำหนัก: {pct}%",
   "notAvailable": "ไม่พร้อมใช้งาน",
   "marketTitle": "บริบทตลาด",
@@ -37,7 +35,7 @@
   "timeUnavailable": "เวลาไม่พร้อมใช้งาน",
   "timestampUnavailable": "การประทับเวลาไม่พร้อมใช้งาน",
   "calTitle": "ปฏิทินรายวันย้อนหลัง",
-  "calSub": "ตัวเลขในช่องคือคะแนน BFS รายวัน สีใช้ตามช่วงคะแนน",
+  "calSub": "แต่ละช่องแสดงราคาปิด BTC และคะแนน BFS ของวันนั้น สีตามช่วง BFS",
   "prevMonth": "เดือนก่อน",
   "nextMonth": "เดือนถัดไป",
   "archivedDays": "{n} วันที่เก็บถาวรแล้ว",
@@ -56,9 +54,9 @@
   "dataAvailable": "มีข้อมูล",
   "noArchivedRecord": "ไม่มีระเบียนที่เก็บถาวร",
   "detailStatus": "สถานะ: {status}",
-  "detailBtc": "ราคาอ้างอิง BTC: {value}",
+  "detailBtc": "ราคาปิด BTC: {value}",
   "detailFear": "ความกลัวและความโลภ: {value}",
-  "detailScores": "BFS: {bfs} · BOS: {bos}",
+  "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "สถานะ BFS: {status} · ความครอบคลุมน้ำหนัก: {pct}%",
   "detailDimensions": "คะแนนรายมิติ: {json}",
   "detailModelVersion": "เวอร์ชันโมเดล: {version}",
@@ -88,5 +86,13 @@
   },
   "bfsStatus": {
     "provisional_unvalidated": "เบื้องต้น"
+  },
+  "detailChange": "การเปลี่ยนแปลงรายวัน: {value}",
+  "band": {
+    "deep": "คุณค่าลึก",
+    "approaching": "ใกล้เข้า",
+    "neutral": "กลาง",
+    "elevated": "สูง",
+    "euphoria": "คึกคัก"
   }
 }

@@ -18,9 +18,7 @@
   "modelVersion": "Model v{version}",
   "scoresEyebrow": "Skor model",
   "bfsLabel": "BFS · Pembentukan Dasar",
-  "bosLabel": "BOS · Peluang Beli",
   "bfsNote": "0–100 · penutupan harian",
-  "bosNote": "Cakrawala 12–18 bulan",
   "provisionalCoverage": "Cakupan bobot: {pct}%",
   "notAvailable": "Tidak tersedia",
   "marketTitle": "Konteks Pasar",
@@ -37,7 +35,7 @@
   "timeUnavailable": "waktu tidak tersedia",
   "timestampUnavailable": "stempel waktu tidak tersedia",
   "calTitle": "Kalender Harian Historis",
-  "calSub": "Angka pada sel adalah skor BFS harian; warna mengikuti pita skor.",
+  "calSub": "Setiap sel menampilkan penutupan BTC dan skor BFS hari itu; warna mengikuti pita BFS.",
   "prevMonth": "Bulan sebelumnya",
   "nextMonth": "Bulan berikutnya",
   "archivedDays": "{n} hari terarsip",
@@ -56,9 +54,9 @@
   "dataAvailable": "Data tersedia",
   "noArchivedRecord": "Tidak ada catatan terarsip",
   "detailStatus": "Status: {status}",
-  "detailBtc": "Referensi BTC: {value}",
+  "detailBtc": "Penutupan BTC: {value}",
   "detailFear": "Fear & Greed: {value}",
-  "detailScores": "BFS: {bfs} · BOS: {bos}",
+  "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "Status BFS: {status} · Cakupan bobot: {pct}%",
   "detailDimensions": "Skor dimensi: {json}",
   "detailModelVersion": "Versi model: {version}",
@@ -88,5 +86,13 @@
   },
   "bfsStatus": {
     "provisional_unvalidated": "sementara"
+  },
+  "detailChange": "Perubahan harian: {value}",
+  "band": {
+    "deep": "Nilai dalam",
+    "approaching": "Mendekat",
+    "neutral": "Netral",
+    "elevated": "Tinggi",
+    "euphoria": "Euforia"
   }
 }

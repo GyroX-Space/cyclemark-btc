@@ -18,9 +18,7 @@
   "modelVersion": "Модель v{version}",
   "scoresEyebrow": "Оценки модели",
   "bfsLabel": "BFS · Формирование дна",
-  "bosLabel": "BOS · Возможность покупки",
   "bfsNote": "0–100 · дневное закрытие",
-  "bosNote": "Горизонт 12–18 месяцев",
   "provisionalCoverage": "Покрытие весов: {pct}%",
   "notAvailable": "Недоступно",
   "marketTitle": "Рыночный контекст",
@@ -37,7 +35,7 @@
   "timeUnavailable": "время недоступно",
   "timestampUnavailable": "метка времени недоступна",
   "calTitle": "Исторический дневной календарь",
-  "calSub": "Число в ячейке — дневная оценка BFS; цвет соответствует диапазонам оценки.",
+  "calSub": "В каждой ячейке — закрытие BTC и оценка BFS за день; цвет соответствует диапазонам BFS.",
   "prevMonth": "Предыдущий месяц",
   "nextMonth": "Следующий месяц",
   "archivedDays": "Архивных дней: {n}",
@@ -56,9 +54,9 @@
   "dataAvailable": "Данные доступны",
   "noArchivedRecord": "Нет архивной записи",
   "detailStatus": "Статус: {status}",
-  "detailBtc": "Справочная цена BTC: {value}",
+  "detailBtc": "Закрытие BTC: {value}",
   "detailFear": "Страх и жадность: {value}",
-  "detailScores": "BFS: {bfs} · BOS: {bos}",
+  "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "Статус BFS: {status} · Покрытие весов: {pct}%",
   "detailDimensions": "Оценки по измерениям: {json}",
   "detailModelVersion": "Версия модели: {version}",
@@ -88,5 +86,13 @@
   },
   "bfsStatus": {
     "provisional_unvalidated": "предварительно"
+  },
+  "detailChange": "Дневное изменение: {value}",
+  "band": {
+    "deep": "Глубокая стоимость",
+    "approaching": "Приближение",
+    "neutral": "Нейтрально",
+    "elevated": "Повышенный",
+    "euphoria": "Эйфория"
   }
 }

@@ -18,9 +18,7 @@
   "modelVersion": "模型 v{version}",
   "scoresEyebrow": "模型評分",
   "bfsLabel": "BFS · 底部形成度",
-  "bosLabel": "BOS · 買入機會",
   "bfsNote": "0–100 · 日收盤",
-  "bosNote": "12–18 個月週期",
   "provisionalCoverage": "權重覆蓋率：{pct}%",
   "notAvailable": "無法取得",
   "marketTitle": "市場背景",
@@ -37,7 +35,7 @@
   "timeUnavailable": "時間無法取得",
   "timestampUnavailable": "時間戳記無法取得",
   "calTitle": "歷史每日日曆",
-  "calSub": "格子中的數字為每日 BFS 分數，顏色依分數分檔顯示。",
+  "calSub": "每個格子顯示當日 BTC 收盤價與 BFS 分數，顏色依 BFS 分檔。",
   "prevMonth": "上個月",
   "nextMonth": "下個月",
   "archivedDays": "已歸檔 {n} 天",
@@ -56,9 +54,9 @@
   "dataAvailable": "有資料",
   "noArchivedRecord": "無歸檔紀錄",
   "detailStatus": "狀態：{status}",
-  "detailBtc": "BTC 參考價：{value}",
+  "detailBtc": "BTC 收盤價：{value}",
   "detailFear": "恐懼與貪婪：{value}",
-  "detailScores": "BFS：{bfs} · BOS：{bos}",
+  "detailScores": "BFS：{bfs} · {band}",
   "detailBfsStatus": "BFS 狀態：{status} · 權重覆蓋率：{pct}%",
   "detailDimensions": "分項得分：{json}",
   "detailModelVersion": "模型版本：{version}",
@@ -88,5 +86,13 @@
   },
   "bfsStatus": {
     "provisional_unvalidated": "暫定"
+  },
+  "detailChange": "日漲跌：{value}",
+  "band": {
+    "deep": "深度價值",
+    "approaching": "接近價值區",
+    "neutral": "中性",
+    "elevated": "偏高",
+    "euphoria": "狂熱"
   }
 }

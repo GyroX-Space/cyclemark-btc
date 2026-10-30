@@ -18,9 +18,7 @@
   "modelVersion": "模型 v{version}",
   "scoresEyebrow": "模型评分",
   "bfsLabel": "BFS · 底部形成度",
-  "bosLabel": "BOS · 买入机会",
   "bfsNote": "0–100 · 日收盘",
-  "bosNote": "12–18 个月周期",
   "provisionalCoverage": "权重覆盖率：{pct}%",
   "notAvailable": "不可用",
   "marketTitle": "市场背景",
@@ -37,7 +35,7 @@
   "timeUnavailable": "时间不可用",
   "timestampUnavailable": "时间戳不可用",
   "calTitle": "历史每日日历",
-  "calSub": "格子中的数字为每日 BFS 分数，颜色按分数分档显示。",
+  "calSub": "每个格子显示当日 BTC 收盘价与 BFS 分数，颜色按 BFS 分档。",
   "prevMonth": "上个月",
   "nextMonth": "下个月",
   "archivedDays": "已归档 {n} 天",
@@ -56,9 +54,9 @@
   "dataAvailable": "有数据",
   "noArchivedRecord": "无归档记录",
   "detailStatus": "状态：{status}",
-  "detailBtc": "BTC 参考价：{value}",
+  "detailBtc": "BTC 收盘价：{value}",
   "detailFear": "恐惧与贪婪：{value}",
-  "detailScores": "BFS：{bfs} · BOS：{bos}",
+  "detailScores": "BFS：{bfs} · {band}",
   "detailBfsStatus": "BFS 状态：{status} · 权重覆盖率：{pct}%",
   "detailDimensions": "分项得分：{json}",
   "detailModelVersion": "模型版本：{version}",
@@ -88,5 +86,13 @@
     "research_data_available_signals_not_yet_validated": "每日市场数据",
     "historical_research_backfill_not_point_in_time": "历史回溯",
     "historical_research_backfill": "历史回溯"
+  },
+  "detailChange": "日涨跌：{value}",
+  "band": {
+    "deep": "深度价值",
+    "approaching": "接近价值区",
+    "neutral": "中性",
+    "elevated": "偏高",
+    "euphoria": "狂热"
   }
 }

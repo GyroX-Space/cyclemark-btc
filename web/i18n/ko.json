@@ -18,9 +18,7 @@
   "modelVersion": "모델 v{version}",
   "scoresEyebrow": "모델 점수",
   "bfsLabel": "BFS · 저점 형성도",
-  "bosLabel": "BOS · 매수 기회",
   "bfsNote": "0–100 · 일봉 종가",
-  "bosNote": "12–18개월 기간",
   "provisionalCoverage": "가중치 커버리지: {pct}%",
   "notAvailable": "사용 불가",
   "marketTitle": "시장 환경",
@@ -37,7 +35,7 @@
   "timeUnavailable": "시간을 사용할 수 없음",
   "timestampUnavailable": "타임스탬프를 사용할 수 없음",
   "calTitle": "과거 일별 캘린더",
-  "calSub": "셀의 숫자는 일별 BFS 점수이며, 색상은 점수 구간을 따릅니다.",
+  "calSub": "각 셀에 해당일 BTC 종가와 BFS 점수를 표시하며 색상은 BFS 구간을 따릅니다.",
   "prevMonth": "이전 달",
   "nextMonth": "다음 달",
   "archivedDays": "아카이브 {n}일",
@@ -56,9 +54,9 @@
   "dataAvailable": "데이터 있음",
   "noArchivedRecord": "아카이브 기록 없음",
   "detailStatus": "상태: {status}",
-  "detailBtc": "BTC 참고가: {value}",
+  "detailBtc": "BTC 종가: {value}",
   "detailFear": "공포·탐욕: {value}",
-  "detailScores": "BFS: {bfs} · BOS: {bos}",
+  "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "BFS 상태: {status} · 가중치 커버리지: {pct}%",
   "detailDimensions": "차원 점수: {json}",
   "detailModelVersion": "모델 버전: {version}",
@@ -88,5 +86,13 @@
   },
   "bfsStatus": {
     "provisional_unvalidated": "잠정"
+  },
+  "detailChange": "일간 변동: {value}",
+  "band": {
+    "deep": "딥 밸류",
+    "approaching": "접근",
+    "neutral": "중립",
+    "elevated": "상승",
+    "euphoria": "과열"
   }
 }

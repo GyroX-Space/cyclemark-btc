@@ -18,9 +18,7 @@
   "modelVersion": "Modelo v{version}",
   "scoresEyebrow": "Puntuaciones del modelo",
   "bfsLabel": "BFS · Formación de suelo",
-  "bosLabel": "BOS · Oportunidad de compra",
   "bfsNote": "0–100 · cierre diario",
-  "bosNote": "Horizonte de 12–18 meses",
   "provisionalCoverage": "Cobertura de ponderación: {pct} %",
   "notAvailable": "No disponible",
   "marketTitle": "Contexto de mercado",
@@ -37,7 +35,7 @@
   "timeUnavailable": "hora no disponible",
   "timestampUnavailable": "marca de tiempo no disponible",
   "calTitle": "Calendario diario histórico",
-  "calSub": "El número de la celda es la puntuación BFS diaria; el color sigue las bandas de puntuación.",
+  "calSub": "Cada celda muestra el cierre BTC y la puntuación BFS del día; el color sigue las bandas BFS.",
   "prevMonth": "Mes anterior",
   "nextMonth": "Mes siguiente",
   "archivedDays": "{n} días archivados",
@@ -56,9 +54,9 @@
   "dataAvailable": "Datos disponibles",
   "noArchivedRecord": "Sin registro archivado",
   "detailStatus": "Estado: {status}",
-  "detailBtc": "Referencia BTC: {value}",
+  "detailBtc": "Cierre de BTC: {value}",
   "detailFear": "Miedo y codicia: {value}",
-  "detailScores": "BFS: {bfs} · BOS: {bos}",
+  "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "Estado de BFS: {status} · Cobertura de ponderación: {pct} %",
   "detailDimensions": "Puntuaciones por dimensión: {json}",
   "detailModelVersion": "Versión del modelo: {version}",
@@ -88,5 +86,13 @@
   },
   "bfsStatus": {
     "provisional_unvalidated": "provisional"
+  },
+  "detailChange": "Cambio diario: {value}",
+  "band": {
+    "deep": "Valor profundo",
+    "approaching": "Aproximación",
+    "neutral": "Neutro",
+    "elevated": "Elevado",
+    "euphoria": "Euforia"
   }
 }

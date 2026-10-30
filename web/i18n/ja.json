@@ -18,9 +18,7 @@
   "modelVersion": "モデル v{version}",
   "scoresEyebrow": "モデルスコア",
   "bfsLabel": "BFS · ボトム形成度",
-  "bosLabel": "BOS · 買い場機会",
   "bfsNote": "0–100 · 日足終値",
-  "bosNote": "12–18 か月の期間",
   "provisionalCoverage": "ウェイトカバレッジ：{pct}%",
   "notAvailable": "利用不可",
   "marketTitle": "市場環境",
@@ -37,7 +35,7 @@
   "timeUnavailable": "時刻取得不可",
   "timestampUnavailable": "タイムスタンプ取得不可",
   "calTitle": "過去のデイリーカレンダー",
-  "calSub": "セル内の数値は日次の BFS スコアです。色はスコア区分に対応しています。",
+  "calSub": "各セルに当日の BTC 終値と BFS スコアを表示し、色は BFS 区分に対応します。",
   "prevMonth": "前月",
   "nextMonth": "翌月",
   "archivedDays": "アーカイブ {n} 日",
@@ -56,9 +54,9 @@
   "dataAvailable": "データあり",
   "noArchivedRecord": "アーカイブ記録なし",
   "detailStatus": "ステータス：{status}",
-  "detailBtc": "BTC 参考価格：{value}",
+  "detailBtc": "BTC 終値：{value}",
   "detailFear": "恐怖・強欲：{value}",
-  "detailScores": "BFS：{bfs} · BOS：{bos}",
+  "detailScores": "BFS：{bfs} · {band}",
   "detailBfsStatus": "BFS ステータス：{status} · ウェイトカバレッジ：{pct}%",
   "detailDimensions": "ディメンションスコア：{json}",
   "detailModelVersion": "モデルバージョン：{version}",
@@ -88,5 +86,13 @@
   },
   "bfsStatus": {
     "provisional_unvalidated": "暫定"
+  },
+  "detailChange": "前日比：{value}",
+  "band": {
+    "deep": "ディープバリュー",
+    "approaching": "接近",
+    "neutral": "中立",
+    "elevated": "高値圏",
+    "euphoria": "高揚"
   }
 }

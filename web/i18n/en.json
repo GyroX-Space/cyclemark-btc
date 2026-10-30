@@ -18,9 +18,7 @@
   "modelVersion": "Model v{version}",
   "scoresEyebrow": "Model scores",
   "bfsLabel": "BFS · Bottom Formation",
-  "bosLabel": "BOS · Buy Opportunity",
   "bfsNote": "0–100 · daily close",
-  "bosNote": "12–18 month horizon",
   "provisionalCoverage": "Weight coverage: {pct}%",
   "notAvailable": "Not available",
   "marketTitle": "Market Context",
@@ -37,7 +35,7 @@
   "timeUnavailable": "time unavailable",
   "timestampUnavailable": "timestamp unavailable",
   "calTitle": "Historical Daily Calendar",
-  "calSub": "Cell number is the daily BFS score; colour follows the score bands.",
+  "calSub": "Each cell shows the day's BTC close and BFS score; colour follows the BFS bands.",
   "prevMonth": "Previous month",
   "nextMonth": "Next month",
   "archivedDays": "{n} archived days",
@@ -56,9 +54,10 @@
   "dataAvailable": "Data available",
   "noArchivedRecord": "No archived record",
   "detailStatus": "Status: {status}",
-  "detailBtc": "BTC reference: {value}",
+  "detailBtc": "BTC close: {value}",
+  "detailChange": "Daily change: {value}",
   "detailFear": "Fear & Greed: {value}",
-  "detailScores": "BFS: {bfs} · BOS: {bos}",
+  "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "BFS status: {status} · Weight coverage: {pct}%",
   "detailDimensions": "Dimension scores: {json}",
   "detailModelVersion": "Model version: {version}",
@@ -80,6 +79,13 @@
     "Neutral": "Neutral",
     "Greed": "Greed",
     "ExtremeGreed": "Extreme greed"
+  },
+  "band": {
+    "deep": "Deep value",
+    "approaching": "Approaching",
+    "neutral": "Neutral",
+    "elevated": "Elevated",
+    "euphoria": "Euphoria"
   },
   "bfsStatus": {
     "provisional_unvalidated": "provisional"

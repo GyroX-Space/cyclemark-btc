@@ -18,9 +18,7 @@
   "modelVersion": "মডেল v{version}",
   "scoresEyebrow": "মডেল স্কোর",
   "bfsLabel": "BFS · নিম্নস্তর গঠন",
-  "bosLabel": "BOS · কেনার সুযোগ",
   "bfsNote": "0–100 · দৈনিক ক্লোজ",
-  "bosNote": "12–18 মাসের সময়সীমা",
   "provisionalCoverage": "ওজনের কভারেজ: {pct}%",
   "notAvailable": "অনুপলব্ধ",
   "marketTitle": "বাজার প্রসঙ্গ",
@@ -37,7 +35,7 @@
   "timeUnavailable": "সময় অনুপলব্ধ",
   "timestampUnavailable": "টাইমস্ট্যাম্প অনুপলব্ধ",
   "calTitle": "ঐতিহাসিক দৈনিক ক্যালেন্ডার",
-  "calSub": "ঘরের সংখ্যা দৈনিক BFS স্কোর; রং স্কোর ব্যান্ড অনুসরণ করে।",
+  "calSub": "প্রতিটি ঘরে ওই দিনের BTC ক্লোজ ও BFS স্কোর দেখানো হয়; রং BFS ব্যান্ড অনুসরণ করে।",
   "prevMonth": "পূর্ববর্তী মাস",
   "nextMonth": "পরবর্তী মাস",
   "archivedDays": "{n} দিন আর্কাইভ করা হয়েছে",
@@ -56,9 +54,9 @@
   "dataAvailable": "ডেটা পাওয়া যাচ্ছে",
   "noArchivedRecord": "কোনো আর্কাইভকৃত রেকর্ড নেই",
   "detailStatus": "অবস্থা: {status}",
-  "detailBtc": "BTC রেফারেন্স: {value}",
+  "detailBtc": "BTC ক্লোজ: {value}",
   "detailFear": "ভয় ও লোভ: {value}",
-  "detailScores": "BFS: {bfs} · BOS: {bos}",
+  "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "BFS অবস্থা: {status} · ওজন কভারেজ: {pct}%",
   "detailDimensions": "মাত্রাভিত্তিক স্কোর: {json}",
   "detailModelVersion": "মডেল সংস্করণ: {version}",
@@ -88,5 +86,13 @@
   },
   "bfsStatus": {
     "provisional_unvalidated": "সাময়িক"
+  },
+  "detailChange": "দৈনিক পরিবর্তন: {value}",
+  "band": {
+    "deep": "গভীর মান",
+    "approaching": "নিকটবর্তী",
+    "neutral": "নিরপেক্ষ",
+    "elevated": "ঊর্ধ্বমুখী",
+    "euphoria": "উচ্ছ্বাস"
   }
 }
