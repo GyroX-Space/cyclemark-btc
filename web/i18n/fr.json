@@ -94,5 +94,6 @@
     "neutral": "Neutre",
     "elevated": "Élevé",
     "euphoria": "Euphorie"
-  }
+  },
+  "toggleTheme": "Basculer le thème clair/sombre"
 }

@@ -94,5 +94,6 @@
     "neutral": "중립",
     "elevated": "상승",
     "euphoria": "과열"
-  }
+  },
+  "toggleTheme": "라이트/다크 테마 전환"
 }

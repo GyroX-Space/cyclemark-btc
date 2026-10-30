@@ -94,5 +94,6 @@
     "neutral": "中性",
     "elevated": "偏高",
     "euphoria": "狂熱"
-  }
+  },
+  "toggleTheme": "切換淺色/深色主題"
 }

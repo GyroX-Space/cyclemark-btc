@@ -94,5 +94,6 @@
     "neutral": "Neutro",
     "elevated": "Elevado",
     "euphoria": "Euforia"
-  }
+  },
+  "toggleTheme": "Cambiar tema claro/oscuro"
 }

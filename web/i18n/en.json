@@ -94,5 +94,6 @@
     "research_data_available_signals_not_yet_validated": "daily market data",
     "historical_research_backfill_not_point_in_time": "historical backfill",
     "historical_research_backfill": "historical backfill"
-  }
+  },
+  "toggleTheme": "Toggle light/dark theme"
 }
