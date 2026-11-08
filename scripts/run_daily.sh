@@ -105,9 +105,23 @@ fi
 
 # Telegram notification (optional, non-fatal). Credentials live in an env file
 # on the host, never in the repo.
+#
+# Data refreshes every day, but the message goes out every N days (default 2).
+# Epoch-day arithmetic keeps the cadence exact across month and year boundaries
+# and needs no stored state, unlike a day-of-month modulo.
+NOTIFY_INTERVAL_DAYS="${CYCLEMARK_TELEGRAM_INTERVAL_DAYS:-2}"
+[[ "$NOTIFY_INTERVAL_DAYS" =~ ^[1-9][0-9]*$ ]] || NOTIFY_INTERVAL_DAYS=2
+NOTIFY_EPOCH_DAY=$(( $(date -u +%s) / 86400 ))
+NOTIFY_PHASE=$(( NOTIFY_EPOCH_DAY % NOTIFY_INTERVAL_DAYS ))
+
 if [[ $DAILY_EXIT -eq 0 && -f "${CYCLEMARK_TELEGRAM_ENV:-$HOME/simon/cyclemark-telegram.env}" ]]; then
-  set -a; source "${CYCLEMARK_TELEGRAM_ENV:-$HOME/simon/cyclemark-telegram.env}"; set +a
-  python scripts/notify_telegram.py || echo "Telegram notification failed (non-fatal)." >&2
+  if [[ $NOTIFY_PHASE -eq 0 ]]; then
+    set -a; source "${CYCLEMARK_TELEGRAM_ENV:-$HOME/simon/cyclemark-telegram.env}"; set +a
+    python scripts/notify_telegram.py || echo "Telegram notification failed (non-fatal)." >&2
+  else
+    NEXT_SEND_DAY=$(( NOTIFY_EPOCH_DAY + NOTIFY_INTERVAL_DAYS - NOTIFY_PHASE ))
+    echo "Telegram notification not due today (every ${NOTIFY_INTERVAL_DAYS} days); next on $(date -u -d "@$(( NEXT_SEND_DAY * 86400 ))" +%F) UTC."
+  fi
 fi
 
 exit $DAILY_EXIT
