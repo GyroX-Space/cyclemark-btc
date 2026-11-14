@@ -1,18 +1,18 @@
 {
-  "bfs": 47.44,
+  "bfs": 46.88,
   "bfs_status": "provisional_unvalidated",
   "bos": null,
   "data_quality": {
     "core_price": {
-      "assessed_at_utc": "2026-11-13T00:30:05Z",
+      "assessed_at_utc": "2026-11-14T00:30:05Z",
       "duplicate_open_time_count": 0,
-      "expected_calendar_days": 3375,
+      "expected_calendar_days": 3376,
       "fatal_issues": [],
-      "finalized_candle_count": 3375,
+      "finalized_candle_count": 3376,
       "first_candle_date_utc": "2017-08-17",
       "irregular_close_time_count": 0,
       "is_stale": false,
-      "last_candle_date_utc": "2026-11-12",
+      "last_candle_date_utc": "2026-11-13",
       "latest_candle_age_days": 1,
       "missing_date_count": 0,
       "missing_dates_truncated": false,
@@ -21,9 +21,9 @@
       "source_fetch": {
         "duplicate_rows_dropped": 0,
         "pages": 4,
-        "raw_rows": 3376,
+        "raw_rows": 3377,
         "requested_start_time_ms": null,
-        "retrieved_at_utc": "2026-11-13T00:30:06Z",
+        "retrieved_at_utc": "2026-11-14T00:30:06Z",
         "source": "binance_spot_api"
       },
       "warnings": [
@@ -40,24 +40,24 @@
       }
     }
   },
-  "date": "2026-11-12",
+  "date": "2026-11-13",
   "dimension_scores": {
     "capitulation_panic": null,
-    "cycle_position": 54.22,
+    "cycle_position": 57.34,
     "flows_market_structure": null,
-    "trend_price_structure": 40.66,
+    "trend_price_structure": 36.42,
     "valuation_cost_basis": null
   },
   "feature_values": {
-    "drawdown_from_all_time_high_pct": -43.38,
-    "momentum_30d_pct": -14.08,
-    "momentum_90d_pct": 13.35,
-    "price_vs_sma_200_pct": -2.29,
+    "drawdown_from_all_time_high_pct": -45.87,
+    "momentum_30d_pct": -16.37,
+    "momentum_90d_pct": 8.29,
+    "price_vs_sma_200_pct": -6.54,
     "prior_30d_low_usd": 74967.97,
-    "recent_30d_low_usd": 71113.06
+    "recent_30d_low_usd": 67568.0
   },
-  "first_published_at_utc": "2026-11-13T00:30:05Z",
-  "generated_at_utc": "2026-11-13T00:30:05Z",
+  "first_published_at_utc": "2026-11-14T00:30:05Z",
+  "generated_at_utc": "2026-11-14T00:30:05Z",
   "limitations": [
     "Valuation, capitulation, and flows dimensions are unavailable in core scoring.",
     "Third-party calculated indicators are auxiliary context only and are excluded from BFS.",
@@ -69,10 +69,10 @@
       "core_score_role": "research_archive_only_excluded_from_core_scores",
       "funding_observations_retrieved": 500,
       "latest_funding_rate": {
-        "funding_rate": 0.0001,
-        "funding_time_ms": 1794528000000,
-        "mark_price": 71432.98516667,
-        "retrieved_at_utc": "2026-11-13T00:30:06Z",
+        "funding_rate": 5.972e-05,
+        "funding_time_ms": 1794614400004,
+        "mark_price": 68279.9,
+        "retrieved_at_utc": "2026-11-14T00:30:06Z",
         "schema_version": "1.0",
         "source": "binance_usdm_funding_rate_api",
         "symbol": "BTCUSDT"
@@ -80,23 +80,23 @@
     },
     "fear_greed": {
       "classification": "Extreme Fear",
-      "observation_timestamp_utc": "2026-11-13T00:00:00Z",
-      "retrieved_at_utc": "2026-11-13T00:30:06Z",
+      "observation_timestamp_utc": "2026-11-14T00:00:00Z",
+      "retrieved_at_utc": "2026-11-14T00:30:06Z",
       "source": "alternative_me_fear_greed_api",
-      "value": 20
+      "value": 13
     },
     "price": {
-      "candle_close_time_utc": "2026-11-12T23:59:59.999000Z",
-      "candle_date_utc": "2026-11-12",
-      "drawdown_from_365d_high_pct": -31.34,
-      "drawdown_from_all_time_high_pct": -43.38,
-      "history_candles": 3375,
-      "momentum_30d_pct": -14.08,
-      "momentum_90d_pct": 13.35,
+      "candle_close_time_utc": "2026-11-13T23:59:59.999000Z",
+      "candle_date_utc": "2026-11-13",
+      "drawdown_from_365d_high_pct": -31.59,
+      "drawdown_from_all_time_high_pct": -45.87,
+      "history_candles": 3376,
+      "momentum_30d_pct": -16.37,
+      "momentum_90d_pct": 8.29,
       "price_source": "Binance public spot market API",
-      "price_usd": 71460.0,
-      "price_vs_sma_200_pct": -2.29,
-      "sma_200_usd": 73136.87,
+      "price_usd": 68314.0,
+      "price_vs_sma_200_pct": -6.54,
+      "sma_200_usd": 73091.58,
       "symbol": "BTCUSDT"
     }
   },
@@ -118,19 +118,19 @@
   "sources": {
     "auxiliary_sentiment": {
       "name": "Alternative.me Crypto Fear & Greed Index",
-      "retrieved_at_utc": "2026-11-13T00:30:06Z",
+      "retrieved_at_utc": "2026-11-14T00:30:06Z",
       "role": "display_only_excluded_from_core_scores"
     },
     "derivatives_funding": {
       "archive_path": "data/market/binance_funding_rates.json",
       "name": "Binance USD-M BTCUSDT perpetual funding-rate API",
-      "retrieved_at_utc": "2026-11-13T00:30:06Z",
+      "retrieved_at_utc": "2026-11-14T00:30:06Z",
       "role": "raw_exchange_observation_archived_not_used_in_core_scores"
     },
     "price": {
       "name": "Binance public spot market API",
       "point_in_time_history_verified": false,
-      "retrieved_at_utc": "2026-11-13T00:30:05Z"
+      "retrieved_at_utc": "2026-11-14T00:30:05Z"
     }
   },
   "state": null,
