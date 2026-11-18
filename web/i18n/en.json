@@ -59,7 +59,7 @@
   "detailFear": "Fear & Greed: {value}",
   "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "BFS status: {status} · Weight coverage: {pct}%",
-  "detailDimensions": "Dimension scores: {json}",
+  "detailDimensions": "Dimension scores",
   "detailModelVersion": "Model version: {version}",
   "detailGenerated": "Generated at: {ts}",
   "unavailable": "Unavailable",
@@ -95,5 +95,22 @@
     "historical_research_backfill_not_point_in_time": "historical backfill",
     "historical_research_backfill": "historical backfill"
   },
-  "toggleTheme": "Toggle light/dark theme"
+  "toggleTheme": "Toggle light/dark theme",
+  "chartTitle": "Cycle Trend",
+  "chartSub": "BFS, BTC close and Fear & Greed across the selected window.",
+  "chartBfs": "BFS",
+  "chartPrice": "BTC close",
+  "chartFear": "Fear & Greed",
+  "chartNote": "Left axis: BFS and Fear & Greed (0–100). Right axis: BTC close on a log scale.",
+  "range3m": "3M",
+  "range6m": "6M",
+  "range12m": "12M",
+  "rangeAll": "ALL",
+  "dim": {
+    "capitulation_panic": "Capitulation & panic",
+    "cycle_position": "Cycle position",
+    "flows_market_structure": "Flows & market structure",
+    "trend_price_structure": "Trend & price structure",
+    "valuation_cost_basis": "Valuation & cost basis"
+  }
 }

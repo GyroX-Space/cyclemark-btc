@@ -58,7 +58,7 @@
   "detailFear": "恐懼與貪婪：{value}",
   "detailScores": "BFS：{bfs} · {band}",
   "detailBfsStatus": "BFS 狀態：{status} · 權重覆蓋率：{pct}%",
-  "detailDimensions": "分項得分：{json}",
+  "detailDimensions": "維度得分",
   "detailModelVersion": "模型版本：{version}",
   "detailGenerated": "產生時間：{ts}",
   "unavailable": "無法取得",
@@ -95,5 +95,22 @@
     "elevated": "偏高",
     "euphoria": "狂熱"
   },
-  "toggleTheme": "切換淺色/深色主題"
+  "toggleTheme": "切換淺色/深色主題",
+  "chartTitle": "週期趨勢",
+  "chartSub": "所選區間內的 BFS、BTC 收盤價與恐懼貪婪指數。",
+  "chartBfs": "BFS",
+  "chartPrice": "BTC 收盤價",
+  "chartFear": "恐懼貪婪指數",
+  "chartNote": "左軸：BFS 與恐懼貪婪指數（0–100）。右軸：BTC 收盤價（對數座標）。",
+  "range3m": "3個月",
+  "range6m": "6個月",
+  "range12m": "12個月",
+  "rangeAll": "全部",
+  "dim": {
+    "capitulation_panic": "投降與恐慌",
+    "cycle_position": "週期位置",
+    "flows_market_structure": "資金與市場結構",
+    "trend_price_structure": "趨勢與價格結構",
+    "valuation_cost_basis": "估值與成本基準"
+  }
 }

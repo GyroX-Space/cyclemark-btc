@@ -58,7 +58,7 @@
   "detailFear": "恐惧与贪婪：{value}",
   "detailScores": "BFS：{bfs} · {band}",
   "detailBfsStatus": "BFS 状态：{status} · 权重覆盖率：{pct}%",
-  "detailDimensions": "分项得分：{json}",
+  "detailDimensions": "维度得分",
   "detailModelVersion": "模型版本：{version}",
   "detailGenerated": "生成时间：{ts}",
   "unavailable": "不可用",
@@ -95,5 +95,22 @@
     "elevated": "偏高",
     "euphoria": "狂热"
   },
-  "toggleTheme": "切换浅色/深色主题"
+  "toggleTheme": "切换浅色/深色主题",
+  "chartTitle": "周期趋势",
+  "chartSub": "所选区间内的 BFS、BTC 收盘价与恐惧贪婪指数。",
+  "chartBfs": "BFS",
+  "chartPrice": "BTC 收盘价",
+  "chartFear": "恐惧贪婪指数",
+  "chartNote": "左轴：BFS 与恐惧贪婪指数（0–100）。右轴：BTC 收盘价（对数坐标）。",
+  "range3m": "3个月",
+  "range6m": "6个月",
+  "range12m": "12个月",
+  "rangeAll": "全部",
+  "dim": {
+    "capitulation_panic": "投降与恐慌",
+    "cycle_position": "周期位置",
+    "flows_market_structure": "资金与市场结构",
+    "trend_price_structure": "趋势与价格结构",
+    "valuation_cost_basis": "估值与成本基准"
+  }
 }

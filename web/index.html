@@ -24,6 +24,24 @@ html[data-theme=light] .day .tiny{color:#101828}
 html[data-theme=light] .detail{background:#f3f7fc}
 html[data-theme=light] .notice{background:#fff7e6;color:#5b4720}
 html[data-theme=light] .cell-tip{box-shadow:0 10px 28px rgba(16,24,40,.2)}
+.detail p{overflow-wrap:anywhere}
+.dim-title{font-size:12px;color:var(--muted);margin-top:10px}
+.dim-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px 12px;margin-top:7px}
+.dim-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.16);font-size:12px;min-width:0}
+.dim-row span{color:var(--muted);min-width:0;overflow-wrap:anywhere}
+.dim-row b{font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
+html[data-theme=light] .dim-row{background:#eaeff7}
+.chart-controls{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.chart-controls button{border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--muted);padding:6px 10px;font-size:12px;cursor:pointer}
+.chart-controls button.on{color:var(--text);border-color:#5ba8ff}
+html[data-theme=light] .chart-controls button.on{background:#e3edfb;color:#101828}
+.chart-panel{padding:16px 14px 8px}
+.chart-head{display:flex;flex-wrap:wrap;gap:14px;align-items:center;color:var(--muted);font-size:11px;margin-bottom:4px}
+.chart-head i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+.chart-wrap{position:relative}
+.chart-wrap svg{display:block;width:100%;height:auto;touch-action:pan-y}
+.chart-axis{fill:var(--muted);font-size:10px}
+.chart-note{color:var(--muted);font-size:10px;margin-top:2px}
 .cell-tip{position:fixed;left:0;top:0;z-index:70;pointer-events:none;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:10px 13px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.42);color:var(--text);font-size:12px;opacity:0;transform:translateY(6px);transition:opacity .12s ease,transform .12s ease}
 .cell-tip.show{opacity:1;transform:translateY(0)}
 .cell-tip .tip-date{font-size:13px;font-weight:700;margin-bottom:5px}
@@ -61,6 +79,14 @@ html[data-theme=light] .cell-tip{box-shadow:0 10px 28px rgba(16,24,40,.2)}
 </div>
 </section>
 <section class="section">
+<div class="section-head"><div><h2 data-i18n="chartTitle">Cycle Trend</h2><p data-i18n="chartSub">BFS, BTC close and Fear &amp; Greed across the selected window.</p></div><div class="chart-controls" id="chartRanges"></div></div>
+<div class="panel chart-panel">
+<div class="chart-head"><span><i style="background:#45d6a0"></i><span data-i18n="chartBfs">BFS</span></span><span><i style="background:#f4b740"></i><span data-i18n="chartPrice">BTC close</span></span><span><i style="background:#5ba8ff"></i><span data-i18n="chartFear">Fear &amp; Greed</span></span></div>
+<div class="chart-wrap"><svg id="trendChart" role="img" aria-label="Cycle trend chart"></svg><div class="cell-tip" id="chartTip" aria-hidden="true"></div></div>
+<div class="chart-note" data-i18n="chartNote">Left axis: BFS and Fear &amp; Greed (0–100). Right axis: BTC close on a log scale.</div>
+</div>
+</section>
+<section class="section">
 <div class="section-head"><div><h2 data-i18n="calTitle">Historical Daily Calendar</h2><p data-i18n="calSub">Each cell shows the day's BTC close and BFS score; colour follows the BFS bands.</p></div></div>
 <div class="panel calendar-panel">
 <div class="section-head"><div class="calendar-controls"><button id="prevMonth" aria-label="Previous month" data-i18n-aria="prevMonth">←</button><div class="month-label" id="monthLabel">—</div><button id="nextMonth" aria-label="Next month" data-i18n-aria="nextMonth">→</button></div><div class="timestamp" id="calendarCount"></div></div>
@@ -88,7 +114,7 @@ var I18N_BASES=["i18n/","https://raw.githubusercontent.com/GyroX-Space/cyclemark
 var DATA_SOURCES=["data/signals/","../data/signals/","https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/data/signals/"];
 var CACHE_BUST="?_t="+new Date().toISOString().slice(0,10).replace(/-/g,"");
 var FG_KEYS={"Extreme Fear":"ExtremeFear","Fear":"Fear","Neutral":"Neutral","Greed":"Greed","Extreme Greed":"ExtremeGreed"};
-var EN_DYNAMIC={loadingData:"Loading public data…",archiveLoaded:"Archive loaded",statusUnavailable:"status unavailable",modelVersion:"Model v{version}",asOfWaiting:"Waiting for the latest archive record",asOfLine:"Data date: {date} · Generated: {ts}",notAvailable:"Not available",provisionalCoverage:"Weight coverage: {pct}%",bfsNote:"0–100 · daily close",stateResearch:"Cycle Monitoring",stateLoadingDesc:"Loading the latest cycle snapshot.",statePublishedDesc:"State published from the CycleMark model archive.",statePublicOnlyDesc:"CycleMark tracks BTC cycle conditions from finalized daily market data.",updatedAt:"Updated {ts}",timeUnavailable:"time unavailable",timestampUnavailable:"timestamp unavailable",noFinalizedCandle:"No finalized candle",awaitingData:"Awaiting data",archivedDays:"{n} archived days",archivedRecordAria:"archived record",noArchivedRecordAria:"no archived record",dateUnavailable:"Date unavailable",dataAvailable:"Data available",noArchivedRecord:"No archived record",detailStatus:"Status: {status}",detailBtc:"BTC close: {value}",detailChange:"Daily change: {value}",detailFear:"Fear & Greed: {value}",detailScores:"BFS: {bfs} · {band}",detailBfsStatus:"BFS status: {status} · Weight coverage: {pct}%",detailDimensions:"Dimension scores: {json}",detailModelVersion:"Model version: {version}",detailGenerated:"Generated at: {ts}",unavailable:"Unavailable",unknown:"Unknown",noRecordForDate:"No record exists for this date. The calendar does not infer missing observations.",archiveUnavailable:"Archive unavailable",archiveUnavailableDesc:"No published data archive could be loaded. Please try again shortly.",band:{deep:"Deep value",approaching:"Approaching",neutral:"Neutral",elevated:"Elevated",euphoria:"Euphoria"},fear:{ExtremeFear:"Extreme fear",Fear:"Fear",Neutral:"Neutral",Greed:"Greed",ExtremeGreed:"Extreme greed"},bfsStatus:{provisional_unvalidated:"provisional"},status:{research_data_available_signals_not_yet_validated:"daily market data",historical_research_backfill_not_point_in_time:"historical backfill",historical_research_backfill:"historical backfill"}};
+var EN_DYNAMIC={loadingData:"Loading public data…",archiveLoaded:"Archive loaded",statusUnavailable:"status unavailable",modelVersion:"Model v{version}",asOfWaiting:"Waiting for the latest archive record",asOfLine:"Data date: {date} · Generated: {ts}",notAvailable:"Not available",provisionalCoverage:"Weight coverage: {pct}%",bfsNote:"0–100 · daily close",stateResearch:"Cycle Monitoring",stateLoadingDesc:"Loading the latest cycle snapshot.",statePublishedDesc:"State published from the CycleMark model archive.",statePublicOnlyDesc:"CycleMark tracks BTC cycle conditions from finalized daily market data.",updatedAt:"Updated {ts}",timeUnavailable:"time unavailable",timestampUnavailable:"timestamp unavailable",noFinalizedCandle:"No finalized candle",awaitingData:"Awaiting data",archivedDays:"{n} archived days",archivedRecordAria:"archived record",noArchivedRecordAria:"no archived record",dateUnavailable:"Date unavailable",dataAvailable:"Data available",noArchivedRecord:"No archived record",detailStatus:"Status: {status}",detailBtc:"BTC close: {value}",detailChange:"Daily change: {value}",detailFear:"Fear & Greed: {value}",detailScores:"BFS: {bfs} · {band}",detailBfsStatus:"BFS status: {status} · Weight coverage: {pct}%",detailDimensions:"Dimension scores",detailModelVersion:"Model version: {version}",detailGenerated:"Generated at: {ts}",unavailable:"Unavailable",unknown:"Unknown",chartTitle:"Cycle Trend",chartSub:"BFS, BTC close and Fear & Greed across the selected window.",chartBfs:"BFS",chartPrice:"BTC close",chartFear:"Fear & Greed",chartNote:"Left axis: BFS and Fear & Greed (0–100). Right axis: BTC close on a log scale.",range3m:"3M",range6m:"6M",range12m:"12M",rangeAll:"ALL",dim:{capitulation_panic:"Capitulation & panic",cycle_position:"Cycle position",flows_market_structure:"Flows & market structure",trend_price_structure:"Trend & price structure",valuation_cost_basis:"Valuation & cost basis"},noRecordForDate:"No record exists for this date. The calendar does not infer missing observations.",archiveUnavailable:"Archive unavailable",archiveUnavailableDesc:"No published data archive could be loaded. Please try again shortly.",band:{deep:"Deep value",approaching:"Approaching",neutral:"Neutral",elevated:"Elevated",euphoria:"Euphoria"},fear:{ExtremeFear:"Extreme fear",Fear:"Fear",Neutral:"Neutral",Greed:"Greed",ExtremeGreed:"Extreme greed"},bfsStatus:{provisional_unvalidated:"provisional"},status:{research_data_available_signals_not_yet_validated:"daily market data",historical_research_backfill_not_point_in_time:"historical backfill",historical_research_backfill:"historical backfill"}};
 function fetchJson(url){return fetch(url,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error(url+" unavailable ("+r.status+")");return r.json()})}
 function lookup(obj,key){var parts=key.split(".");for(var i=0;i<parts.length;i++){if(obj==null)return null;obj=obj[parts[i]]}return typeof obj==="string"?obj:null}
 function t(key,params){var v=lookup(pack,key);if(v==null)v=lookup(EN_DYNAMIC,key);if(v==null)return key;return String(v).replace(/\{(\w+)\}/g,function(m,k){return params&&params[k]!=null?params[k]:m})}
@@ -127,7 +153,8 @@ function changeOf(key,r){var p=priceOf(r),pp=priceOf(previousRecord(key));return
 function fearOf(r){var f=r&&r.market_data&&r.market_data.fear_greed;return f&&f.value!=null?fmt(f.value)+"/100":t("unavailable")}
 function currentTheme(){return document.documentElement.getAttribute("data-theme")==="light"?"light":"dark"}
 function applyTheme(theme,save){document.documentElement.setAttribute("data-theme",theme);var b=$("themeToggle");if(b)b.textContent=theme==="light"?"☾":"☀";var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=theme==="light"?"#f4f7fc":"#0b1020";if(save){try{localStorage.setItem("cyclemark.theme",theme)}catch(e){}}}
-function placeTip(x,y){var tip=$("cellTip");if(!tip)return;var w=tip.offsetWidth,h=tip.offsetHeight,left=x+16,top=y+16;if(left+w>window.innerWidth-8)left=Math.max(8,x-w-16);if(top+h>window.innerHeight-8)top=Math.max(8,y-h-16);tip.style.left=left+"px";tip.style.top=top+"px"}
+function placeTipEl(tip,x,y){if(!tip)return;var w=tip.offsetWidth,h=tip.offsetHeight,left=x+16,top=y+16;if(left+w>window.innerWidth-8)left=Math.max(8,x-w-16);if(top+h>window.innerHeight-8)top=Math.max(8,y-h-16);tip.style.left=left+"px";tip.style.top=top+"px"}
+function placeTip(x,y){placeTipEl($("cellTip"),x,y)}
 function showTip(key,r,x,y){var tip=$("cellTip");if(!tip)return;tip.innerHTML="";var head=document.createElement("div");head.className="tip-date";head.textContent=dateLabel(key);tip.appendChild(head);var p=priceOf(r);var lines=r?[t("detailScores",{bfs:r.bfs==null?t("notAvailable"):fmt(r.bfs),band:bandName(r.bfs)}),t("detailBtc",{value:p&&p.price_usd!=null?"$"+fmt(p.price_usd):t("unavailable")}),t("detailChange",{value:changeOf(key,r)}),t("detailFear",{value:fearOf(r)})]:[t("noArchivedRecord")];lines.forEach(function(line){var d=document.createElement("div");d.className="tip-line";d.textContent=line;tip.appendChild(d)});tip.classList.add("show");tip.setAttribute("aria-hidden","false");placeTip(x,y)}
 function hideTip(){var tip=$("cellTip");if(!tip)return;tip.classList.remove("show");tip.setAttribute("aria-hidden","true")}
 function renderCalendar(){
@@ -153,6 +180,19 @@ grid.appendChild(button);
 }
 text("calendarCount",t("archivedDays",{n:records.length}));
 }
+var DIM_KEYS=["capitulation_panic","cycle_position","flows_market_structure","trend_price_structure","valuation_cost_basis"];
+function appendDimensions(box,r){
+var scores=r.dimension_scores||{};
+var title=document.createElement("div");title.className="dim-title";title.textContent=t("detailDimensions");box.appendChild(title);
+var list=document.createElement("div");list.className="dim-list";
+DIM_KEYS.forEach(function(k){
+var row=document.createElement("div");row.className="dim-row";
+var name=document.createElement("span");name.textContent=t("dim."+k);
+var val=document.createElement("b");val.textContent=scores[k]==null?t("notAvailable"):Number(scores[k]).toFixed(2);
+row.appendChild(name);row.appendChild(val);list.appendChild(row);
+});
+box.appendChild(list);
+}
 function showDetail(key,r){
 var box=$("dayDetail");box.innerHTML="";var h=document.createElement("h3");h.textContent=dateLabel(key)+" · "+(r?t("dataAvailable"):t("noArchivedRecord"));box.appendChild(h);
 var p=priceOf(r),change=changeOf(key,r);
@@ -163,11 +203,97 @@ t("detailChange",{value:change}),
 t("detailScores",{bfs:r.bfs==null?t("notAvailable"):fmt(r.bfs),band:bandName(r.bfs)}),
 t("detailFear",{value:fearOf(r)}),
 t("detailBfsStatus",{status:bfsStatusLabel(r.bfs_status),pct:(r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0}),
-t("detailDimensions",{json:JSON.stringify(r.dimension_scores||{})}),
 t("detailModelVersion",{version:r.model_version||t("unknown")}),
 t("detailGenerated",{ts:r.generated_at_utc||t("unknown")})
 ]:[t("noRecordForDate")];
 lines.forEach(function(line){var p=document.createElement("p");p.textContent=line;box.appendChild(p)});
+if(r)appendDimensions(box,r);
+}
+var CHART_RANGES=[{days:90,key:"range3m"},{days:180,key:"range6m"},{days:365,key:"range12m"},{days:0,key:"rangeAll"}];
+var chartDays=180,chartGeom=null,SVGNS="http://www.w3.org/2000/svg";
+function svgEl(tag,attrs){var e=document.createElementNS(SVGNS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e}
+function chartRows(){
+if(!records.length)return[];
+if(!chartDays)return records.slice();
+var last=new Date(records[records.length-1].date+"T00:00:00Z");
+last.setUTCDate(last.getUTCDate()-(chartDays-1));
+var cut=last.toISOString().slice(0,10);
+return records.filter(function(r){return r.date>=cut});
+}
+function buildChartRanges(){
+var box=$("chartRanges");if(!box)return;box.innerHTML="";
+CHART_RANGES.forEach(function(o){
+var b=document.createElement("button");b.type="button";b.textContent=t(o.key);
+if(o.days===chartDays)b.className="on";
+b.addEventListener("click",function(){chartDays=o.days;hideChartTip();buildChartRanges();renderChart()});
+box.appendChild(b);
+});
+}
+function hideChartTip(){var tip=$("chartTip");if(tip){tip.classList.remove("show");tip.setAttribute("aria-hidden","true")}if(chartGeom&&chartGeom.cross)chartGeom.cross.setAttribute("opacity",0)}
+function showChartTip(r,cx,cy){
+var tip=$("chartTip");if(!tip)return;tip.innerHTML="";
+var head=document.createElement("div");head.className="tip-date";head.textContent=dateLabel(r.date);tip.appendChild(head);
+var p=priceOf(r);
+var lines=[t("detailScores",{bfs:r.bfs==null?t("notAvailable"):fmt(r.bfs),band:bandName(r.bfs)}),t("detailBtc",{value:p&&p.price_usd!=null?"$"+fmt(p.price_usd):t("unavailable")}),t("detailFear",{value:fearOf(r)})];
+lines.forEach(function(line){var d=document.createElement("div");d.className="tip-line";d.textContent=line;tip.appendChild(d)});
+tip.classList.add("show");tip.setAttribute("aria-hidden","false");placeTipEl(tip,cx,cy);
+}
+function renderChart(){
+var svg=$("trendChart");if(!svg)return;
+var wrap=svg.parentNode,width=Math.max(260,Math.floor(wrap.clientWidth||600)),height=width<520?195:270;
+svg.innerHTML="";svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("width",width);svg.setAttribute("height",height);
+var rows=chartRows();chartGeom=null;hideChartTip();
+if(rows.length<2){var empty=svgEl("text",{x:width/2,y:height/2,"text-anchor":"middle",class:"chart-axis"});empty.textContent=t("awaitingData");svg.appendChild(empty);return}
+var plot=rows;
+if(plot.length>800){var step=Math.ceil(plot.length/800),sampled=[];for(var i=0;i<plot.length;i+=step)sampled.push(plot[i]);if(sampled[sampled.length-1]!==plot[plot.length-1])sampled.push(plot[plot.length-1]);plot=sampled}
+var pad={l:34,r:54,t:10,b:22},W=width-pad.l-pad.r,H=height-pad.t-pad.b;
+var t0=Date.parse(plot[0].date+"T00:00:00Z"),t1=Date.parse(plot[plot.length-1].date+"T00:00:00Z"),span=t1-t0||86400000;
+var xAt=function(ms){return pad.l+(ms-t0)/span*W},yIdx=function(v){return pad.t+(1-v/100)*H};
+var prices=[];plot.forEach(function(r){var p=priceOf(r);if(p&&p.price_usd!=null&&p.price_usd>0)prices.push(Number(p.price_usd))});
+if(!prices.length)prices=[1];
+var lmin=Math.log(Math.min.apply(null,prices)),lmax=Math.log(Math.max.apply(null,prices));
+if(lmax-lmin<0.02){var mid=(lmax+lmin)/2;lmin=mid-0.01;lmax=mid+0.01}
+var yPrice=function(v){return pad.t+(1-(Math.log(v)-lmin)/(lmax-lmin))*H};
+[0,25,50,75,100].forEach(function(v){
+var y=yIdx(v);
+svg.appendChild(svgEl("line",{x1:pad.l,y1:y,x2:pad.l+W,y2:y,stroke:"#7b8798","stroke-width":1,"stroke-opacity":v===0?.5:.22}));
+var l=svgEl("text",{x:pad.l-6,y:y+3,"text-anchor":"end",class:"chart-axis"});l.textContent=v;svg.appendChild(l);
+var pr=Math.exp(lmax-(y-pad.t)/H*(lmax-lmin));
+var rt=svgEl("text",{x:pad.l+W+6,y:y+3,class:"chart-axis"});rt.textContent=compactPrice(pr);svg.appendChild(rt);
+});
+var ticks=width<520?3:5;
+for(var k=0;k<ticks;k++){
+var ms=t0+span*(k/(ticks-1)),d=new Date(ms);
+var lbl=span>320*86400000?d.toLocaleDateString(localeTag(),{month:"short",year:"2-digit",timeZone:"UTC"}):d.toLocaleDateString(localeTag(),{month:"short",day:"numeric",timeZone:"UTC"});
+var tx=svgEl("text",{x:xAt(ms),y:height-7,"text-anchor":k===0?"start":(k===ticks-1?"end":"middle"),class:"chart-axis"});tx.textContent=lbl;svg.appendChild(tx);
+}
+var series=[{color:"#f4b740",w:1.5,y:function(r){var p=priceOf(r);return p&&p.price_usd!=null&&p.price_usd>0?yPrice(Number(p.price_usd)):null},v:function(r){var p=priceOf(r);return p&&p.price_usd!=null&&p.price_usd>0?Number(p.price_usd):null}},
+{color:"#45d6a0",w:2.2,y:function(r){return r.bfs==null?null:yIdx(Number(r.bfs))},v:function(r){return r.bfs==null?null:Number(r.bfs)}},
+{color:"#5ba8ff",w:1.8,y:function(r){var f=r.market_data&&r.market_data.fear_greed;return f&&f.value!=null?yIdx(Number(f.value)):null},v:function(r){var f=r.market_data&&r.market_data.fear_greed;return f&&f.value!=null?Number(f.value):null}}];
+series.forEach(function(s){
+var d="",pen=false;
+plot.forEach(function(r){var py=s.y(r);if(py==null){pen=false;return}var px=xAt(Date.parse(r.date+"T00:00:00Z"));d+=(pen?"L":"M")+px.toFixed(1)+" "+py.toFixed(1)+" ";pen=true});
+if(d)svg.appendChild(svgEl("path",{d:d,fill:"none",stroke:s.color,"stroke-width":s.w,"stroke-linejoin":"round","stroke-linecap":"round"}));
+});
+var cross=svgEl("line",{y1:pad.t,y2:pad.t+H,stroke:"#91c5ff","stroke-width":1,"stroke-dasharray":"3 3",opacity:0});
+svg.appendChild(cross);
+var dots=series.map(function(s){var c=svgEl("circle",{r:3.2,fill:s.color,stroke:"#0b1020","stroke-width":1,opacity:0});svg.appendChild(c);return c});
+chartGeom={plot:plot,pad:pad,W:W,H:H,t0:t0,span:span,xAt:xAt,series:series,dots:dots,cross:cross};
+var hit=svgEl("rect",{x:pad.l,y:pad.t,width:W,height:H,fill:"transparent"});
+svg.appendChild(hit);
+function onMove(ev){
+var box=svg.getBoundingClientRect(),scale=width/box.width,mx=(ev.clientX-box.left)*scale;
+if(mx<pad.l||mx>pad.l+W){hideChartTip();return}
+var best=0,bd=Infinity;
+for(var i=0;i<plot.length;i++){var dd=Math.abs(xAt(Date.parse(plot[i].date+"T00:00:00Z"))-mx);if(dd<bd){bd=dd;best=i}}
+var r=plot[best],px=xAt(Date.parse(r.date+"T00:00:00Z"));
+cross.setAttribute("x1",px);cross.setAttribute("x2",px);cross.setAttribute("opacity",1);
+series.forEach(function(s,j){var py=s.y(r),dot=dots[j];if(py==null){dot.setAttribute("opacity",0);return}dot.setAttribute("cx",px);dot.setAttribute("cy",py);dot.setAttribute("opacity",1)});
+showChartTip(r,ev.clientX,ev.clientY);
+}
+hit.addEventListener("mousemove",onMove);
+if(window.PointerEvent){hit.addEventListener("pointermove",onMove);hit.addEventListener("pointerdown",onMove)}
+svg.addEventListener("mouseleave",hideChartTip);
 }
 $("prevMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()-1);renderCalendar()});
 $("nextMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()+1);renderCalendar()});
@@ -191,13 +317,17 @@ if(latestRecord){renderLatest(latestRecord);if(selectedDate)showDetail(selectedD
 else if(dataError){text("connection",t("archiveUnavailable"));text("stateDescription",t("archiveUnavailableDesc"));text("asOf",String(dataError.message||dataError));text("bfs",t("notAvailable"))}
 else{text("connection",t("loadingData"));text("asOf",t("asOfWaiting"));text("stateName",t("stateResearch"));text("stateDescription",t("stateLoadingDesc"))}
 if(records.length||dataError)renderCalendar();
+if(records.length){buildChartRanges();renderChart()}
 }
 applyTheme(currentTheme(),false);
 if($("themeToggle"))$("themeToggle").addEventListener("click",function(){applyTheme(currentTheme()==="light"?"dark":"light",true)});
 buildLangSelect();
+buildChartRanges();
+var resizeTimer=null;
+window.addEventListener("resize",function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(function(){if(records.length)renderChart()},150)});
 setLocale(detectLocale(),false);
 loadArchive(0)
-.then(function(archive){var latest=archive.latest;renderLatest(latest);$("connection").title="Data source: "+archive.base;records=Array.isArray(archive.history)?archive.history:[];if(!records.some(function(r){return r.date===latest.date}))records.push(latest);records.sort(function(a,b){return a.date.localeCompare(b.date)});records.forEach(function(r){byDate[r.date]=r});if(records.length){var last=records[records.length-1];viewDate=new Date(last.date+"T00:00:00Z");viewDate.setDate(1);selectedDate=last.date}renderCalendar();if(selectedDate)showDetail(selectedDate,byDate[selectedDate])})
+.then(function(archive){var latest=archive.latest;renderLatest(latest);$("connection").title="Data source: "+archive.base;records=Array.isArray(archive.history)?archive.history:[];if(!records.some(function(r){return r.date===latest.date}))records.push(latest);records.sort(function(a,b){return a.date.localeCompare(b.date)});records.forEach(function(r){byDate[r.date]=r});if(records.length){var last=records[records.length-1];viewDate=new Date(last.date+"T00:00:00Z");viewDate.setDate(1);selectedDate=last.date}renderCalendar();if(selectedDate)showDetail(selectedDate,byDate[selectedDate]);buildChartRanges();renderChart()})
 .catch(function(err){dataError=err;text("connection",t("archiveUnavailable"));text("stateDescription",t("archiveUnavailableDesc"));text("asOf",String(err.message||err));renderCalendar()});
 })();
 </script>

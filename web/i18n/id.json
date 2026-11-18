@@ -58,7 +58,7 @@
   "detailFear": "Fear & Greed: {value}",
   "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "Status BFS: {status} · Cakupan bobot: {pct}%",
-  "detailDimensions": "Skor dimensi: {json}",
+  "detailDimensions": "Skor dimensi",
   "detailModelVersion": "Versi model: {version}",
   "detailGenerated": "Dibuat: {ts}",
   "unavailable": "Tidak tersedia",
@@ -95,5 +95,22 @@
     "elevated": "Tinggi",
     "euphoria": "Euforia"
   },
-  "toggleTheme": "Ganti tema terang/gelap"
+  "toggleTheme": "Ganti tema terang/gelap",
+  "chartTitle": "Tren siklus",
+  "chartSub": "BFS, penutupan BTC, dan indeks Fear & Greed pada periode terpilih.",
+  "chartBfs": "BFS",
+  "chartPrice": "Penutupan BTC",
+  "chartFear": "Fear & Greed",
+  "chartNote": "Sumbu kiri: BFS dan Fear & Greed (0–100). Sumbu kanan: penutupan BTC dalam skala log.",
+  "range3m": "3 bln",
+  "range6m": "6 bln",
+  "range12m": "12 bln",
+  "rangeAll": "SEMUA",
+  "dim": {
+    "capitulation_panic": "Kapitulasi dan panik",
+    "cycle_position": "Posisi siklus",
+    "flows_market_structure": "Arus dan struktur pasar",
+    "trend_price_structure": "Tren dan struktur harga",
+    "valuation_cost_basis": "Valuasi dan basis biaya"
+  }
 }

@@ -58,7 +58,7 @@
   "detailFear": "الخوف والطمع: {value}",
   "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "حالة BFS: {status} · تغطية الأوزان: {pct}%",
-  "detailDimensions": "درجات الأبعاد: {json}",
+  "detailDimensions": "درجات الأبعاد",
   "detailModelVersion": "إصدار النموذج: {version}",
   "detailGenerated": "تاريخ الإنشاء: {ts}",
   "unavailable": "غير متاح",
@@ -95,5 +95,22 @@
     "elevated": "مرتفع",
     "euphoria": "ابتهاج"
   },
-  "toggleTheme": "تبديل السمة الفاتحة/الداكنة"
+  "toggleTheme": "تبديل السمة الفاتحة/الداكنة",
+  "chartTitle": "اتجاه الدورة",
+  "chartSub": "مؤشر BFS وسعر إغلاق BTC ومؤشر الخوف والطمع خلال الفترة المحددة.",
+  "chartBfs": "BFS",
+  "chartPrice": "إغلاق BTC",
+  "chartFear": "الخوف والطمع",
+  "chartNote": "المحور الأيسر: BFS ومؤشر الخوف والطمع (0–100). المحور الأيمن: إغلاق BTC بمقياس لوغاريتمي.",
+  "range3m": "3 أشهر",
+  "range6m": "6 أشهر",
+  "range12m": "12 شهرًا",
+  "rangeAll": "الكل",
+  "dim": {
+    "capitulation_panic": "الاستسلام والذعر",
+    "cycle_position": "موقع الدورة",
+    "flows_market_structure": "التدفقات وهيكل السوق",
+    "trend_price_structure": "الاتجاه وهيكل السعر",
+    "valuation_cost_basis": "التقييم وأساس التكلفة"
+  }
 }

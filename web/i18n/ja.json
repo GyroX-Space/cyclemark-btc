@@ -58,7 +58,7 @@
   "detailFear": "恐怖・強欲：{value}",
   "detailScores": "BFS：{bfs} · {band}",
   "detailBfsStatus": "BFS ステータス：{status} · ウェイトカバレッジ：{pct}%",
-  "detailDimensions": "ディメンションスコア：{json}",
+  "detailDimensions": "ディメンションスコア",
   "detailModelVersion": "モデルバージョン：{version}",
   "detailGenerated": "生成日時：{ts}",
   "unavailable": "利用不可",
@@ -95,5 +95,22 @@
     "elevated": "高値圏",
     "euphoria": "高揚"
   },
-  "toggleTheme": "ライト/ダークテーマを切り替え"
+  "toggleTheme": "ライト/ダークテーマを切り替え",
+  "chartTitle": "サイクルトレンド",
+  "chartSub": "選択期間の BFS、BTC 終値、恐怖・強欲指数。",
+  "chartBfs": "BFS",
+  "chartPrice": "BTC 終値",
+  "chartFear": "恐怖・強欲指数",
+  "chartNote": "左軸：BFS と恐怖・強欲指数（0–100）。右軸：BTC 終値（対数スケール）。",
+  "range3m": "3か月",
+  "range6m": "6か月",
+  "range12m": "12か月",
+  "rangeAll": "全期間",
+  "dim": {
+    "capitulation_panic": "投げ売りとパニック",
+    "cycle_position": "サイクル位置",
+    "flows_market_structure": "資金フローと市場構造",
+    "trend_price_structure": "トレンドと価格構造",
+    "valuation_cost_basis": "バリュエーションと取得原価"
+  }
 }

@@ -58,7 +58,7 @@
   "detailFear": "공포·탐욕: {value}",
   "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "BFS 상태: {status} · 가중치 커버리지: {pct}%",
-  "detailDimensions": "차원 점수: {json}",
+  "detailDimensions": "차원 점수",
   "detailModelVersion": "모델 버전: {version}",
   "detailGenerated": "생성 시각: {ts}",
   "unavailable": "사용 불가",
@@ -95,5 +95,22 @@
     "elevated": "상승",
     "euphoria": "과열"
   },
-  "toggleTheme": "라이트/다크 테마 전환"
+  "toggleTheme": "라이트/다크 테마 전환",
+  "chartTitle": "사이클 추세",
+  "chartSub": "선택 기간의 BFS, BTC 종가, 공포·탐욕 지수.",
+  "chartBfs": "BFS",
+  "chartPrice": "BTC 종가",
+  "chartFear": "공포·탐욕 지수",
+  "chartNote": "왼쪽 축: BFS와 공포·탐욕 지수(0–100). 오른쪽 축: BTC 종가(로그 스케일).",
+  "range3m": "3개월",
+  "range6m": "6개월",
+  "range12m": "12개월",
+  "rangeAll": "전체",
+  "dim": {
+    "capitulation_panic": "투매와 공포",
+    "cycle_position": "사이클 위치",
+    "flows_market_structure": "자금 흐름 및 시장 구조",
+    "trend_price_structure": "추세 및 가격 구조",
+    "valuation_cost_basis": "밸류에이션 및 취득 원가"
+  }
 }

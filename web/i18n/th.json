@@ -58,7 +58,7 @@
   "detailFear": "ความกลัวและความโลภ: {value}",
   "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "สถานะ BFS: {status} · ความครอบคลุมน้ำหนัก: {pct}%",
-  "detailDimensions": "คะแนนรายมิติ: {json}",
+  "detailDimensions": "คะแนนมิติ",
   "detailModelVersion": "เวอร์ชันโมเดล: {version}",
   "detailGenerated": "สร้างเมื่อ: {ts}",
   "unavailable": "ไม่พร้อมใช้งาน",
@@ -95,5 +95,22 @@
     "elevated": "สูง",
     "euphoria": "คึกคัก"
   },
-  "toggleTheme": "สลับธีมสว่าง/มืด"
+  "toggleTheme": "สลับธีมสว่าง/มืด",
+  "chartTitle": "แนวโน้มรอบ",
+  "chartSub": "BFS ราคาปิด BTC และดัชนีความกลัวและความโลภในช่วงที่เลือก",
+  "chartBfs": "BFS",
+  "chartPrice": "ราคาปิด BTC",
+  "chartFear": "ความกลัวและความโลภ",
+  "chartNote": "แกนซ้าย: BFS และความกลัวและความโลภ (0–100) แกนขวา: ราคาปิด BTC แบบลอการิทึม",
+  "range3m": "3 เดือน",
+  "range6m": "6 เดือน",
+  "range12m": "12 เดือน",
+  "rangeAll": "ทั้งหมด",
+  "dim": {
+    "capitulation_panic": "การยอมแพ้และตื่นตระหนก",
+    "cycle_position": "ตำแหน่งรอบ",
+    "flows_market_structure": "กระแสเงินและโครงสร้างตลาด",
+    "trend_price_structure": "แนวโน้มและโครงสร้างราคา",
+    "valuation_cost_basis": "การประเมินมูลค่าและฐานต้นทุน"
+  }
 }

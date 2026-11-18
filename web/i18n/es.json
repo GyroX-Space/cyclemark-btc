@@ -58,7 +58,7 @@
   "detailFear": "Miedo y codicia: {value}",
   "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "Estado de BFS: {status} · Cobertura de ponderación: {pct} %",
-  "detailDimensions": "Puntuaciones por dimensión: {json}",
+  "detailDimensions": "Puntuaciones por dimensión",
   "detailModelVersion": "Versión del modelo: {version}",
   "detailGenerated": "Generado: {ts}",
   "unavailable": "No disponible",
@@ -95,5 +95,22 @@
     "elevated": "Elevado",
     "euphoria": "Euforia"
   },
-  "toggleTheme": "Cambiar tema claro/oscuro"
+  "toggleTheme": "Cambiar tema claro/oscuro",
+  "chartTitle": "Tendencia del ciclo",
+  "chartSub": "BFS, cierre de BTC e índice de miedo y codicia en el periodo seleccionado.",
+  "chartBfs": "BFS",
+  "chartPrice": "Cierre BTC",
+  "chartFear": "Miedo y codicia",
+  "chartNote": "Eje izquierdo: BFS y miedo y codicia (0–100). Eje derecho: cierre de BTC en escala logarítmica.",
+  "range3m": "3 M",
+  "range6m": "6 M",
+  "range12m": "12 M",
+  "rangeAll": "TODO",
+  "dim": {
+    "capitulation_panic": "Capitulación y pánico",
+    "cycle_position": "Posición en el ciclo",
+    "flows_market_structure": "Flujos y estructura de mercado",
+    "trend_price_structure": "Tendencia y estructura de precios",
+    "valuation_cost_basis": "Valoración y base de coste"
+  }
 }

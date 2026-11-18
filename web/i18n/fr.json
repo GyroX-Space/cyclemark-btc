@@ -58,7 +58,7 @@
   "detailFear": "Peur et avidité : {value}",
   "detailScores": "BFS : {bfs} · {band}",
   "detailBfsStatus": "Statut BFS : {status} · Couverture de pondération : {pct} %",
-  "detailDimensions": "Scores par dimension : {json}",
+  "detailDimensions": "Scores par dimension",
   "detailModelVersion": "Version du modèle : {version}",
   "detailGenerated": "Généré le : {ts}",
   "unavailable": "Indisponible",
@@ -95,5 +95,22 @@
     "elevated": "Élevé",
     "euphoria": "Euphorie"
   },
-  "toggleTheme": "Basculer le thème clair/sombre"
+  "toggleTheme": "Basculer le thème clair/sombre",
+  "chartTitle": "Tendance du cycle",
+  "chartSub": "BFS, clôture BTC et Fear & Greed sur la période sélectionnée.",
+  "chartBfs": "BFS",
+  "chartPrice": "Clôture BTC",
+  "chartFear": "Fear & Greed",
+  "chartNote": "Axe gauche : BFS et Fear & Greed (0–100). Axe droit : clôture BTC en échelle logarithmique.",
+  "range3m": "3 M",
+  "range6m": "6 M",
+  "range12m": "12 M",
+  "rangeAll": "TOUT",
+  "dim": {
+    "capitulation_panic": "Capitulation et panique",
+    "cycle_position": "Position dans le cycle",
+    "flows_market_structure": "Flux et structure de marché",
+    "trend_price_structure": "Tendance et structure des prix",
+    "valuation_cost_basis": "Valorisation et coût de revient"
+  }
 }

@@ -58,7 +58,7 @@
   "detailFear": "ভয় ও লোভ: {value}",
   "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "BFS অবস্থা: {status} · ওজন কভারেজ: {pct}%",
-  "detailDimensions": "মাত্রাভিত্তিক স্কোর: {json}",
+  "detailDimensions": "মাত্রা স্কোর",
   "detailModelVersion": "মডেল সংস্করণ: {version}",
   "detailGenerated": "তৈরি: {ts}",
   "unavailable": "অনুপলব্ধ",
@@ -95,5 +95,22 @@
     "elevated": "ঊর্ধ্বমুখী",
     "euphoria": "উচ্ছ্বাস"
   },
-  "toggleTheme": "হালকা/গাঢ় থিম পরিবর্তন করুন"
+  "toggleTheme": "হালকা/গাঢ় থিম পরিবর্তন করুন",
+  "chartTitle": "চক্র প্রবণতা",
+  "chartSub": "নির্বাচিত সময়ে BFS, BTC ক্লোজ এবং ভয় ও লোভ সূচক।",
+  "chartBfs": "BFS",
+  "chartPrice": "BTC ক্লোজ",
+  "chartFear": "ভয় ও লোভ",
+  "chartNote": "বাম অক্ষ: BFS ও ভয় ও লোভ (০–১০০)। ডান অক্ষ: লগ স্কেলে BTC ক্লোজ।",
+  "range3m": "৩ মাস",
+  "range6m": "৬ মাস",
+  "range12m": "১২ মাস",
+  "rangeAll": "সব",
+  "dim": {
+    "capitulation_panic": "আত্মসমর্পণ ও আতঙ্ক",
+    "cycle_position": "চক্র অবস্থান",
+    "flows_market_structure": "প্রবাহ ও বাজার কাঠামো",
+    "trend_price_structure": "প্রবণতা ও মূল্য কাঠামো",
+    "valuation_cost_basis": "মূল্যায়ন ও খরচ ভিত্তি"
+  }
 }

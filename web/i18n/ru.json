@@ -58,7 +58,7 @@
   "detailFear": "Страх и жадность: {value}",
   "detailScores": "BFS: {bfs} · {band}",
   "detailBfsStatus": "Статус BFS: {status} · Покрытие весов: {pct}%",
-  "detailDimensions": "Оценки по измерениям: {json}",
+  "detailDimensions": "Оценки по измерениям",
   "detailModelVersion": "Версия модели: {version}",
   "detailGenerated": "Сформировано: {ts}",
   "unavailable": "Недоступно",
@@ -95,5 +95,22 @@
     "elevated": "Повышенный",
     "euphoria": "Эйфория"
   },
-  "toggleTheme": "Переключить светлую/тёмную тему"
+  "toggleTheme": "Переключить светлую/тёмную тему",
+  "chartTitle": "Динамика цикла",
+  "chartSub": "BFS, закрытие BTC и индекс страха и жадности за выбранный период.",
+  "chartBfs": "BFS",
+  "chartPrice": "Закрытие BTC",
+  "chartFear": "Страх и жадность",
+  "chartNote": "Левая ось: BFS и индекс страха и жадности (0–100). Правая ось: закрытие BTC в логарифмическом масштабе.",
+  "range3m": "3 мес",
+  "range6m": "6 мес",
+  "range12m": "12 мес",
+  "rangeAll": "ВСЁ",
+  "dim": {
+    "capitulation_panic": "Капитуляция и паника",
+    "cycle_position": "Позиция в цикле",
+    "flows_market_structure": "Потоки и структура рынка",
+    "trend_price_structure": "Тренд и структура цены",
+    "valuation_cost_basis": "Оценка и база затрат"
+  }
 }
