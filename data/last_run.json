@@ -1,12 +1,12 @@
 {
-  "run_at_utc": "2026-11-18T00:30:07Z",
+  "run_at_utc": "2026-11-19T00:30:07Z",
   "host": "ip-172-31-28-76.ap-northeast-2.compute.internal",
-  "repo_commit": "fb82f36123ca11e1320be59fc87d0dfebc389258",
+  "repo_commit": "77d83bf45f1cea12600b7d1d88c3519ae7e8a7b8",
   "exit_code": 0,
   "outcome": "success",
-  "record_date": 2026-11-17,
+  "record_date": 2026-11-18,
   "revision": 1,
-  "price_usd": 64947.35,
-  "bfs": 44.79,
+  "price_usd": 63068.22,
+  "bfs": 43.78,
   "configured_weight_coverage_pct": 40.0
 }
