@@ -19,6 +19,14 @@ from .registry import Registry
 
 GENESIS = "2009-01-03T00:00:00Z"
 DAILY = 365.0
+MACRO_CODES = (
+    ("US_10Y_YIELD", "us_10y"),
+    ("US_10Y_REAL_YIELD", "us_10y_real"),
+    ("USD_BROAD_INDEX", "usd_broad"),
+    ("FED_BALANCE_SHEET", "fed_assets"),
+    ("VIX", "vix"),
+    ("HY_CREDIT_SPREAD", "hy_spread"),
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -44,6 +52,8 @@ class CycleRow:
     stablecoin_supply_at_start: float | None
     stablecoin_supply_at_end: float | None
     etf_net_flow_in_cycle: float | None
+    macro_start_json: str | None
+    macro_end_json: str | None
     data_note: str
 
     def to_dict(self) -> dict[str, Any]:
@@ -69,6 +79,8 @@ class CycleRow:
             "stablecoin_supply_at_start": self.stablecoin_supply_at_start,
             "stablecoin_supply_at_end": self.stablecoin_supply_at_end,
             "etf_net_flow_in_cycle": self.etf_net_flow_in_cycle,
+            "macro_start_json": self.macro_start_json,
+            "macro_end_json": self.macro_end_json,
             "data_note": self.data_note,
         }
 
@@ -169,6 +181,7 @@ class CycleTableService:
         issuance = self._series("BTC_ISSUANCE")
         stablecoins = self._series("STABLECOIN_TOTAL_SUPPLY")
         etf_flows = self._series("BTC_SPOT_ETF_NET_FLOW")
+        macro_series = {label: self._series(code) for code, label in MACRO_CODES}
         halvings = self._halvings()
         if not prices:
             raise ValueError("BTC_USD_OHLCV 没有观测，无法建立周期表")
@@ -193,6 +206,10 @@ class CycleTableService:
                 notes.append("ETF 资金流缺失")
 
             price_halving = _at(prices, end)
+            macro_start = _macro_json(macro_series, start)
+            macro_end = _macro_json(macro_series, end)
+            if macro_start is None:
+                notes.append("周期起点无 L1 宏观数据")
             row = CycleRow(
                 label=label,
                 start_utc=start.isoformat() + "T00:00:00Z",
@@ -226,6 +243,8 @@ class CycleTableService:
                     if any(start <= day <= end for day, _ in etf_flows)
                     else None
                 ),
+                macro_start_json=macro_start,
+                macro_end_json=macro_end,
                 data_note="；".join(notes),
             )
             rows.append(row)
@@ -267,6 +286,8 @@ class CycleTableService:
                 if any(current_start <= day <= latest for day, _ in etf_flows)
                 else None
             ),
+            macro_start_json=_macro_json(macro_series, current_start),
+            macro_end_json=_macro_json(macro_series, latest),
             data_note="进行中，尚未闭合",
         )
         rows.append(current)
@@ -292,6 +313,15 @@ def _change(before: float | None, after: float | None) -> float | None:
     if before in (None, 0) or after is None:
         return None
     return (after / before - 1.0) * 100
+
+
+def _macro_json(series_map: dict[str, list[tuple[date, float]]], day: date) -> str | None:
+    values: dict[str, float] = {}
+    for label, points in series_map.items():
+        value = _at(points, day)
+        if value is not None:
+            values[label] = value
+    return json.dumps(values, ensure_ascii=False) if values else None
 
 
 def write_outputs(report: dict[str, Any], output_dir: str | Path) -> tuple[Path, Path]:

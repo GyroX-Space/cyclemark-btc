@@ -11,11 +11,13 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from cmci import AuditService, Registry, ReplayService, ResearchDatasetService  # noqa: E402
+from cmci.first_batch import FRED_SERIES  # noqa: E402
 
 DEFAULT_DB = ROOT / "data" / "cmci" / "cmci.db"
 PROJECT_CODE = "cmci"
 DATASET_CODE = "CMCI-CORE-2015"
 
+L1_MEMBERS = list(FRED_SERIES)
 L2_MEMBERS = [
     "BTC_CIRCULATING_SUPPLY",
     "BTC_ISSUANCE",
@@ -54,6 +56,7 @@ def main() -> int:
     parser.add_argument("--db", default=str(DEFAULT_DB))
     parser.add_argument("--report", default=str(ROOT / "data" / "cmci" / "core-build-report.json"))
     parser.add_argument("--skip-audit", action="store_true")
+    parser.add_argument("--new-version", action="store_true")
     args = parser.parse_args()
 
     registry = Registry(args.db)
@@ -80,7 +83,7 @@ def main() -> int:
             )
 
         versions = service.list_versions(DATASET_CODE)
-        if versions and versions[-1].status == "sealed":
+        if versions and versions[-1].status == "sealed" and not args.new_version:
             version = versions[-1]
         else:
             version = service.create_dataset_version(
@@ -88,7 +91,9 @@ def main() -> int:
                 time_start="2015-01-01T00:00:00Z",
                 time_end="2026-11-28T23:59:59Z",
                 change_reason=(
-                    "First real-data batch: D2-D5 ingested; D1 FRED/ALFRED pending API key."
+                    "Add L1 FRED/ALFRED vintage series to the sealed core dataset."
+                    if args.new_version
+                    else "First real-data batch: D2-D5 ingested; D1 FRED/ALFRED pending API key."
                 ),
                 created_by="cmci",
             )
@@ -194,6 +199,9 @@ def _add_members(
             actor=actor,
         )
 
+    for code in L1_MEMBERS:
+        add(code, "not_applicable", "2015-01-01T00:00:00Z", "2026-11-28T23:59:59Z",
+            "L1 macro and financial conditions")
     for code in L2_MEMBERS:
         add(code, "not_applicable", "2015-01-01T00:00:00Z", "2026-11-28T23:59:59Z",
             "L2 supply and network series")

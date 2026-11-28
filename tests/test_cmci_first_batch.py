@@ -187,6 +187,22 @@ def test_fred_rows_use_vintage_availability():
     assert rows[0]["available_time_method"] == "historical_vintage"
 
 
+def test_fred_matrix_keeps_only_changes():
+    payload = {
+        "observations": [
+            {"date": "2015-01-01", "DGS10_20150130": "1.0", "DGS10_20150227": "1.0"},
+            {"date": "2015-01-02", "DGS10_20150130": "1.1", "DGS10_20150227": "1.2"},
+        ]
+    }
+    changed = connectors.fred_matrix_changed_rows(
+        payload, series_id="DGS10", vintage_dates=["2015-01-30", "2015-02-27"]
+    )
+    assert len(changed["2015-01-30"]) == 2
+    assert len(changed["2015-02-27"]) == 1
+    assert changed["2015-02-27"][0]["value"] == "1.2"
+    assert changed["2015-02-27"][0]["available_time"] == "2015-02-27T23:59:59Z"
+
+
 def test_governance_records_are_append_only():
     registry = Registry(":memory:")
     service = FirstBatchService(registry)

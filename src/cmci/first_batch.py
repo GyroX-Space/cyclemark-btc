@@ -7,6 +7,7 @@ then ingests each batch through the existing append-only ingestion service.
 from __future__ import annotations
 
 import json
+import time
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
@@ -173,6 +174,8 @@ _INDICATORS: list[IndicatorSpec] = [
                   "requires a defined asset sample", False, "unknown", "unavailable", None,
                   update_method=UpdateMethod.MANUAL),
 ]
+
+SPEC_BY_CODE: dict[str, IndicatorSpec] = {spec.code: spec for spec in _INDICATORS}
 
 SOURCE_SPECS: dict[str, dict[str, Any]] = {
     "FRED": dict(source_name="FRED / ALFRED", provider="Federal Reserve Bank of St. Louis",
@@ -411,17 +414,14 @@ class FirstBatchService:
                     report.skipped.append(f"{code}: no vintages")
                     continue
                 total = 0
-                for vintage in selected:
-                    fetched = connectors.fetch_fred_observations(
-                        series_id, api_key, realtime_start=vintage, realtime_end=vintage
-                    )
-                    rows = connectors.fred_rows(
-                        fetched.data.get("observations", []), vintage_date=vintage
-                    )
-                    if not rows:
-                        continue
+                matrix = connectors.fetch_fred_vintage_matrix(series_id, api_key, selected)
+                changed = connectors.fred_matrix_changed_rows(
+                    matrix.data, series_id=series_id, vintage_dates=selected
+                )
+                for vintage, rows in changed.items():
                     result = self._ingest(code, "FRED", rows, batch=f"D1-{code}-{vintage}")
                     total += result.records_inserted
+                time.sleep(0.5)
                 report.results.append(
                     {"indicator": code, "vintages": len(selected), "inserted": total}
                 )
@@ -588,6 +588,39 @@ class FirstBatchService:
     # --------------------------------------------------------------- coverage
     def coverage_report(self) -> list[dict[str, Any]]:
         return [self.governance.actual_coverage(spec.code) for spec in _INDICATORS]
+
+    def reconcile_coverage(self, *, actor: str = "first-batch") -> list[str]:
+        """Append a new governance version when declared coverage differs from data."""
+        updated: list[str] = []
+        for spec in _INDICATORS:
+            actual = self.governance.actual_coverage(spec.code)
+            start = actual["coverage_start_utc"]
+            if not start:
+                continue
+            computed = (
+                "full_target_coverage" if start[:10] <= "2015-01-08" else "partial_coverage"
+            )
+            current = self.governance.get_indicator_governance(spec.code, missing_ok=True)
+            if (
+                current
+                and current.coverage_status == computed
+                and (current.coverage_start_utc or "")[:10] == start[:10]
+            ):
+                continue
+            self.governance.register_indicator_governance(
+                spec.code,
+                source_grade=spec.source_grade,
+                measurement_scope=spec.measurement_scope,
+                proxy_flag=spec.proxy_flag,
+                license_status=spec.license_status,
+                coverage_status=computed,
+                coverage_start=start,
+                coverage_end=actual["coverage_end_utc"],
+                notes=spec.description,
+                actor=actor,
+            )
+            updated.append(f"{spec.code}: {computed} from {start[:10]}")
+        return updated
 
 
 def _sample_vintages(vintages: list[str], sampling: str) -> list[str]:

@@ -49,6 +49,11 @@ DRIVERS: tuple[DriverSpec, ...] = (
     DriverSpec("STABLECOIN_TOTAL_SUPPLY", "稳定币总供应", "L4 资金传导", "last", "log_change"),
     DriverSpec("BTC_SPOT_ETF_NET_FLOW", "现货 ETF 净流入", "L4 资金传导", "sum", "level"),
     DriverSpec("BTC_SPOT_ETF_AUM", "现货 ETF 资产规模", "L4 资金传导", "last", "log_change"),
+    DriverSpec("US_10Y_REAL_YIELD", "美国10年期实际利率", "L1 宏观", "mean", "diff"),
+    DriverSpec("USD_BROAD_INDEX", "美元广义指数", "L1 宏观", "last", "log_change"),
+    DriverSpec("FED_BALANCE_SHEET", "美联储总资产", "L1 宏观", "last", "log_change"),
+    DriverSpec("VIX", "VIX 波动率", "L1 宏观", "mean", "log_change"),
+    DriverSpec("HY_CREDIT_SPREAD", "高收益债信用利差", "L1 宏观", "mean", "diff"),
 )
 
 CAVEATS: dict[str, str] = {
@@ -58,6 +63,11 @@ CAVEATS: dict[str, str] = {
     "STABLECOIN_TOTAL_SUPPLY": "供应是存量，变化不等于资金进入交易所或买入 BTC。",
     "BTC_SPOT_ETF_NET_FLOW": "仅覆盖 2024 年后，全部落在验证期，无法完成独立识别。",
     "BTC_SPOT_ETF_AUM": "覆盖期过短，且 AUM 随价格机械变化。",
+    "US_10Y_REAL_YIELD": "宏观变量与风险资产存在共同驱动和内生性，不能直接解释为因果。",
+    "USD_BROAD_INDEX": "美元与风险资产可能同受宏观因素驱动，相关不等于传导。",
+    "FED_BALANCE_SHEET": "资产负债表是慢变量，且与政策预期高度相关。",
+    "VIX": "波动率与收益存在同期反向的机械关系，不是独立驱动。",
+    "HY_CREDIT_SPREAD": "历史版本仅 2023 年后可得，识别期样本不足。",
 }
 
 
@@ -216,8 +226,11 @@ class RelationshipService:
         transformed: dict[tuple[int, int], tuple[date, float]] = {}
         previous: float | None = None
         for key, (day, value) in ordered:
-            if previous is not None and previous > 0 and value > 0:
-                transformed[key] = (day, math.log(value / previous))
+            if previous is not None:
+                if spec.transform == "diff":
+                    transformed[key] = (day, value - previous)
+                elif previous > 0 and value > 0:
+                    transformed[key] = (day, math.log(value / previous))
             previous = value
         return transformed
 
@@ -331,7 +344,8 @@ class RelationshipService:
         return {
             "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
             "scope": (
-                "仅检验 L2 供给与 L4 资金传导；L1 未接入，共同驱动与资本竞争无法检验。"
+                "检验 L1 宏观条件、L2 供给与 L4 资金传导到 BTC 收益的关系；"
+                "共同驱动与资本竞争尚未与股票、配置数据区分。"
             ),
             "method": {
                 "frequency": "weekly",

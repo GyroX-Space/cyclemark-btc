@@ -141,6 +141,67 @@ def fetch_fred_vintage_dates(
     return list(result.data.get("vintage_dates", []))
 
 
+def fetch_fred_vintage_matrix(
+    series_id: str,
+    api_key: str,
+    vintage_dates: list[str],
+    *,
+    observation_start: str = "2014-01-01",
+) -> FetchResult:
+    """One request per series: full matrix of all selected vintages."""
+    params = {
+        "series_id": series_id,
+        "api_key": api_key,
+        "file_type": "json",
+        "observation_start": observation_start,
+        "output_type": 2,
+        "vintage_dates": ",".join(vintage_dates),
+    }
+    return fetch_json(
+        f"{FRED_API}/series/observations?{urllib.parse.urlencode(params)}", timeout=180
+    )
+
+
+def fred_matrix_changed_rows(
+    payload: dict[str, Any], *, series_id: str, vintage_dates: list[str]
+) -> dict[str, list[dict[str, Any]]]:
+    """Return only new or revised observations per vintage."""
+    observations = payload.get("observations")
+    if not isinstance(observations, list):
+        raise ConnectorError("FRED 响应缺少 observations")
+    snapshots: dict[str, dict[str, str]] = {vintage: {} for vintage in vintage_dates}
+    for item in observations:
+        period = item.get("date")
+        if period is None:
+            continue
+        for vintage in vintage_dates:
+            column = f"{series_id}_{vintage.replace('-', '')}"
+            raw = item.get(column)
+            if raw in (None, "", "."):
+                continue
+            snapshots[vintage][period] = str(raw)
+
+    changed: dict[str, list[dict[str, Any]]] = {}
+    previous: dict[str, str] = {}
+    for vintage in vintage_dates:
+        snapshot = snapshots[vintage]
+        rows: list[dict[str, Any]] = []
+        available = f"{vintage}T23:59:59Z"
+        for period in sorted(snapshot):
+            value = snapshot[period]
+            if previous.get(period) == value:
+                continue
+            day = date.fromisoformat(period)
+            start, end = _bounds(day)
+            rows.append(
+                _row(start, end, value, available_time=available, method="historical_vintage")
+            )
+        previous = snapshot
+        if rows:
+            changed[vintage] = rows
+    return changed
+
+
 def fred_rows(observations: list[dict[str, Any]], *, vintage_date: str) -> list[dict[str, Any]]:
     """Rows for one vintage. The vintage date is the conservative availability date."""
     available = f"{vintage_date}T23:59:59Z"

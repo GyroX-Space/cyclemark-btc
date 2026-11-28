@@ -62,6 +62,7 @@ def main() -> int:
     if "derived" in selected:
         report["derived"] = service.run_derived().__dict__
 
+    report["coverage_reconciled"] = service.reconcile_coverage()
     report["coverage"] = service.coverage_report()
     text = json.dumps(report, ensure_ascii=False, indent=2)
     if args.report:
