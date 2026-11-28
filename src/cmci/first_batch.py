@@ -74,6 +74,26 @@ FRED_LABELS: dict[str, tuple[str, str, str]] = {
     "US_UNEMPLOYMENT": ("美国失业率", "percent", "monthly"),
 }
 
+BINANCE_SERIES: dict[str, dict[str, str]] = {
+    "BTCUSDT": {
+        "close": "BTC_USDT_CLOSE_BINANCE",
+        "volume": "BTC_USDT_VOLUME_BINANCE",
+        "trades": "BTC_USDT_TRADES_BINANCE",
+    },
+    "ETHUSDT": {
+        "close": "ETH_USDT_CLOSE_BINANCE",
+        "volume": "ETH_USDT_VOLUME_BINANCE",
+        "trades": "ETH_USDT_TRADES_BINANCE",
+    },
+}
+
+STABLECOIN_COINS: dict[str, str] = {
+    "USDT": "STABLECOIN_USDT_SUPPLY",
+    "USDC": "STABLECOIN_USDC_SUPPLY",
+    "DAI": "STABLECOIN_DAI_SUPPLY",
+    "USDE": "STABLECOIN_USDE_SUPPLY",
+}
+
 _INDICATORS: list[IndicatorSpec] = [
     *[
         IndicatorSpec(
@@ -135,6 +155,18 @@ _INDICATORS: list[IndicatorSpec] = [
                   "Daily change in USD-pegged stablecoin supply, derived within CMCI.", "A",
                   "derived from STABLECOIN_TOTAL_SUPPLY", False, "internal_research", "partial_coverage",
                   "2017-11-30", update_method=UpdateMethod.MANUAL),
+    IndicatorSpec("STABLECOIN_USDT_SUPPLY", "USDT 供应量", Layer.L4, "stablecoin", "USD", "daily", "numeric",
+                  "Tether (USDT) circulating supply from DefiLlama; single stablecoin, not total capital inflow.",
+                  "A", "USDT only", False, "internal_research", "partial_coverage", "2017-11-29"),
+    IndicatorSpec("STABLECOIN_USDC_SUPPLY", "USDC 供应量", Layer.L4, "stablecoin", "USD", "daily", "numeric",
+                  "USD Coin (USDC) circulating supply from DefiLlama; single stablecoin.", "A",
+                  "USDC only", False, "internal_research", "partial_coverage", None),
+    IndicatorSpec("STABLECOIN_DAI_SUPPLY", "DAI 供应量", Layer.L4, "stablecoin", "USD", "daily", "numeric",
+                  "DAI circulating supply from DefiLlama; single stablecoin.", "A",
+                  "DAI only", False, "internal_research", "partial_coverage", None),
+    IndicatorSpec("STABLECOIN_USDE_SUPPLY", "USDe 供应量", Layer.L4, "stablecoin", "USD", "daily", "numeric",
+                  "Ethena USDe circulating supply from DefiLlama; single stablecoin.", "B",
+                  "USDe only", False, "internal_research", "partial_coverage", None),
     IndicatorSpec("BTC_SPOT_ETF_NET_FLOW", "美国现货 BTC ETF 净流入", Layer.L4, "etf_flow", "USD", "trading_day", "numeric",
                   "Daily US spot Bitcoin ETF net flow; structurally new from 2024-01-11.", "A",
                   "US spot Bitcoin ETFs only", False, "internal_and_commercial", "partial_coverage", "2024-01-11"),
@@ -153,6 +185,24 @@ _INDICATORS: list[IndicatorSpec] = [
     IndicatorSpec("BTC_VOLUME", "BTC 成交量", Layer.L5, "price", "BTC", "daily", "numeric",
                   "Daily venue volume for the reference BTC/USD pair.", "A",
                   "single-venue volume, not global volume", False, "internal_research", "full_target_coverage", TARGET_START),
+    IndicatorSpec("BTC_USDT_CLOSE_BINANCE", "BTC/USDT 收盘价（Binance）", Layer.L5, "price", "USDT", "daily", "numeric",
+                  "Daily close from Binance BTCUSDT spot klines; single-venue reference, not a global index.", "A",
+                  "Binance BTCUSDT spot only", False, "internal_research", "partial_coverage", "2017-08-17"),
+    IndicatorSpec("BTC_USDT_VOLUME_BINANCE", "BTC/USDT 成交量（Binance）", Layer.L5, "price", "BTC", "daily", "numeric",
+                  "Daily base-asset volume from Binance BTCUSDT spot klines; single-venue, not global volume.", "A",
+                  "Binance BTCUSDT spot only", False, "internal_research", "partial_coverage", "2017-08-17"),
+    IndicatorSpec("BTC_USDT_TRADES_BINANCE", "BTC/USDT 成交笔数（Binance）", Layer.L5, "price", "trades", "daily", "numeric",
+                  "Daily trade count from Binance BTCUSDT spot klines; single-venue activity.", "B",
+                  "Binance BTCUSDT spot only", False, "internal_research", "partial_coverage", "2017-08-17"),
+    IndicatorSpec("ETH_USDT_CLOSE_BINANCE", "ETH/USDT 收盘价（Binance）", Layer.L5, "price", "USDT", "daily", "numeric",
+                  "Daily close from Binance ETHUSDT spot klines; single-venue reference.", "A",
+                  "Binance ETHUSDT spot only", False, "internal_research", "partial_coverage", "2017-08-17"),
+    IndicatorSpec("ETH_USDT_VOLUME_BINANCE", "ETH/USDT 成交量（Binance）", Layer.L5, "price", "ETH", "daily", "numeric",
+                  "Daily base-asset volume from Binance ETHUSDT spot klines; single-venue volume.", "A",
+                  "Binance ETHUSDT spot only", False, "internal_research", "partial_coverage", "2017-08-17"),
+    IndicatorSpec("ETH_USDT_TRADES_BINANCE", "ETH/USDT 成交笔数（Binance）", Layer.L5, "price", "trades", "daily", "numeric",
+                  "Daily trade count from Binance ETHUSDT spot klines; single-venue activity.", "B",
+                  "Binance ETHUSDT spot only", False, "internal_research", "partial_coverage", "2017-08-17"),
     IndicatorSpec("BTC_RETURN", "BTC 日收益率", Layer.L5, "price", "ratio", "daily", "numeric",
                   "Daily close-to-close return derived within CMCI.", "A",
                   "derived from BTC_USD_OHLCV", False, "internal_research", "full_target_coverage",
@@ -220,6 +270,14 @@ SOURCE_SPECS: dict[str, dict[str, Any]] = {
                    historical_coverage="from each pair's first trade",
                    revision_support=False, reliability_grade="A",
                    notes="Single-venue volume; never label as global volume."),
+    "BINANCE": dict(source_name="Binance Public REST", provider="Binance",
+                    source_type="api", base_url="https://api.binance.com/api/v3",
+                    access_method="public klines REST, no API key", auth_type=None,
+                    license_type="Binance public market data; internal research",
+                    update_frequency="daily",
+                    historical_coverage="BTCUSDT/ETHUSDT from 2017-08-17",
+                    revision_support=False, reliability_grade="A",
+                    notes="Single-venue spot klines; volume and trades are venue-specific."),
     "DERIVED": dict(source_name="CMCI Derived Series", provider="CMCI",
                     source_type="manual", base_url=None,
                     access_method="computed inside CMCI", auth_type=None,
@@ -249,6 +307,10 @@ LICENSE_SPECS: dict[str, dict[str, Any]] = {
     "KRAKEN": dict(internal_research_allowed=True, commercial_use_allowed=False,
                    redistribution_allowed=False, attribution_required=True,
                    local_retention_allowed=True, terms_url="https://www.kraken.com/legal"),
+    "BINANCE": dict(internal_research_allowed=True, commercial_use_allowed=False,
+                    redistribution_allowed=False, attribution_required=True,
+                    local_retention_allowed=True,
+                    terms_url="https://www.binance.com/en/terms"),
     "DERIVED": dict(internal_research_allowed=True, commercial_use_allowed=False,
                     redistribution_allowed=False, attribution_required=False,
                     local_retention_allowed=True, terms_url=None),
@@ -476,6 +538,26 @@ class FirstBatchService:
                 report.skipped.append(f"{code}: {exc}")
         return report
 
+    def run_d2_binance(self) -> BatchReport:
+        report = BatchReport("D2-Binance")
+        for symbol, fields in BINANCE_SERIES.items():
+            try:
+                klines = connectors.fetch_binance_klines(symbol).data
+                for field, code in fields.items():
+                    rows = connectors.binance_rows(klines, field=field)
+                    result = self._ingest(code, "BINANCE", rows, batch=f"D2-{code}")
+                    report.results.append(
+                        {
+                            "indicator": code,
+                            "rows": result.records_inserted,
+                            "source": "Binance",
+                            "symbol": symbol,
+                        }
+                    )
+            except Exception as exc:  # noqa: BLE001
+                report.skipped.append(f"{symbol}: {exc}")
+        return report
+
     def run_d3_blockchain(self) -> BatchReport:
         report = BatchReport("D3")
         for code, chart in connectors.BLOCKCHAIN_CHARTS.items():
@@ -518,6 +600,31 @@ class FirstBatchService:
             )
         except Exception as exc:  # noqa: BLE001
             report.skipped.append(f"stablecoins: {exc}")
+        return report
+
+    def run_d4b_stablecoin_coins(self) -> BatchReport:
+        report = BatchReport("D4b")
+        try:
+            listed = connectors.fetch_defillama_stablecoin_list()
+            assets = listed.data.get("peggedAssets", [])
+            by_symbol = {
+                str(asset.get("symbol", "")).upper(): str(asset.get("id"))
+                for asset in assets
+                if asset.get("id") is not None
+            }
+            for symbol, code in STABLECOIN_COINS.items():
+                coin_id = by_symbol.get(symbol)
+                if coin_id is None:
+                    report.skipped.append(f"{symbol}: DefiLlama 列表中没有该币种")
+                    continue
+                history = connectors.fetch_defillama_coin_history(coin_id)
+                rows = connectors.defillama_coin_rows(history.data)
+                result = self._ingest(code, "DEFILLAMA", rows, batch=f"D4b-{code}")
+                report.results.append(
+                    {"indicator": code, "rows": result.records_inserted, "symbol": symbol}
+                )
+        except Exception as exc:  # noqa: BLE001
+            report.skipped.append(f"stablecoin_coins: {exc}")
         return report
 
     def run_d5_etf(self) -> BatchReport:

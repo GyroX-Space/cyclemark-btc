@@ -31,6 +31,10 @@ L2_MEMBERS = [
 L4_MEMBERS = [
     "STABLECOIN_TOTAL_SUPPLY",
     "STABLECOIN_SUPPLY_CHANGE",
+    "STABLECOIN_USDT_SUPPLY",
+    "STABLECOIN_USDC_SUPPLY",
+    "STABLECOIN_DAI_SUPPLY",
+    "STABLECOIN_USDE_SUPPLY",
     "BTC_SPOT_ETF_NET_FLOW",
     "BTC_SPOT_ETF_AUM",
 ]
@@ -48,6 +52,12 @@ L5_PLAN = {
     "BTC_REALIZED_VOL": {"identification", "validation"},
     "BTC_DRAWDOWN": {"validation"},
     "ETH_USD_OHLCV": {"identification", "validation"},
+    "BTC_USDT_CLOSE_BINANCE": {"training", "identification", "validation"},
+    "BTC_USDT_VOLUME_BINANCE": {"training", "identification", "validation"},
+    "BTC_USDT_TRADES_BINANCE": {"training", "identification", "validation"},
+    "ETH_USDT_CLOSE_BINANCE": {"training", "identification", "validation"},
+    "ETH_USDT_VOLUME_BINANCE": {"training", "identification", "validation"},
+    "ETH_USDT_TRADES_BINANCE": {"training", "identification", "validation"},
 }
 
 

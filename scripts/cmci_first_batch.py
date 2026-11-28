@@ -22,7 +22,7 @@ def main() -> int:
     parser.add_argument(
         "--batches",
         default="d2,d3,d4,d5,derived",
-        help="comma separated: d1,d2,d3,d4,d5,derived (d2 = Yahoo unless Kraken files are given)",
+        help="comma separated: d1,d2,d2b,d3,d4,d4b,d5,derived (d2b = Binance, d4b = per-coin stablecoins)",
     )
     parser.add_argument("--fred-key", default=os.environ.get("FRED_API_KEY", ""))
     parser.add_argument("--fred-sampling", default="month_end", choices=["month_end", "all"])
@@ -53,10 +53,14 @@ def main() -> int:
             ).__dict__
         else:
             report["D2-Yahoo"] = service.run_d2_yahoo().__dict__
+    if "d2b" in selected:
+        report["D2-Binance"] = service.run_d2_binance().__dict__
     if "d3" in selected:
         report["D3"] = service.run_d3_blockchain().__dict__
     if "d4" in selected:
         report["D4"] = service.run_d4_stablecoins().__dict__
+    if "d4b" in selected:
+        report["D4b"] = service.run_d4b_stablecoin_coins().__dict__
     if "d5" in selected:
         report["D5"] = service.run_d5_etf().__dict__
     if "derived" in selected:

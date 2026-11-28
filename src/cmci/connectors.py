@@ -271,6 +271,85 @@ def blockchain_rows(payload: dict[str, Any], *, coverage_start: str = "2015-01-0
     return rows
 
 
+# ------------------------------------------------------------------- Binance
+BINANCE_API = "https://api.binance.com/api/v3"
+
+
+def fetch_binance_klines(symbol: str, *, interval: str = "1d") -> FetchResult:
+    """Paginate Binance public klines; no API key is required."""
+    rows: list[list[Any]] = []
+    start = 0
+    for _ in range(50):
+        url = (
+            f"{BINANCE_API}/klines?symbol={symbol}&interval={interval}"
+            f"&startTime={start}&limit=1000"
+        )
+        fetched = fetch_json(url, timeout=60)
+        payload = fetched.data
+        if not isinstance(payload, list):
+            raise ConnectorError("Binance klines 响应格式异常")
+        if not payload:
+            break
+        rows.extend(payload)
+        if len(payload) < 1000:
+            break
+        start = int(payload[-1][0]) + 1
+        time.sleep(0.3)
+    if not rows:
+        raise ConnectorError(f"Binance {symbol} 没有可用的日线数据")
+    return FetchResult(data=rows, content=b"", content_hash="")
+
+
+def binance_rows(klines: list[list[Any]], *, field: str) -> list[dict[str, Any]]:
+    """Convert Binance klines to normalized rows for close, volume or trades."""
+    index = {"close": 4, "volume": 5, "trades": 8}[field]
+    rows: list[dict[str, Any]] = []
+    for item in klines:
+        open_time = int(item[0])
+        day = datetime.fromtimestamp(open_time / 1000, tz=timezone.utc).date()
+        start, end = _bounds(day)
+        rows.append(
+            _row(
+                start,
+                end,
+                float(item[index]),
+                available_time=_day_plus(day, 1),
+            )
+        )
+    return rows
+
+
+def fetch_defillama_coin_history(coin_id: str) -> FetchResult:
+    return fetch_json(
+        f"https://stablecoins.llama.fi/stablecoincharts/all?stablecoin={coin_id}",
+        timeout=120,
+    )
+
+
+def fetch_defillama_stablecoin_list() -> FetchResult:
+    return fetch_json(
+        "https://stablecoins.llama.fi/stablecoins?includePrices=true", timeout=120
+    )
+
+
+def defillama_coin_rows(payload: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    for point in payload:
+        circulating = point.get("totalCirculatingUSD") or {}
+        value = circulating.get("peggedUSD")
+        if value is None:
+            circulating = point.get("totalCirculating") or {}
+            value = circulating.get("peggedUSD")
+        if value is None or float(value) <= 0:
+            continue
+        day = _utc_day(point["date"])
+        start, end = _bounds(day)
+        rows.append(_row(start, end, float(value), available_time=_day_plus(day, 1)))
+    if not rows:
+        raise ConnectorError("DefiLlama 逐币种响应没有供应数据")
+    return rows
+
+
 # --------------------------------------------------------------- DefiLlama
 def fetch_defillama_stablecoins() -> FetchResult:
     return fetch_json("https://stablecoins.llama.fi/stablecoincharts/all", timeout=120)

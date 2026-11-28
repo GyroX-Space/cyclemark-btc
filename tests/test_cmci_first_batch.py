@@ -187,6 +187,28 @@ def test_fred_rows_use_vintage_availability():
     assert rows[0]["available_time_method"] == "historical_vintage"
 
 
+def test_binance_rows_map_close_volume_trades():
+    klines = [
+        [1511913600000, "100", "110", "90", "105", "12.5", 1511999999999, "1300", 42, "6", "630", "0"],
+    ]
+    close = connectors.binance_rows(klines, field="close")[0]
+    volume = connectors.binance_rows(klines, field="volume")[0]
+    trades = connectors.binance_rows(klines, field="trades")[0]
+    assert close["value"] == 105.0
+    assert volume["value"] == 12.5
+    assert trades["value"] == 42.0
+    assert close["period_start"] == "2017-11-29T00:00:00Z"
+
+
+def test_defillama_coin_rows_uses_usd_value():
+    payload = [
+        {"date": "1511913600", "totalCirculatingUSD": {"peggedUSD": 1000.0}},
+        {"date": "1512000000", "totalCirculating": {"peggedUSD": 1100.0}},
+    ]
+    rows = connectors.defillama_coin_rows(payload)
+    assert [row["value"] for row in rows] == [1000.0, 1100.0]
+
+
 def test_api_key_is_redacted_from_errors():
     redacted = connectors._redact_url(
         "https://api.stlouisfed.org/fred/series?series_id=DGS10&api_key=secret123&file_type=json"
