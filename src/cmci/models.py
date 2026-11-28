@@ -141,6 +141,68 @@ class IndicatorSourceLink:
 
 
 @dataclass(frozen=True, slots=True)
+class ResearchProject:
+    project_id: str
+    project_code: str
+    project_name: str
+    description: str
+    owner: str
+    status: str
+    created_at_utc: str
+
+
+@dataclass(frozen=True, slots=True)
+class ResearchDataset:
+    dataset_id: str
+    project_id: str
+    dataset_code: str
+    dataset_name: str
+    description: str
+    current_version_no: int
+    status: str
+    created_by: str
+    created_at_utc: str
+
+
+@dataclass(frozen=True, slots=True)
+class DatasetVersion:
+    dataset_version_id: str
+    dataset_id: str
+    version_no: int
+    time_start: str
+    time_end: str
+    status: str
+    sealed_at_utc: str | None
+    superseded_at_utc: str | None
+    replaces_version_id: str | None
+    invalidates_independent_validation: bool
+    change_reason: str
+    partition_hash: str
+    created_by: str
+    created_at_utc: str
+
+    @property
+    def is_sealed(self) -> bool:
+        return self.status != "draft"
+
+
+@dataclass(frozen=True, slots=True)
+class DatasetMember:
+    member_id: str
+    dataset_version_id: str
+    indicator_id: str
+    usage_partition: str
+    time_start: str
+    time_end: str
+    embargo_before: float
+    embargo_after: float
+    partition_version: int
+    notes: str | None
+    created_by: str
+    created_at_utc: str
+
+
+@dataclass(frozen=True, slots=True)
 class OperationLog:
     log_id: int
     entity_type: str

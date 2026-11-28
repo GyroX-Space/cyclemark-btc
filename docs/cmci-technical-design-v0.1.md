@@ -76,15 +76,16 @@ data_sources ──< indicator_sources >── indicators ──< indicator_vers
 
 ## 4. L5 三分区与 embargo 校验
 
-分区登记在 `dataset_members`：`(dataset_version_id, indicator_id, usage_partition, time_start, time_end, embargo_before, embargo_after)`。
+分区登记在 `dataset_members`：`(dataset_version_id, indicator_id, usage_partition, time_start, time_end, embargo_before, embargo_after, partition_version)`。embargo 单位为天，登记在成员上；L1–L4 成员使用 `not_applicable`，L5 成员只能使用 `training` / `identification` / `validation`（数据库触发器与 `ResearchDatasetService` 双重校验）。
 
-校验算法（P0-3 实现）：
+校验算法（P0-3 已实现，`src/cmci/datasets.py`）：
 
 1. 同一 `dataset_version` 内取同一 `indicator_id` 的所有成员。
-2. 对任意两条 `identification` 与 `validation` 成员，比较区间：重叠或“间隔小于 embargo”即冲突。
-3. 冲突即拒绝写入，并返回冲突对、重叠区间与需要的 embargo 天数。
-4. `validation` 成员一旦置为 `locked=1`（完成正式评价），分区修改必须新建 `dataset_version`；旧版本标记 `superseded`，新版本记录 `replaces_version_id` 与原因。
-5. 所有分区变更写入 `operation_logs`，并保存分区快照哈希。
+2. 对任意两条分区不同的成员，比较区间：重叠即冲突；相邻时要求间隔不小于 `max(前一段.embargo_after, 后一段.embargo_before)` 天。该规则比“仅 identification/validation”更严格，同时阻止训练区间与识别区间泄漏。
+3. 冲突即拒绝写入，并返回冲突对、重叠区间与需要的 embargo 天数（`PartitionConflictError.conflicts`）。
+4. 版本封存使用 `dataset_versions.status='sealed'` + `sealed_at_utc`（不再单独维护 `locked` 标志）。封存后成员行不可增删改（触发器强制），分区修改必须新建 `dataset_version`；旧版本标为 `superseded`，新版本记录 `replaces_version_id` 与 `change_reason`，并置 `invalidates_independent_validation=1`，明确原验证集失去独立验证资格。
+5. 所有分区变更写入 `operation_logs`；封存时保存成员集合的确定性 `partition_hash` 快照。
+6. `dataset_members` 为 append-only；封存版本禁止新增成员由数据库触发器兜底，服务层先抛出可读错误。
 
 指标字典层面强制：`layer='L5'` 的指标必须有非空 `usage_partition_policy`，由数据库 CHECK 约束与仓储层双重校验。
 

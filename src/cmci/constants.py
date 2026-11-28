@@ -46,6 +46,21 @@ class UpdateMethod(StrEnum):
     MANUAL = "manual"
 
 
+class UsagePartition(StrEnum):
+    """L5 three-way partition plus ``not_applicable`` for L1-L4 members."""
+
+    TRAINING = "training"
+    IDENTIFICATION = "identification"
+    VALIDATION = "validation"
+    NOT_APPLICABLE = "not_applicable"
+
+
+class DatasetVersionStatus(StrEnum):
+    DRAFT = "draft"
+    SEALED = "sealed"
+    SUPERSEDED = "superseded"
+
+
 INDICATOR_STATUS_TRANSITIONS: dict[str, frozenset[str]] = {
     IndicatorStatus.CANDIDATE.value: frozenset(
         {IndicatorStatus.ACTIVE.value, IndicatorStatus.DISABLED.value}
