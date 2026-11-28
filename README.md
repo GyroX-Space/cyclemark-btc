@@ -44,7 +44,7 @@ The production site keeps a single deployment and a two-product layout:
 | `/` | **CMCI** — primary research program: positioning, L1–L6 architecture, governance, status. |
 | `/cyclemark/` | **CycleMark BTC · BFS** — secondary product: the existing daily BTC cycle dashboard, still updating and publicly accessible. |
 
-`cyclemarket.predi.org` publishes both pages through the daily step in `scripts/run_daily.sh`. The GitHub Pages workflow publishes the CMCI root page; its secondary-product links point to `cyclemarket.predi.org/cyclemark/`, so the dashboard stays reachable from both hosts. The dashboard keeps its original data endpoints at `/data/signals/`; moving it under `/cyclemark/` does not change its data pipeline or refresh cadence.
+`cyclemarket.predi.org` publishes both pages through the daily step in `scripts/run_daily.sh`. If the GitHub Pages mirror is enabled, its workflow publishes only the CMCI root page; secondary-product links then point to `cyclemarket.predi.org/cyclemark/`, so the dashboard stays reachable from both hosts. The dashboard keeps its original data endpoints at `/data/signals/`; moving it under `/cyclemark/` does not change its data pipeline or refresh cadence.
 
 ## Phase 1 delivery batches
 

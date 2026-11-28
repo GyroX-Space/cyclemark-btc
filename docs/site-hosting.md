@@ -16,7 +16,7 @@ The English-language dashboard lives in `web/cyclemark/` and reads JSON records 
 4. Use a GitHub Actions deployment workflow that copies `web/index.html` (CMCI) and `data/signals` into the publish artifact.
 5. Confirm the published URL and test that the latest and history JSON paths return valid JSON.
 
-The Pages mirror serves the CMCI root page. Its secondary-product links resolve to `cyclemarket.predi.org/cyclemark/`, so the dashboard remains reachable from the mirror too. Do not announce a live URL until the deployment has been verified.
+The Pages workflow publishes the CMCI root page when Pages is enabled for the repository. Its secondary-product links resolve to `cyclemarket.predi.org/cyclemark/`, so the dashboard remains reachable from the mirror too. Do not announce a live URL until the deployment has been verified.
 
 ## Server hosting (cyclemarket.predi.org)
 
