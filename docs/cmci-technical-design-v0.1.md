@@ -144,12 +144,14 @@ WHERE o.available_time <= :T;
 
 ## 8. 审计报告实现
 
-- 审计任务 `audit_jobs` 预登记：时间范围、抽样数 `N`、抽样种子、审计方案版本。
-- 抽样使用固定种子 + 可复现随机数，抽样时点列表一并保存。
-- 逐时点执行回放，检查每条输入记录的 `available_time`、`vintage_time`、`revision_id`。
-- 违规分三类：未来数据（`available_time > T`）、事后修订值（版本晚于 T）、未来市场结果混入。
-- 输出 `audit_results`：`checked_record_count`、`violation_count`、`violation_details`、`audit_result ∈ {passed, failed, inconclusive}`，并附报告哈希。
-- 任何无法解释的违规即 `failed`；审计人独立于数据构建者，签名与时间入档。
+- 审计任务 `audit_jobs` 预登记：审计类型、抽样数 `N`、抽样种子、检查项计数与结构化报告 JSON。
+- 抽样使用固定种子 + 可复现随机数；实际使用的种子写入报告（`seed_used`），相同种子与数据得到相同抽样。
+- 逐条检查输入记录的 `available_time`、`release_time`、`vintage_time` 与修订链。
+- 违规分类：`available_before_release`、`missing_available_time`、`revision_vintage_order`、`missing_superseded_observation`、`replay_mismatch`；警告分类：`missing_release_time`、`missing_revision_record`、`active_indicator_without_data`、`non_normal_quality`、`replay_snapshot_missing`。
+- 回放复核：对每个 `replay_jobs` 重新执行 `ReplayService.preview` 并比较 `replay_result_hash` 与行数；封存版本不一致记违规，草稿版本不一致记警告。
+- 输出 `audit_results`（append-only）与 JSON 报告文件，`AuditService.export_report` 可导出任务、报告与全部发现的合并文件。
+- 质量报告按指标汇总观测数、区间、release 延迟、vintage 数、修订数与质量状态分布，并汇总 `data_quality_checks`。
+- 入口：`python scripts/cmci_audit.py --type quality|lookahead [--sample N] [--seed S]`。
 
 ## 9. 数据量与性能初步估算
 

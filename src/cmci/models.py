@@ -217,6 +217,32 @@ class ReplayJob:
 
 
 @dataclass(frozen=True, slots=True)
+class AuditJob:
+    audit_job_id: str
+    audit_type: str
+    parameters_json: str
+    checked_count: int
+    violation_count: int
+    warning_count: int
+    report_json: str
+    report_path: str | None
+    created_by: str
+    created_at_utc: str
+
+
+@dataclass(frozen=True, slots=True)
+class AuditResult:
+    audit_result_id: str
+    audit_job_id: str
+    severity: str
+    rule_code: str
+    entity_type: str
+    entity_id: str
+    detail_json: str
+    created_at_utc: str
+
+
+@dataclass(frozen=True, slots=True)
 class OperationLog:
     log_id: int
     entity_type: str

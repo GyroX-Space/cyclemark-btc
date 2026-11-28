@@ -41,7 +41,7 @@ L6 (cycle-state model), cycle-transition detection, CCE synthesis, and live infe
 | P0-2 | Raw + normalized data, CSV/Excel/JSON import, API ingestion framework, append-only revisions, basic quality checks | done |
 | P0-3 | Research datasets and L5 partitions, conflict checks, embargo, validation-zone locking | done |
 | P0-4 | Historical replay by `available_time`, snapshots, replay reports, export | done |
-| P0-5 | Quality reporting, look-ahead audit, random sampling, audit reports, operation logs | pending |
+| P0-5 | Quality reporting, look-ahead audit, random sampling, audit reports, operation logs | done |
 
 ## Development
 
@@ -56,6 +56,13 @@ Python 3.11 or later is required.
     python scripts/cmci_replay.py --dataset <dataset_code> --as-of 2024-03-10
 
 Only observations whose `available_time` was known at the as-of instant are returned; each replay writes a CSV snapshot and a hashed `replay_jobs` record.
+
+Quality and look-ahead audits:
+
+    python scripts/cmci_audit.py --type quality
+    python scripts/cmci_audit.py --type lookahead --sample 500 --seed 7
+
+Audit findings are persisted in `audit_jobs` / `audit_results`, with a JSON report per run.
 
 CycleMark BTC continues to run unchanged:
 

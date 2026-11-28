@@ -131,6 +131,22 @@ class ReplayService:
         return DatasetVersion(**payload)
 
     # ------------------------------------------------------------------ replay
+    def preview(
+        self, dataset_version_id: str, *, as_of: str
+    ) -> tuple[tuple[dict[str, Any], ...], str]:
+        """Compute a replay result without persisting a job.
+
+        Used by the audit service to verify that a stored replay is reproducible.
+        """
+        self.resolve_version_by_id(dataset_version_id)
+        try:
+            as_of_utc = to_utc_iso(as_of, field="as_of")
+        except TimeFormatError as exc:
+            raise ValidationError(str(exc)) from exc
+        assert as_of_utc is not None
+        rows = self._collect_rows(dataset_version_id, as_of_utc)
+        return rows, _row_hash(rows)
+
     def replay(
         self,
         dataset_version_id: str,
