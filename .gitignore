@@ -8,3 +8,7 @@ __pycache__/
 !.env.example
 daily.log
 *.egg-info/
+backups/
+data/cmci/*.db
+data/cmci/*.db-wal
+data/cmci/*.db-shm

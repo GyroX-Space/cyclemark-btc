@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "cyclemark-btc"
 version = "0.1.1"
-description = "A transparent research framework for Bitcoin cycle states."
+description = "CMCI crypto market cycle research infrastructure, with CycleMark BTC as a sub-product."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
@@ -20,4 +20,5 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["src"]
 addopts = "-q"
