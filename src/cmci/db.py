@@ -12,6 +12,7 @@ MIGRATIONS: tuple[tuple[int, str, str], ...] = (
     (1, "schema.sql", "P0-1 core schema"),
     (2, "schema_v2.sql", "P0-2 raw, normalized, ingestion, quality"),
     (3, "schema_v3.sql", "P0-3 research datasets and L5 partitions"),
+    (4, "schema_v4.sql", "P0-4 historical replay"),
 )
 
 

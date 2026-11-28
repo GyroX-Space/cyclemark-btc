@@ -203,6 +203,20 @@ class DatasetMember:
 
 
 @dataclass(frozen=True, slots=True)
+class ReplayJob:
+    replay_job_id: str
+    dataset_version_id: str
+    as_of_utc: str
+    replay_result_hash: str
+    row_count: int
+    snapshot_path: str | None
+    parameters_json: str
+    report_json: str
+    created_by: str
+    created_at_utc: str
+
+
+@dataclass(frozen=True, slots=True)
 class OperationLog:
     log_id: int
     entity_type: str

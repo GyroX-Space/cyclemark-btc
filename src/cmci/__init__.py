@@ -20,10 +20,12 @@ from .models import (
     IndicatorSourceLink,
     IndicatorVersion,
     OperationLog,
+    ReplayJob,
     ResearchDataset,
     ResearchProject,
 )
 from .registry import Registry
+from .replay import ReplayResult, ReplayService
 
 __all__ = [
     "ColumnMapping",
@@ -40,6 +42,9 @@ __all__ = [
     "PartitionConflict",
     "PartitionConflictError",
     "Registry",
+    "ReplayJob",
+    "ReplayResult",
+    "ReplayService",
     "ResearchDataset",
     "ResearchDatasetService",
     "ResearchProject",
@@ -47,4 +52,4 @@ __all__ = [
     "map_rows",
     "read_rows",
 ]
-__version__ = "0.3.0"
+__version__ = "0.4.0"

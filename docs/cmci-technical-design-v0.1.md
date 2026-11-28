@@ -112,9 +112,18 @@ JOIN (
 WHERE o.available_time <= :T;
 ```
 
-回放输出写入 `replay_jobs`，包含 `replay_result_hash`：对结果按 `(indicator_id, period, vintage, value, source_id)` 排序后规范化 JSON 做 SHA-256，保证相同输入可复现。
+回放输出写入 `replay_jobs`，包含 `replay_result_hash`：对结果按 `(indicator_id, period_start, period_end, vintage_time, value, value_text, source_id)` 排序后规范化 JSON 做 SHA-256，保证相同输入可复现。
 
 `known_future_events` 不进入上述查询，单独返回并标注 `known_future_event=true`。
+
+实现（P0-4，`src/cmci/replay.py` 的 `ReplayService`）：
+
+1. 回放范围由 `dataset_version` 的成员窗口决定，观测区间必须完整落在成员窗口内。
+2. 每个 `(member, indicator, observation_period)` 取 `available_time_utc <= as_of` 的最新 `vintage`；同 vintage 多来源时按 `created_at_utc`、`observation_id` 稳定排序。
+3. 每次回放写入一行 `replay_jobs`（as-of、版本、参数、行数、哈希、快照路径、报告 JSON），并写 `operation_logs`。
+4. CSV 快照默认写入 `data/cmci/replays/<replay_job_id>.csv`，字段包含观测区间、release/available/vintage、来源、用途分区与数据集版本；`export_snapshot` 可复制快照文件。
+5. 回放报告包含分区计数、指标计数、无数据成员与已知未来事件数量。
+6. 入口：`python scripts/cmci_replay.py --dataset <code> --as-of <ISO8601> [--version N]`。
 
 索引：`(indicator_id, available_time)`、`(indicator_id, observation_period_start)`、`(available_time, vintage_time)`。
 
