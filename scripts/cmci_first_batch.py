@@ -69,7 +69,10 @@ def main() -> int:
         Path(args.report).write_text(text, encoding="utf-8")
     print(text)
     registry.close()
-    return 0
+    had_skips = any(
+        isinstance(value, dict) and value.get("skipped") for value in report.values()
+    )
+    return 1 if had_skips else 0
 
 
 if __name__ == "__main__":

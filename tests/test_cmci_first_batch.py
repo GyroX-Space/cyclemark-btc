@@ -187,6 +187,14 @@ def test_fred_rows_use_vintage_availability():
     assert rows[0]["available_time_method"] == "historical_vintage"
 
 
+def test_api_key_is_redacted_from_errors():
+    redacted = connectors._redact_url(
+        "https://api.stlouisfed.org/fred/series?series_id=DGS10&api_key=secret123&file_type=json"
+    )
+    assert "secret123" not in redacted
+    assert "api_key=***" in redacted
+
+
 def test_fred_matrix_keeps_only_changes():
     payload = {
         "observations": [

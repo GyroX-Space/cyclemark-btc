@@ -18,6 +18,7 @@ import csv
 import io
 import json
 import math
+import re
 import time
 import urllib.parse
 import urllib.request
@@ -63,7 +64,12 @@ def fetch_json(
             last_error = exc
             if attempt < retries:
                 time.sleep(2 * (attempt + 1))
-    raise ConnectorError(f"无法获取 {url}: {last_error}") from last_error
+    raise ConnectorError(f"无法获取 {_redact_url(url)}: {last_error}") from last_error
+
+
+def _redact_url(url: str) -> str:
+    """Never leak API keys into logs or error reports."""
+    return re.sub(r"(api_key=)[^&]*", r"\1***", url)
 
 
 def _now_iso() -> str:

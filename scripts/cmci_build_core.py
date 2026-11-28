@@ -83,6 +83,7 @@ def main() -> int:
             )
 
         versions = service.list_versions(DATASET_CODE)
+        previous_version = versions[-1] if versions else None
         if versions and versions[-1].status == "sealed" and not args.new_version:
             version = versions[-1]
         else:
@@ -96,6 +97,11 @@ def main() -> int:
                     else "First real-data batch: D2-D5 ingested; D1 FRED/ALFRED pending API key."
                 ),
                 created_by="cmci",
+                replaces_version_id=(
+                    previous_version.dataset_version_id
+                    if previous_version and previous_version.status == "sealed"
+                    else None
+                ),
             )
 
         if version.status == "draft":
