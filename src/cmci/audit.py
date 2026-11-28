@@ -420,7 +420,9 @@ class AuditService:
             )
             if not matches:
                 severity = (
-                    "warning" if job["version_status"] == "draft" else "violation"
+                    "warning"
+                    if job["version_status"] in {"draft", "superseded"}
+                    else "violation"
                 )
                 findings.append(
                     _Finding(
