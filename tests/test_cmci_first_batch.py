@@ -200,6 +200,21 @@ def test_binance_rows_map_close_volume_trades():
     assert close["period_start"] == "2017-11-29T00:00:00Z"
 
 
+def test_fetch_binance_klines_returns_complete_fetch_result(monkeypatch):
+    klines = [
+        [1511913600000, "100", "110", "90", "105", "12.5", 1511999999999, "1300", 42, "6", "630", "0"],
+    ]
+    monkeypatch.setattr(
+        connectors,
+        "fetch_json",
+        lambda url, **kwargs: connectors.FetchResult(url, b"", klines, "2026-11-28T00:00:00Z"),
+    )
+    result = connectors.fetch_binance_klines("BTCUSDT")
+    assert result.url.startswith("https://api.binance.com/api/v3/klines?symbol=BTCUSDT")
+    assert result.data == klines
+    assert result.fetched_at_utc
+
+
 def test_defillama_coin_rows_uses_usd_value():
     payload = [
         {"date": "1511913600", "totalCirculatingUSD": {"peggedUSD": 1000.0}},

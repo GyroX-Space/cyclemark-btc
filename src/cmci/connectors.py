@@ -297,7 +297,12 @@ def fetch_binance_klines(symbol: str, *, interval: str = "1d") -> FetchResult:
         time.sleep(0.3)
     if not rows:
         raise ConnectorError(f"Binance {symbol} 没有可用的日线数据")
-    return FetchResult(content=b"", data=rows)
+    return FetchResult(
+        url=f"{BINANCE_API}/klines?symbol={symbol}&interval={interval}",
+        content=b"",
+        data=rows,
+        fetched_at_utc=_now_iso(),
+    )
 
 
 def binance_rows(klines: list[list[Any]], *, field: str) -> list[dict[str, Any]]:
