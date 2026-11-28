@@ -37,8 +37,8 @@ L6 (cycle-state model), cycle-transition detection, CCE synthesis, and live infe
 
 | Batch | Scope | Status |
 |---|---|---|
-| P0-1 | Data model, indicator dictionary, data-source registry, indicator↔source mapping, time-field and L5 partition fields | in progress |
-| P0-2 | Raw + normalized data, CSV/Excel/JSON import, API ingestion framework, append-only revisions, basic quality checks | pending |
+| P0-1 | Data model, indicator dictionary, data-source registry, indicator↔source mapping, time-field and L5 partition fields | done |
+| P0-2 | Raw + normalized data, CSV/Excel/JSON import, API ingestion framework, append-only revisions, basic quality checks | done |
 | P0-3 | Research datasets and L5 partitions, conflict checks, embargo, validation-zone locking | pending |
 | P0-4 | Historical replay by `available_time`, snapshots, replay reports, export | pending |
 | P0-5 | Quality reporting, look-ahead audit, random sampling, audit reports, operation logs | pending |

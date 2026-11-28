@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "cyclemark-btc"
-version = "0.1.1"
+version = "0.2.0"
 description = "CMCI crypto market cycle research infrastructure, with CycleMark BTC as a sub-product."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "CycleMark Contributors" }]
-dependencies = []
+dependencies = ["openpyxl>=3.1"]
 
 [project.optional-dependencies]
 dev = ["pytest>=8.0"]
