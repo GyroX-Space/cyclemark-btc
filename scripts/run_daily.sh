@@ -90,15 +90,16 @@ git push origin main || { echo "Push failed (non-fatal); marker written locally.
 # run; the step is skipped on hosts that do not host the site.
 WEB_ROOT="${CYCLEMARK_WEB_ROOT:-/srv/cyclemark}"
 if [[ -d "$WEB_ROOT" && -w "$WEB_ROOT" ]]; then
+  # CMCI is the primary research program at the site root; the existing BTC
+  # dashboard is published as the secondary product under /cyclemark/.
   install -m 644 web/index.html "$WEB_ROOT/index.html"
-  if [[ -d web/i18n ]]; then
-    install -d "$WEB_ROOT/i18n"
-    install -m 644 web/i18n/*.json "$WEB_ROOT/i18n/"
-  fi
+  install -d "$WEB_ROOT/cyclemark/i18n"
+  install -m 644 web/cyclemark/index.html "$WEB_ROOT/cyclemark/index.html"
+  install -m 644 web/i18n/*.json "$WEB_ROOT/cyclemark/i18n/"
   install -d "$WEB_ROOT/data/signals"
   install -m 644 data/signals/latest.json "$WEB_ROOT/data/signals/latest.json"
   install -m 644 data/signals/history.json "$WEB_ROOT/data/signals/history.json"
-  echo "Published dashboard to $WEB_ROOT"
+  echo "Published CMCI at $WEB_ROOT and CycleMark BTC at $WEB_ROOT/cyclemark"
 else
   echo "Web root $WEB_ROOT is missing or not writable; dashboard not published." >&2
 fi

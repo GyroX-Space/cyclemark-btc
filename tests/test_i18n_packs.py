@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 I18N_DIR = ROOT / "web" / "i18n"
-INDEX = ROOT / "web" / "index.html"
+INDEX = ROOT / "web" / "cyclemark" / "index.html"
 
 
 def _flatten(obj, prefix=""):

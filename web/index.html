@@ -4,331 +4,238 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#0b1020">
-<script>try{var theme=localStorage.getItem("cyclemark.theme");if(!theme)theme=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",theme)}catch(e){}</script>
-<meta name="description" content="CycleMark BTC Cycle Intelligence: Bitcoin cycle indicators, daily market context, and an auditable historical calendar.">
-<title>CycleMark BTC — Cycle Intelligence</title>
+<script>try{var t=localStorage.getItem("cmci.theme");if(!t)t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<meta name="description" content="CMCI — Crypto Market Cycle Intelligence. An independent research system for macro conditions, crypto supply and demand, capital transmission, and market-cycle state.">
+<title>CMCI — Crypto Market Cycle Intelligence</title>
 <style>
-:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2d;--panel2:#182238;--line:#2a3650;--text:#f4f7fb;--muted:#a7b3c8;--slate:#778397;--amber:#f4b740;--blue:#5ba8ff;--green:#45d6a0;--red:#ff7185}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3152 0,transparent 48%),var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-a{color:#91c5ff}button{font:inherit}.shell{max-width:1180px;margin:auto;padding:28px 22px 56px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:34px}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border:1px solid #47678d;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,#1d3e63,#142138);font-weight:900;color:#9dd3ff;font-size:20px}.brand h1{font-size:18px;letter-spacing:.08em;margin:0}.brand p{margin:2px 0 0;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase}.pill{border:1px solid var(--line);border-radius:99px;padding:7px 11px;color:var(--muted);font-size:12px;white-space:nowrap}.eyebrow{color:#90b9e8;text-transform:uppercase;letter-spacing:.15em;font-size:11px;font-weight:750}.hero{display:grid;grid-template-columns:1.2fr .8fr;gap:16px;margin-bottom:16px}.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(24,34,56,.96),rgba(16,24,41,.96));padding:22px;min-width:0}.state-panel{min-height:245px;display:flex;flex-direction:column;justify-content:space-between}.state-line{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.state-name{font-size:clamp(30px,5vw,48px);font-weight:800;letter-spacing:-.04em;margin:8px 0 2px}.state-dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--amber);margin-right:9px;vertical-align:middle}.sub{color:var(--muted);max-width:600px}.timestamp{color:var(--muted);font-size:12px}.metric-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.metric{padding:17px;border-radius:14px;background:rgba(6,11,22,.3);border:1px solid var(--line)}.metric-label{color:var(--muted);font-size:12px}.metric-value{font-size:clamp(22px,3vw,32px);font-weight:750;margin:5px 0}.metric-note{font-size:11px;color:var(--muted)}.section{margin-top:18px}.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:12px}.section h2{font-size:17px;margin:0}.section-head p{margin:3px 0 0;color:var(--muted);font-size:12px}.data-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.data-card{padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.data-card span{display:block;color:var(--muted);font-size:12px}.data-card strong{display:block;font-size:21px;margin:7px 0}.data-card small{color:var(--muted)}.calendar-panel{padding:20px}.calendar-controls{display:flex;gap:8px;align-items:center}.calendar-controls button{border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);padding:7px 11px;cursor:pointer}.calendar-controls button:focus-visible,.day:focus-visible{outline:2px solid #91c5ff;outline-offset:2px}.month-label{min-width:130px;text-align:center;font-weight:700}.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.weekday{text-align:center;color:var(--muted);font-size:11px;padding:8px 0}.day{border:1px solid #29344a;border-radius:8px;min-height:68px;padding:7px;background:#151e30;color:var(--text);text-align:left;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between}.day .num{font-size:12px}.day .tiny{font-size:10px;color:#e6eefc;font-weight:650;line-height:1.2}.day .px{font-size:9px;color:#a7b3c8;line-height:1.2}.day.empty{visibility:hidden}.day.available{border-color:#47668b;background:#192d45}.day.selected{outline:2px solid #a8d5ff;outline-offset:1px}.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;color:var(--muted);font-size:11px}.legend i{display:inline-block;width:8px;height:8px;border-radius:3px;margin-right:5px}.detail{margin-top:12px;padding:16px;border-radius:12px;background:#0c1424;border:1px solid var(--line);min-height:90px}.detail h3{margin:0 0 8px;font-size:14px}.detail p{margin:4px 0;color:var(--muted);font-size:13px}.notice{border-left:3px solid var(--amber);padding:12px 14px;background:#201d19;border-radius:0 10px 10px 0;color:#e5d8bf;font-size:12px;margin-top:16px}.footer{margin-top:26px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:11px}.footer a{text-decoration:none}.loading{color:var(--muted)}@media(max-width:760px){.hero{grid-template-columns:1fr}.data-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shell{padding:18px 12px 40px}.panel{padding:16px}.top{align-items:flex-start}.pill{white-space:normal;text-align:center}.day{min-height:58px;padding:5px}.day .tiny{font-size:8px}.day .px{font-size:7px}.calendar-grid{gap:3px}}@media print{body{background:#fff;color:#111}.panel,.data-card,.detail{background:#fff;border-color:#bbb;color:#111}.sub,.timestamp,.metric-label,.metric-note,.data-card span,.data-card small,.section-head p,.legend,.detail p,.footer{color:#444}.pill{color:#333;border-color:#aaa}.notice{background:#fff8e8;color:#333}.calendar-controls{display:none}.shell{max-width:none;padding:12px}}
-.lang{border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);padding:7px 9px;font-size:12px;cursor:pointer}.top-right{display:flex;align-items:center;gap:8px;justify-content:flex-end;flex-wrap:wrap}.lang:focus-visible{outline:2px solid #91c5ff;outline-offset:2px}html[dir=rtl] .day{text-align:right}
-html[data-theme=light]{color-scheme:light;--bg:#f4f7fc;--panel:#ffffff;--panel2:#eef2f8;--line:#d6dfeb;--text:#101828;--muted:#5a6879;--slate:#8492a6}
+:root{color-scheme:dark;--bg:#0b1020;--panel:#121a2d;--panel2:#182238;--line:#2a3650;--text:#f4f7fb;--muted:#a7b3c8;--accent:#91c5ff;--green:#45d6a0;--amber:#f4b740;--blue:#5ba8ff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(ellipse at 50% -20%,#1b3152 0,transparent 48%),var(--bg);color:var(--text);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.shell{max-width:1120px;margin:auto;padding:28px 22px 56px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:40px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}
+.mark{width:44px;height:44px;border:1px solid #47678d;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,#1d3e63,#142138);font-weight:900;color:#9dd3ff;font-size:20px;letter-spacing:.02em}
+.brand h1{font-size:18px;letter-spacing:.1em;margin:0}
+.brand p{margin:2px 0 0;color:var(--muted);font-size:11px;letter-spacing:.09em;text-transform:uppercase}
+.top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.control,.pill{border:1px solid var(--line);border-radius:99px;background:var(--panel2);color:var(--muted);padding:7px 12px;font-size:12px;cursor:pointer;white-space:nowrap}
+.control:hover,.pill:hover{border-color:#47678d;color:var(--text);text-decoration:none}
+.pill.link{border-color:#3e6b9a;color:#b9dcff}
+.control:focus-visible,.cta:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hero{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;align-items:stretch;margin-bottom:10px}
+.eyebrow{color:#90b9e8;text-transform:uppercase;letter-spacing:.16em;font-size:11px;font-weight:750}
+.title{font-size:clamp(34px,5.4vw,56px);line-height:1.04;letter-spacing:-.035em;margin:12px 0 14px;font-weight:800}
+.lead{color:var(--muted);font-size:16px;max-width:620px;margin:0 0 22px}
+.cta-row{display:flex;gap:10px;flex-wrap:wrap}
+.cta{display:inline-block;border-radius:11px;padding:11px 16px;font-size:13px;font-weight:650;background:linear-gradient(135deg,#2d6da8,#1d4b7a);border:1px solid #4d86bb;color:#fff}
+.cta:hover{text-decoration:none;filter:brightness(1.08)}
+.cta.ghost{background:var(--panel2);border-color:var(--line);color:var(--text)}
+.panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(24,34,56,.96),rgba(16,24,41,.96));padding:22px;min-width:0}
+.status{display:flex;flex-direction:column;gap:12px}
+.status-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #2e6b57;background:rgba(69,214,160,.09);color:#a7f0d1;border-radius:99px;padding:7px 12px;font-size:12px;font-weight:650;width:fit-content}
+.status-chip i{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block}
+.status-list{list-style:none;margin:2px 0 0;padding:0;display:grid;gap:7px}
+.status-list li{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12.5px;border-bottom:1px dashed #263048;padding-bottom:7px}
+.status-list li:last-child{border-bottom:0;padding-bottom:0}
+.status-list b{color:var(--text);font-weight:650;white-space:nowrap}
+.note{color:var(--muted);font-size:12px;margin:2px 0 0}
+.section{margin-top:34px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.section-head h2{font-size:19px;margin:0}
+.section-head p{margin:3px 0 0;color:var(--muted);font-size:12.5px;max-width:640px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.layer{padding:17px;border:1px solid var(--line);border-radius:15px;background:var(--panel)}
+.layer .code{display:inline-block;font-size:11px;letter-spacing:.12em;color:#9dd3ff;border:1px solid #35577c;border-radius:7px;padding:3px 7px;margin-bottom:9px;font-weight:700}
+.layer h3{font-size:14px;margin:0 0 6px}
+.layer p{margin:0;color:var(--muted);font-size:12.5px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.two-col h2{font-size:17px;margin:0 0 12px}
+.rule-list{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.rule-list li{position:relative;padding-left:18px;color:var(--muted);font-size:13px}
+.rule-list li::before{content:"";position:absolute;left:2px;top:8px;width:6px;height:6px;border-radius:2px;background:var(--blue)}
+.rule-list b{color:var(--text);font-weight:650}
+.boundary p{color:var(--muted);font-size:13px;margin:0 0 14px}
+.products{display:grid;gap:10px;margin-top:4px}
+.product{border:1px solid var(--line);border-radius:12px;padding:13px 14px;background:rgba(6,11,22,.3);display:flex;justify-content:space-between;gap:12px;align-items:center}
+.product.primary{border-color:#3e6b9a;background:rgba(45,109,168,.12)}
+.product .p-name{font-weight:700;font-size:13.5px}
+.product .p-desc{color:var(--muted);font-size:11.5px;margin-top:2px}
+.tag{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);border-radius:99px;padding:4px 8px;color:var(--muted);white-space:nowrap}
+.tag.main{border-color:#4d86bb;color:#b9dcff}
+.notice{border-left:3px solid var(--amber);padding:13px 15px;background:#201d19;border-radius:0 10px 10px 0;color:#e5d8bf;font-size:12.5px;margin-top:30px}
+.footer{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;color:var(--muted);font-size:11.5px}
+.footer nav{display:flex;gap:14px;flex-wrap:wrap}
+html[data-theme=light]{color-scheme:light;--bg:#f4f7fc;--panel:#ffffff;--panel2:#eef2f8;--line:#d6dfeb;--text:#101828;--muted:#5a6879;--accent:#1769c2}
 html[data-theme=light] body{background:radial-gradient(ellipse at 50% -20%,#dfeafb 0,transparent 48%),var(--bg)}
-html[data-theme=light] a{color:#1769c2}
-html[data-theme=light] .panel{background:linear-gradient(145deg,#ffffff,#f1f5fb)}
 html[data-theme=light] .mark{background:linear-gradient(135deg,#dbe9fb,#edf3fc);border-color:#aac4e2;color:#175ea8}
-html[data-theme=light] .metric{background:#f6f9fd}
-html[data-theme=light] .day{background:#edf2f9}
-html[data-theme=light] .day.available{background:#e3ecf8;border-color:#b9cbe2}
-html[data-theme=light] .day .tiny{color:#101828}
-html[data-theme=light] .detail{background:#f3f7fc}
+html[data-theme=light] .panel{background:linear-gradient(145deg,#ffffff,#f1f5fb)}
+html[data-theme=light] .status-list li{border-color:#e3e9f2}
+html[data-theme=light] .product{background:#f6f9fd}
+html[data-theme=light] .product.primary{background:#e8f1fc}
 html[data-theme=light] .notice{background:#fff7e6;color:#5b4720}
-html[data-theme=light] .cell-tip{box-shadow:0 10px 28px rgba(16,24,40,.2)}
-.detail p{overflow-wrap:anywhere}
-.dim-title{font-size:12px;color:var(--muted);margin-top:10px}
-.dim-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:6px 12px;margin-top:7px}
-.dim-row{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:rgba(0,0,0,.16);font-size:12px;min-width:0}
-.dim-row span{color:var(--muted);min-width:0;overflow-wrap:anywhere}
-.dim-row b{font-weight:650;font-variant-numeric:tabular-nums;white-space:nowrap}
-html[data-theme=light] .dim-row{background:#eaeff7}
-.chart-controls{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.chart-controls button{border:1px solid var(--line);border-radius:8px;background:var(--panel2);color:var(--muted);padding:6px 10px;font-size:12px;cursor:pointer}
-.chart-controls button.on{color:var(--text);border-color:#5ba8ff}
-html[data-theme=light] .chart-controls button.on{background:#e3edfb;color:#101828}
-.chart-panel{padding:16px 14px 8px}
-.chart-head{display:flex;flex-wrap:wrap;gap:14px;align-items:center;color:var(--muted);font-size:11px;margin-bottom:4px}
-.chart-head i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
-.chart-wrap{position:relative}
-.chart-wrap svg{display:block;width:100%;height:auto;touch-action:pan-y}
-.chart-axis{fill:var(--muted);font-size:10px}
-.chart-note{color:var(--muted);font-size:10px;margin-top:2px}
-.cell-tip{position:fixed;left:0;top:0;z-index:70;pointer-events:none;background:var(--panel2);border:1px solid var(--line);border-radius:11px;padding:10px 13px;min-width:200px;box-shadow:0 12px 32px rgba(0,0,0,.42);color:var(--text);font-size:12px;opacity:0;transform:translateY(6px);transition:opacity .12s ease,transform .12s ease}
-.cell-tip.show{opacity:1;transform:translateY(0)}
-.cell-tip .tip-date{font-size:13px;font-weight:700;margin-bottom:5px}
-.cell-tip .tip-line{margin-top:3px}
-.cell-tip .tip-line b{font-weight:650}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.hero,.two-col{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.shell{padding:18px 12px 40px}.top{align-items:flex-start}.title{font-size:clamp(30px,9vw,42px)}}
+@media print{body{background:#fff;color:#111}.panel,.layer,.product{background:#fff;border-color:#bbb;color:#111}.lead,.note,.layer p,.rule-list li,.boundary p,.footer{color:#444}.notice{background:#fff8e8;color:#333}.cta-row,.control{display:none}.shell{max-width:none;padding:12px}}
 </style>
 </head>
 <body>
 <div class="shell">
 <header class="top">
-<div class="brand"><div class="mark">C</div><div><h1>CYCLEMARK BTC</h1><p data-i18n="brandSub">BTC Cycle Intelligence</p></div></div>
-<div class="top-right"><div class="pill" id="connection">Loading public data…</div><button class="lang" id="themeToggle" type="button" aria-label="Toggle light/dark theme" data-i18n-aria="toggleTheme">☀</button><select class="lang" id="langSelect" aria-label="Language" data-i18n-aria="languageLabel"></select></div>
+<div class="brand"><div class="mark">C</div><div><h1>CMCI</h1><p data-i18n="brandSub">Crypto Market Cycle Intelligence</p></div></div>
+<div class="top-right">
+<a class="pill link" href="cyclemark/" data-secondary-link data-i18n="secondaryChip">CycleMark BTC · BFS →</a>
+<button class="control" id="langToggle" type="button">中文</button>
+<button class="control" id="themeToggle" type="button" aria-label="Toggle light/dark theme">☀</button>
+</div>
 </header>
+
 <main>
-<div class="eyebrow" data-i18n="eyebrowDaily">Daily cycle snapshot</div>
-<div class="hero">
-<section class="panel state-panel">
-<div class="state-line"><div><div class="eyebrow" data-i18n="currentStatus">Current model status</div><div class="state-name"><span class="state-dot" id="stateDot"></span><span id="stateName" data-i18n="stateResearch">Cycle Monitoring</span></div><div class="sub" id="stateDescription" data-i18n="stateLoadingDesc">Loading the latest cycle snapshot.</div></div><div class="pill" id="version">Model v0.1.0</div></div>
-<div class="timestamp" id="asOf" data-i18n="asOfWaiting">Waiting for the latest archive record</div>
+<section class="hero">
+<div>
+<div class="eyebrow" data-i18n="eyebrow">Independent research program</div>
+<h2 class="title" data-i18n="heroTitle">Crypto Market Cycle Intelligence</h2>
+<p class="lead" data-i18n="heroLead">CMCI studies the global macro environment, Bitcoin's endogenous supply, crypto demand, capital transmission, and market behaviour — to judge where the cycle stands, how strong the evidence is, and what remains unknown.</p>
+<div class="cta-row">
+<a class="cta" href="#architecture" data-i18n="ctaArch">Explore the L1–L6 framework</a>
+<a class="cta ghost" href="cyclemark/" data-secondary-link data-i18n="ctaSecondary">Open CycleMark BTC · BFS</a>
+</div>
+</div>
+<aside class="panel status">
+<div class="status-chip"><i></i><span data-i18n="statusChip">Phase 1 · data infrastructure complete</span></div>
+<ul class="status-list">
+<li><span data-i18n="p1">Indicator dictionary and source registry</span><b data-i18n="done">Done</b></li>
+<li><span data-i18n="p2">Raw and normalized ingestion with append-only revisions</span><b data-i18n="done">Done</b></li>
+<li><span data-i18n="p3">Research datasets and L5 usage partitions</span><b data-i18n="done">Done</b></li>
+<li><span data-i18n="p4">Historical replay by availability time</span><b data-i18n="done">Done</b></li>
+<li><span data-i18n="p5">Quality reports and look-ahead audit</span><b data-i18n="done">Done</b></li>
+</ul>
+<p class="note" data-i18n="statusNote">No public forecast, score, or trading signal is published yet. Phase 1 delivers the auditable data foundation only.</p>
+</aside>
 </section>
-<section class="panel">
-<div class="eyebrow" data-i18n="scoresEyebrow">Model scores</div>
-<div class="metric-grid" style="margin-top:12px;grid-template-columns:minmax(0,1fr)">
-<div class="metric"><div class="metric-label" data-i18n="bfsLabel">BFS · Bottom Formation</div><div class="metric-value" id="bfs">—</div><div class="metric-note" id="bfsNote" data-i18n="bfsNote">0–100 · daily close</div></div>
+
+<section class="section" id="architecture">
+<div class="section-head">
+<h2 data-i18n="archTitle">Research architecture</h2>
+<p data-i18n="archSub">Six layers separate external conditions, crypto-native drivers, capital transmission, observed outcomes, and model inference. L6 never feeds back into driver identification.</p>
+</div>
+<div class="grid">
+<div class="layer"><span class="code">L1</span><h3 data-i18n="l1Title">Macro and global finance</h3><p data-i18n="l1Desc">Central-bank liquidity, policy and real rates, the dollar, yield curves, credit spreads, volatility, and financial stress.</p></div>
+<div class="layer"><span class="code">L2</span><h3 data-i18n="l2Title">Bitcoin endogenous supply</h3><p data-i18n="l2Desc">Halvings, issuance, miner economics, long- and short-term holder supply, and exchange-available supply.</p></div>
+<div class="layer"><span class="code">L3</span><h3 data-i18n="l3Title">Crypto demand drivers</h3><p data-i18n="l3Desc">Retail and institutional demand, ETF appetite, allocation willingness, stablecoin usage, and participant structure.</p></div>
+<div class="layer"><span class="code">L4</span><h3 data-i18n="l4Title">Capital transmission</h3><p data-i18n="l4Desc">How intention becomes flow: ETF and ETP net flows, stablecoin issuance, exchange flows, and cross-market channels.</p></div>
+<div class="layer"><span class="code">L5</span><h3 data-i18n="l5Title">Market observation</h3><p data-i18n="l5Desc">Prices, volume, volatility, drawdowns, breadth, dominance, rotation, funding, open interest, and liquidations.</p></div>
+<div class="layer"><span class="code">L6</span><h3 data-i18n="l6Title">Cycle state output</h3><p data-i18n="l6Desc">Reserved for model inference: phase, maturity, transition risk, evidence strength, and data-quality status. Not built in Phase 1.</p></div>
 </div>
 </section>
+
+<section class="section two-col">
+<div class="panel">
+<h2 data-i18n="govTitle">Governance rules</h2>
+<ul class="rule-list">
+<li><b data-i18n="g1t">No look-ahead.</b> <span data-i18n="g1d">A historical decision may only use data whose availability time was already known.</span></li>
+<li><b data-i18n="g2t">Append-only history.</b> <span data-i18n="g2d">Raw data is never overwritten; corrections become new vintages.</span></li>
+<li><b data-i18n="g3t">Purpose isolation.</b> <span data-i18n="g3d">L5 training, identification, and validation partitions are registered up front, with embargo checks.</span></li>
+<li><b data-i18n="g4t">L6 isolation.</b> <span data-i18n="g4d">Cycle-state labels never feed back into the drivers used to explain them.</span></li>
+<li><b data-i18n="g5t">Evidence over narrative.</b> <span data-i18n="g5d">Findings may be supported, unsupported, or inconclusive; independent sample size is stated.</span></li>
+</ul>
 </div>
-<section class="section">
-<div class="section-head"><div><h2 data-i18n="marketTitle">Market Context</h2><p data-i18n="marketSub">Public source observations; not a composite market signal.</p></div><div class="timestamp" id="sourceTime"></div></div>
-<div class="data-grid">
-<div class="data-card"><span data-i18n="priceLabel">BTC Spot Reference</span><strong id="price">—</strong><small id="priceDate" data-i18n="awaitingData">Awaiting data</small></div>
-<div class="data-card"><span data-i18n="fearLabel">Fear &amp; Greed Index</span><strong id="fear">—</strong><small id="fearClass" data-i18n="awaitingData">Awaiting data</small></div>
-<div class="data-card"><span data-i18n="smaLabel">Price vs. 200-Day Average</span><strong id="sma">—</strong><small data-i18n="smaNote">Daily close reference</small></div>
-<div class="data-card"><span data-i18n="drawdownLabel">Drawdown from 365-Day High</span><strong id="drawdown">—</strong><small data-i18n="drawdownNote">Rolling price context</small></div>
+<div class="panel boundary">
+<h2 data-i18n="boundaryTitle">What CMCI is not</h2>
+<p data-i18n="boundaryText">CMCI is an environment and risk-awareness system, not a trading strategy. It does not issue buy, sell, entry, or exit instructions, and no single CMCI label should be used as the sole reason for a trade.</p>
+<h2 data-i18n="productsTitle">Products</h2>
+<div class="products">
+<div class="product primary"><div><div class="p-name">CMCI</div><div class="p-desc" data-i18n="cmciDesc">Primary research program: macro-to-cycle intelligence and auditable data infrastructure.</div></div><span class="tag main" data-i18n="tagMain">Primary</span></div>
+<div class="product"><div><div class="p-name"><a href="cyclemark/" data-secondary-link>CycleMark BTC · BFS</a></div><div class="p-desc" data-i18n="cycleDesc">Secondary product: the existing daily BTC cycle dashboard. It keeps updating and remains publicly accessible.</div></div><span class="tag" data-i18n="tagSecondary">Secondary</span></div>
 </div>
-</section>
-<section class="section">
-<div class="section-head"><div><h2 data-i18n="chartTitle">Cycle Trend</h2><p data-i18n="chartSub">BFS, BTC close and Fear &amp; Greed across the selected window.</p></div><div class="chart-controls" id="chartRanges"></div></div>
-<div class="panel chart-panel">
-<div class="chart-head"><span><i style="background:#45d6a0"></i><span data-i18n="chartBfs">BFS</span></span><span><i style="background:#f4b740"></i><span data-i18n="chartPrice">BTC close</span></span><span><i style="background:#5ba8ff"></i><span data-i18n="chartFear">Fear &amp; Greed</span></span></div>
-<div class="chart-wrap"><svg id="trendChart" role="img" aria-label="Cycle trend chart"></svg><div class="cell-tip" id="chartTip" aria-hidden="true"></div></div>
-<div class="chart-note" data-i18n="chartNote">Left axis: BFS and Fear &amp; Greed (0–100). Right axis: BTC close on a log scale.</div>
-</div>
-</section>
-<section class="section">
-<div class="section-head"><div><h2 data-i18n="calTitle">Historical Daily Calendar</h2><p data-i18n="calSub">Each cell shows the day's BTC close and BFS score; colour follows the BFS bands.</p></div></div>
-<div class="panel calendar-panel">
-<div class="section-head"><div class="calendar-controls"><button id="prevMonth" aria-label="Previous month" data-i18n-aria="prevMonth">←</button><div class="month-label" id="monthLabel">—</div><button id="nextMonth" aria-label="Next month" data-i18n-aria="nextMonth">→</button></div><div class="timestamp" id="calendarCount"></div></div>
-<div class="calendar-grid" id="calendarGrid"></div>
-<div class="cell-tip" id="cellTip" role="tooltip" aria-hidden="true"></div>
-<div class="legend"><span data-i18n="legendTitle">BFS score band</span><span><i style="background:#45d6a0"></i><span data-i18n="bandDeep">≥80 deep value</span></span><span><i style="background:#5ba8ff"></i><span data-i18n="bandApproaching">60–80 approaching</span></span><span><i style="background:#f4b740"></i><span data-i18n="bandNeutral">40–60 neutral</span></span><span><i style="background:#8f9bb0"></i><span data-i18n="bandElevated">20–40 elevated</span></span><span><i style="background:#ff7185"></i><span data-i18n="bandEuphoria">&lt;20 euphoria</span></span><span><i style="background:#29344a"></i><span data-i18n="bandNone">no score</span></span></div>
-<div class="detail" id="dayDetail" aria-live="polite"><h3 data-i18n="selectArchivedDay">Select an archived day</h3><p data-i18n="detailPlaceholder">Daily market data and model status appear here.</p></div>
 </div>
 </section>
-<div class="notice"><strong data-i18n="noticeTitle">Disclaimer:</strong> <span data-i18n="noticeBody">CycleMark publishes daily BTC cycle indicators built from public market data. Indicators are quantitative measures, not investment advice. Bitcoin is highly volatile.</span></div>
+
+<div class="notice" data-i18n="notice">CMCI is a research program. Phase 1 has completed the data dictionary, ingestion, partition, replay, and audit infrastructure; it does not yet publish a validated cycle stage or market-state score. Nothing on this site is investment advice.</div>
 </main>
-<footer class="footer"><span data-i18n="footerOrg">CycleMark BTC · A Predi Group product</span><span><a href="https://github.com/GyroX-Space/cyclemark-btc" data-i18n="footerRepo">Source repository</a> · <a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/methodology.md" data-i18n="footerMethod">Methodology</a> · <a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/data-sources.md" data-i18n="footerSources">Data sources</a></span></footer>
+
+<footer class="footer">
+<span>CMCI · Crypto Market Cycle Intelligence · A Predi Group research program</span>
+<nav>
+<a href="https://github.com/GyroX-Space/cyclemark-btc" data-i18n="repo">Source repository</a>
+<a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/cmci-project-charter-v0.1.md" data-i18n="charter">Project charter</a>
+<a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/cmci-data-01-requirements.md" data-i18n="requirements">Data requirements</a>
+<a href="https://github.com/GyroX-Space/cyclemark-btc/blob/main/docs/cmci-technical-design-v0.1.md" data-i18n="design">Technical design</a>
+</nav>
+</footer>
 </div>
+
 <script>
 (function(){
-"use strict";
-var records=[],byDate={},viewDate=new Date(),selectedDate=null,latestRecord=null,dataError=null,lang="en",pack=null;
-var $=function(id){return document.getElementById(id)};
-var fmt=function(v){return Number.isFinite(Number(v))?Number(v).toLocaleString("en-US",{maximumFractionDigits:2}):"—"};
-var signed=function(v){if(!Number.isFinite(Number(v)))return "—";var n=Number(v);if(Math.abs(n)<0.005)return "0.00%";return (n>0?"+":"")+n.toFixed(2)+"%"};
-var stateColors={risk:"#778397",watch:"#f4b740",forming:"#5ba8ff",opportunity:"#45d6a0"};
-var LOCALES=["en","zh-Hans","zh-Hant","ja","ko","fr","ru","es","ar","th","bn","id"];
-var NATIVE={en:"English","zh-Hans":"简体中文","zh-Hant":"繁體中文",ja:"日本語",ko:"한국어",fr:"Français",ru:"Русский",es:"Español",ar:"العربية",th:"ไทย",bn:"বাংলা",id:"Bahasa Indonesia"};
-var I18N_BASES=["i18n/","https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/web/i18n/"];
-var DATA_SOURCES=["data/signals/","../data/signals/","https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/data/signals/"];
-var CACHE_BUST="?_t="+new Date().toISOString().slice(0,10).replace(/-/g,"");
-var FG_KEYS={"Extreme Fear":"ExtremeFear","Fear":"Fear","Neutral":"Neutral","Greed":"Greed","Extreme Greed":"ExtremeGreed"};
-var EN_DYNAMIC={loadingData:"Loading public data…",archiveLoaded:"Archive loaded",statusUnavailable:"status unavailable",modelVersion:"Model v{version}",asOfWaiting:"Waiting for the latest archive record",asOfLine:"Data date: {date} · Generated: {ts}",notAvailable:"Not available",provisionalCoverage:"Weight coverage: {pct}%",bfsNote:"0–100 · daily close",stateResearch:"Cycle Monitoring",stateLoadingDesc:"Loading the latest cycle snapshot.",statePublishedDesc:"State published from the CycleMark model archive.",statePublicOnlyDesc:"CycleMark tracks BTC cycle conditions from finalized daily market data.",updatedAt:"Updated {ts}",timeUnavailable:"time unavailable",timestampUnavailable:"timestamp unavailable",noFinalizedCandle:"No finalized candle",awaitingData:"Awaiting data",archivedDays:"{n} archived days",archivedRecordAria:"archived record",noArchivedRecordAria:"no archived record",dateUnavailable:"Date unavailable",dataAvailable:"Data available",noArchivedRecord:"No archived record",detailStatus:"Status: {status}",detailBtc:"BTC close: {value}",detailChange:"Daily change: {value}",detailFear:"Fear & Greed: {value}",detailScores:"BFS: {bfs} · {band}",detailBfsStatus:"BFS status: {status} · Weight coverage: {pct}%",detailDimensions:"Dimension scores",detailModelVersion:"Model version: {version}",detailGenerated:"Generated at: {ts}",unavailable:"Unavailable",unknown:"Unknown",chartTitle:"Cycle Trend",chartSub:"BFS, BTC close and Fear & Greed across the selected window.",chartBfs:"BFS",chartPrice:"BTC close",chartFear:"Fear & Greed",chartNote:"Left axis: BFS and Fear & Greed (0–100). Right axis: BTC close on a log scale.",range3m:"3M",range6m:"6M",range12m:"12M",rangeAll:"ALL",dim:{capitulation_panic:"Capitulation & panic",cycle_position:"Cycle position",flows_market_structure:"Flows & market structure",trend_price_structure:"Trend & price structure",valuation_cost_basis:"Valuation & cost basis"},noRecordForDate:"No record exists for this date. The calendar does not infer missing observations.",archiveUnavailable:"Archive unavailable",archiveUnavailableDesc:"No published data archive could be loaded. Please try again shortly.",band:{deep:"Deep value",approaching:"Approaching",neutral:"Neutral",elevated:"Elevated",euphoria:"Euphoria"},fear:{ExtremeFear:"Extreme fear",Fear:"Fear",Neutral:"Neutral",Greed:"Greed",ExtremeGreed:"Extreme greed"},bfsStatus:{provisional_unvalidated:"provisional"},status:{research_data_available_signals_not_yet_validated:"daily market data",historical_research_backfill_not_point_in_time:"historical backfill",historical_research_backfill:"historical backfill"}};
-function fetchJson(url){return fetch(url,{cache:"no-store"}).then(function(r){if(!r.ok)throw Error(url+" unavailable ("+r.status+")");return r.json()})}
-function lookup(obj,key){var parts=key.split(".");for(var i=0;i<parts.length;i++){if(obj==null)return null;obj=obj[parts[i]]}return typeof obj==="string"?obj:null}
-function t(key,params){var v=lookup(pack,key);if(v==null)v=lookup(EN_DYNAMIC,key);if(v==null)return key;return String(v).replace(/\{(\w+)\}/g,function(m,k){return params&&params[k]!=null?params[k]:m})}
-function localeTag(){return lang==="zh-Hans"?"zh-CN":lang==="zh-Hant"?"zh-TW":lang==="id"?"id-ID":lang}
-function text(id,value){$(id).textContent=value}
-function dateLabel(s){if(!s)return t("dateUnavailable");return new Date(s+"T00:00:00Z").toLocaleDateString(localeTag(),{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"})}
-function statusLabel(s){if(!s)return t("statusUnavailable");var v=lookup(pack,"status."+s)||lookup(EN_DYNAMIC,"status."+s);return v||s.replace(/_/g," ")}
-function fearLabel(c){if(!c)return t("notAvailable");var k=FG_KEYS[c];var v=k&&(lookup(pack,"fear."+k)||lookup(EN_DYNAMIC,"fear."+k));return v||c}
-function bfsStatusLabel(s){if(!s)return t("statusUnavailable");return lookup(pack,"bfsStatus."+s)||lookup(EN_DYNAMIC,"bfsStatus."+s)||s.replace(/_/g," ")}
-function renderLatest(r){
-latestRecord=r;
-var p=r.market_data&&r.market_data.price||{},f=r.market_data&&r.market_data.fear_greed||{};
-text("connection",t("archiveLoaded")+" · "+statusLabel(r.status));
-text("version",t("modelVersion",{version:r.model_version||t("unknown")}));
-text("asOf",t("asOfLine",{date:dateLabel(r.date),ts:r.generated_at_utc||t("timestampUnavailable")}));
-text("bfs",r.bfs==null?t("notAvailable"):fmt(r.bfs));text("bfsNote",r.bfs==null?t("notAvailable"):(r.bfs_status==="provisional_unvalidated"?t("provisionalCoverage",{pct:(r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0}):t("bfsNote")));
-var state=r.state||"research";text("stateName",state==="research"?t("stateResearch"):state.charAt(0).toUpperCase()+state.slice(1));
-$("stateDot").style.background=stateColors[state]||"#f4b740";
-text("stateDescription",r.state?t("statePublishedDesc"):t("statePublicOnlyDesc"));
-text("price",p.price_usd==null?"—":"$"+fmt(p.price_usd));text("priceDate",p.candle_date_utc?dateLabel(p.candle_date_utc):t("noFinalizedCandle"));
-text("fear",f.value==null?"—":fmt(f.value)+"/100");text("fearClass",f.classification?fearLabel(f.classification):t("notAvailable"));
-text("sma",signed(p.price_vs_sma_200_pct));text("drawdown",signed(p.drawdown_from_365d_high_pct));
-text("sourceTime",t("updatedAt",{ts:r.generated_at_utc||t("timeUnavailable")}));
-}
-var BFS_BANDS=[{min:80,key:"deep"},{min:60,key:"approaching"},{min:40,key:"neutral"},{min:20,key:"elevated"},{min:-Infinity,key:"euphoria"}];
-var BFS_RAMP=[{v:0,c:[255,113,133]},{v:20,c:[143,155,176]},{v:40,c:[244,183,64]},{v:60,c:[91,168,255]},{v:80,c:[69,214,160]},{v:100,c:[42,201,146]}];
-function bfsBand(v){if(v==null||!isFinite(Number(v)))return null;var x=Number(v);for(var i=0;i<BFS_BANDS.length;i++){if(x>=BFS_BANDS[i].min)return BFS_BANDS[i]}return BFS_BANDS[BFS_BANDS.length-1]}
-function bfsRgb(v){var x=Math.max(0,Math.min(100,Number(v)));for(var i=0;i<BFS_RAMP.length-1;i++){var a=BFS_RAMP[i],b=BFS_RAMP[i+1];if(x<=b.v){var k=(x-a.v)/(b.v-a.v);return [Math.round(a.c[0]+(b.c[0]-a.c[0])*k),Math.round(a.c[1]+(b.c[1]-a.c[1])*k),Math.round(a.c[2]+(b.c[2]-a.c[2])*k)]}}return BFS_RAMP[BFS_RAMP.length-1].c}
-function bfsColor(v){return "rgb("+bfsRgb(v).join(",")+")"}
-function bfsBg(v){return "rgba("+bfsRgb(v).join(",")+",.24)"}
-function bandName(v){var b=bfsBand(v);if(!b)return t("notAvailable");return lookup(pack,"band."+b.key)||lookup(EN_DYNAMIC,"band."+b.key)||b.key}
-function compactPrice(v){var n=Number(v);if(!isFinite(n))return "—";return n>=1000?"$"+(n/1000).toFixed(1)+"k":"$"+Math.round(n)}
-function previousRecord(key){for(var i=0;i<records.length;i++){if(records[i].date===key)return i>0?records[i-1]:null}return null}
-function priceOf(r){return r&&r.market_data&&r.market_data.price?r.market_data.price:null}
-function changeOf(key,r){var p=priceOf(r),pp=priceOf(previousRecord(key));return (p&&p.price_usd!=null&&pp&&pp.price_usd!=null)?signed((p.price_usd/pp.price_usd-1)*100):t("notAvailable")}
-function fearOf(r){var f=r&&r.market_data&&r.market_data.fear_greed;return f&&f.value!=null?fmt(f.value)+"/100":t("unavailable")}
-function currentTheme(){return document.documentElement.getAttribute("data-theme")==="light"?"light":"dark"}
-function applyTheme(theme,save){document.documentElement.setAttribute("data-theme",theme);var b=$("themeToggle");if(b)b.textContent=theme==="light"?"☾":"☀";var m=document.querySelector('meta[name="theme-color"]');if(m)m.content=theme==="light"?"#f4f7fc":"#0b1020";if(save){try{localStorage.setItem("cyclemark.theme",theme)}catch(e){}}}
-function placeTipEl(tip,x,y){if(!tip)return;var w=tip.offsetWidth,h=tip.offsetHeight,left=x+16,top=y+16;if(left+w>window.innerWidth-8)left=Math.max(8,x-w-16);if(top+h>window.innerHeight-8)top=Math.max(8,y-h-16);tip.style.left=left+"px";tip.style.top=top+"px"}
-function placeTip(x,y){placeTipEl($("cellTip"),x,y)}
-function showTip(key,r,x,y){var tip=$("cellTip");if(!tip)return;tip.innerHTML="";var head=document.createElement("div");head.className="tip-date";head.textContent=dateLabel(key);tip.appendChild(head);var p=priceOf(r);var lines=r?[t("detailScores",{bfs:r.bfs==null?t("notAvailable"):fmt(r.bfs),band:bandName(r.bfs)}),t("detailBtc",{value:p&&p.price_usd!=null?"$"+fmt(p.price_usd):t("unavailable")}),t("detailChange",{value:changeOf(key,r)}),t("detailFear",{value:fearOf(r)})]:[t("noArchivedRecord")];lines.forEach(function(line){var d=document.createElement("div");d.className="tip-line";d.textContent=line;tip.appendChild(d)});tip.classList.add("show");tip.setAttribute("aria-hidden","false");placeTip(x,y)}
-function hideTip(){var tip=$("cellTip");if(!tip)return;tip.classList.remove("show");tip.setAttribute("aria-hidden","true")}
-function renderCalendar(){
-var grid=$("calendarGrid");grid.innerHTML="";hideTip();var year=viewDate.getFullYear(),month=viewDate.getMonth();
-text("monthLabel",new Date(Date.UTC(year,month,1)).toLocaleDateString(localeTag(),{month:"long",year:"numeric",timeZone:"UTC"}));
-for(var w=0;w<7;w++){var e=document.createElement("div");e.className="weekday";e.textContent=new Date(Date.UTC(2024,0,7+w)).toLocaleDateString(localeTag(),{weekday:"short",timeZone:"UTC"});grid.appendChild(e)}
-var first=new Date(Date.UTC(year,month,1)),days=new Date(Date.UTC(year,month+1,0)).getUTCDate();
-for(var i=0;i<first.getUTCDay();i++){var blank=document.createElement("div");blank.className="day empty";grid.appendChild(blank)}
-for(var day=1;day<=days;day++){
-var key=year+"-"+String(month+1).padStart(2,"0")+"-"+String(day).padStart(2,"0"),r=byDate[key],button=document.createElement("button");
-button.type="button";button.className="day"+(r?" available":"")+(selectedDate===key?" selected":"");button.setAttribute("aria-label",key+", "+(r?t("archivedRecordAria"):t("noArchivedRecordAria")));
-if(r&&r.bfs!=null){button.style.borderTop="3px solid "+bfsColor(r.bfs);button.style.background=bfsBg(r.bfs)}else{button.style.borderTop="3px solid #6b7789"}
-var num=document.createElement("span");num.className="num";num.textContent=day;button.appendChild(num);
-var tiny=document.createElement("span");tiny.className="tiny";tiny.textContent=r?(r.bfs==null?"—":Number(r.bfs).toFixed(1)):"";button.appendChild(tiny);
-var px=document.createElement("span");px.className="px";px.textContent=r?(r.market_data&&r.market_data.price?compactPrice(r.market_data.price.price_usd):""):"";button.appendChild(px);
-button.addEventListener("click",(function(k,rec){return function(){selectedDate=k;renderCalendar();showDetail(k,rec)}})(key,r));
-button.addEventListener("mouseenter",(function(k,rec){return function(ev){showTip(k,rec,ev.clientX,ev.clientY)}})(key,r));
-button.addEventListener("mousemove",function(ev){if($("cellTip").classList.contains("show"))placeTip(ev.clientX,ev.clientY)});
-button.addEventListener("mouseleave",hideTip);
-button.addEventListener("focus",(function(k,rec){return function(){var b=this.getBoundingClientRect();showTip(k,rec,b.left+b.width/2,b.top)}})(key,r));
-button.addEventListener("blur",hideTip);
-grid.appendChild(button);
-}
-text("calendarCount",t("archivedDays",{n:records.length}));
-}
-var DIM_KEYS=["capitulation_panic","cycle_position","flows_market_structure","trend_price_structure","valuation_cost_basis"];
-function appendDimensions(box,r){
-var scores=r.dimension_scores||{};
-var title=document.createElement("div");title.className="dim-title";title.textContent=t("detailDimensions");box.appendChild(title);
-var list=document.createElement("div");list.className="dim-list";
-DIM_KEYS.forEach(function(k){
-var row=document.createElement("div");row.className="dim-row";
-var name=document.createElement("span");name.textContent=t("dim."+k);
-var val=document.createElement("b");val.textContent=scores[k]==null?t("notAvailable"):Number(scores[k]).toFixed(2);
-row.appendChild(name);row.appendChild(val);list.appendChild(row);
-});
-box.appendChild(list);
-}
-function showDetail(key,r){
-var box=$("dayDetail");box.innerHTML="";var h=document.createElement("h3");h.textContent=dateLabel(key)+" · "+(r?t("dataAvailable"):t("noArchivedRecord"));box.appendChild(h);
-var p=priceOf(r),change=changeOf(key,r);
-var lines=r?[
-t("detailStatus",{status:statusLabel(r.status)}),
-t("detailBtc",{value:p&&p.price_usd!=null?"$"+fmt(p.price_usd):t("unavailable")}),
-t("detailChange",{value:change}),
-t("detailScores",{bfs:r.bfs==null?t("notAvailable"):fmt(r.bfs),band:bandName(r.bfs)}),
-t("detailFear",{value:fearOf(r)}),
-t("detailBfsStatus",{status:bfsStatusLabel(r.bfs_status),pct:(r.score_coverage&&r.score_coverage.configured_weight_coverage_pct)||0}),
-t("detailModelVersion",{version:r.model_version||t("unknown")}),
-t("detailGenerated",{ts:r.generated_at_utc||t("unknown")})
-]:[t("noRecordForDate")];
-lines.forEach(function(line){var p=document.createElement("p");p.textContent=line;box.appendChild(p)});
-if(r)appendDimensions(box,r);
-}
-var CHART_RANGES=[{days:90,key:"range3m"},{days:180,key:"range6m"},{days:365,key:"range12m"},{days:0,key:"rangeAll"}];
-var chartDays=180,chartGeom=null,SVGNS="http://www.w3.org/2000/svg";
-function svgEl(tag,attrs){var e=document.createElementNS(SVGNS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);return e}
-function chartRows(){
-if(!records.length)return[];
-if(!chartDays)return records.slice();
-var last=new Date(records[records.length-1].date+"T00:00:00Z");
-last.setUTCDate(last.getUTCDate()-(chartDays-1));
-var cut=last.toISOString().slice(0,10);
-return records.filter(function(r){return r.date>=cut});
-}
-function buildChartRanges(){
-var box=$("chartRanges");if(!box)return;box.innerHTML="";
-CHART_RANGES.forEach(function(o){
-var b=document.createElement("button");b.type="button";b.textContent=t(o.key);
-if(o.days===chartDays)b.className="on";
-b.addEventListener("click",function(){chartDays=o.days;hideChartTip();buildChartRanges();renderChart()});
-box.appendChild(b);
-});
-}
-function hideChartTip(){var tip=$("chartTip");if(tip){tip.classList.remove("show");tip.setAttribute("aria-hidden","true")}if(chartGeom&&chartGeom.cross)chartGeom.cross.setAttribute("opacity",0)}
-function showChartTip(r,cx,cy){
-var tip=$("chartTip");if(!tip)return;tip.innerHTML="";
-var head=document.createElement("div");head.className="tip-date";head.textContent=dateLabel(r.date);tip.appendChild(head);
-var p=priceOf(r);
-var lines=[t("detailScores",{bfs:r.bfs==null?t("notAvailable"):fmt(r.bfs),band:bandName(r.bfs)}),t("detailBtc",{value:p&&p.price_usd!=null?"$"+fmt(p.price_usd):t("unavailable")}),t("detailFear",{value:fearOf(r)})];
-lines.forEach(function(line){var d=document.createElement("div");d.className="tip-line";d.textContent=line;tip.appendChild(d)});
-tip.classList.add("show");tip.setAttribute("aria-hidden","false");placeTipEl(tip,cx,cy);
-}
-function renderChart(){
-var svg=$("trendChart");if(!svg)return;
-var wrap=svg.parentNode,width=Math.max(260,Math.floor(wrap.clientWidth||600)),height=width<520?195:270;
-svg.innerHTML="";svg.setAttribute("viewBox","0 0 "+width+" "+height);svg.setAttribute("width",width);svg.setAttribute("height",height);
-var rows=chartRows();chartGeom=null;hideChartTip();
-if(rows.length<2){var empty=svgEl("text",{x:width/2,y:height/2,"text-anchor":"middle",class:"chart-axis"});empty.textContent=t("awaitingData");svg.appendChild(empty);return}
-var plot=rows;
-if(plot.length>800){var step=Math.ceil(plot.length/800),sampled=[];for(var i=0;i<plot.length;i+=step)sampled.push(plot[i]);if(sampled[sampled.length-1]!==plot[plot.length-1])sampled.push(plot[plot.length-1]);plot=sampled}
-var pad={l:34,r:54,t:10,b:22},W=width-pad.l-pad.r,H=height-pad.t-pad.b;
-var t0=Date.parse(plot[0].date+"T00:00:00Z"),t1=Date.parse(plot[plot.length-1].date+"T00:00:00Z"),span=t1-t0||86400000;
-var xAt=function(ms){return pad.l+(ms-t0)/span*W},yIdx=function(v){return pad.t+(1-v/100)*H};
-var prices=[];plot.forEach(function(r){var p=priceOf(r);if(p&&p.price_usd!=null&&p.price_usd>0)prices.push(Number(p.price_usd))});
-if(!prices.length)prices=[1];
-var lmin=Math.log(Math.min.apply(null,prices)),lmax=Math.log(Math.max.apply(null,prices));
-if(lmax-lmin<0.02){var mid=(lmax+lmin)/2;lmin=mid-0.01;lmax=mid+0.01}
-var yPrice=function(v){return pad.t+(1-(Math.log(v)-lmin)/(lmax-lmin))*H};
-[0,25,50,75,100].forEach(function(v){
-var y=yIdx(v);
-svg.appendChild(svgEl("line",{x1:pad.l,y1:y,x2:pad.l+W,y2:y,stroke:"#7b8798","stroke-width":1,"stroke-opacity":v===0?.5:.22}));
-var l=svgEl("text",{x:pad.l-6,y:y+3,"text-anchor":"end",class:"chart-axis"});l.textContent=v;svg.appendChild(l);
-var pr=Math.exp(lmax-(y-pad.t)/H*(lmax-lmin));
-var rt=svgEl("text",{x:pad.l+W+6,y:y+3,class:"chart-axis"});rt.textContent=compactPrice(pr);svg.appendChild(rt);
-});
-var ticks=width<520?3:5;
-for(var k=0;k<ticks;k++){
-var ms=t0+span*(k/(ticks-1)),d=new Date(ms);
-var lbl=span>320*86400000?d.toLocaleDateString(localeTag(),{month:"short",year:"2-digit",timeZone:"UTC"}):d.toLocaleDateString(localeTag(),{month:"short",day:"numeric",timeZone:"UTC"});
-var tx=svgEl("text",{x:xAt(ms),y:height-7,"text-anchor":k===0?"start":(k===ticks-1?"end":"middle"),class:"chart-axis"});tx.textContent=lbl;svg.appendChild(tx);
-}
-var series=[{color:"#f4b740",w:1.5,y:function(r){var p=priceOf(r);return p&&p.price_usd!=null&&p.price_usd>0?yPrice(Number(p.price_usd)):null},v:function(r){var p=priceOf(r);return p&&p.price_usd!=null&&p.price_usd>0?Number(p.price_usd):null}},
-{color:"#45d6a0",w:2.2,y:function(r){return r.bfs==null?null:yIdx(Number(r.bfs))},v:function(r){return r.bfs==null?null:Number(r.bfs)}},
-{color:"#5ba8ff",w:1.8,y:function(r){var f=r.market_data&&r.market_data.fear_greed;return f&&f.value!=null?yIdx(Number(f.value)):null},v:function(r){var f=r.market_data&&r.market_data.fear_greed;return f&&f.value!=null?Number(f.value):null}}];
-series.forEach(function(s){
-var d="",pen=false;
-plot.forEach(function(r){var py=s.y(r);if(py==null){pen=false;return}var px=xAt(Date.parse(r.date+"T00:00:00Z"));d+=(pen?"L":"M")+px.toFixed(1)+" "+py.toFixed(1)+" ";pen=true});
-if(d)svg.appendChild(svgEl("path",{d:d,fill:"none",stroke:s.color,"stroke-width":s.w,"stroke-linejoin":"round","stroke-linecap":"round"}));
-});
-var cross=svgEl("line",{y1:pad.t,y2:pad.t+H,stroke:"#91c5ff","stroke-width":1,"stroke-dasharray":"3 3",opacity:0});
-svg.appendChild(cross);
-var dots=series.map(function(s){var c=svgEl("circle",{r:3.2,fill:s.color,stroke:"#0b1020","stroke-width":1,opacity:0});svg.appendChild(c);return c});
-chartGeom={plot:plot,pad:pad,W:W,H:H,t0:t0,span:span,xAt:xAt,series:series,dots:dots,cross:cross};
-var hit=svgEl("rect",{x:pad.l,y:pad.t,width:W,height:H,fill:"transparent"});
-svg.appendChild(hit);
-function onMove(ev){
-var box=svg.getBoundingClientRect(),scale=width/box.width,mx=(ev.clientX-box.left)*scale;
-if(mx<pad.l||mx>pad.l+W){hideChartTip();return}
-var best=0,bd=Infinity;
-for(var i=0;i<plot.length;i++){var dd=Math.abs(xAt(Date.parse(plot[i].date+"T00:00:00Z"))-mx);if(dd<bd){bd=dd;best=i}}
-var r=plot[best],px=xAt(Date.parse(r.date+"T00:00:00Z"));
-cross.setAttribute("x1",px);cross.setAttribute("x2",px);cross.setAttribute("opacity",1);
-series.forEach(function(s,j){var py=s.y(r),dot=dots[j];if(py==null){dot.setAttribute("opacity",0);return}dot.setAttribute("cx",px);dot.setAttribute("cy",py);dot.setAttribute("opacity",1)});
-showChartTip(r,ev.clientX,ev.clientY);
-}
-hit.addEventListener("mousemove",onMove);
-if(window.PointerEvent){hit.addEventListener("pointermove",onMove);hit.addEventListener("pointerdown",onMove)}
-svg.addEventListener("mouseleave",hideChartTip);
-}
-$("prevMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()-1);renderCalendar()});
-$("nextMonth").addEventListener("click",function(){viewDate.setMonth(viewDate.getMonth()+1);renderCalendar()});
-function loadArchive(index){
-if(index>=DATA_SOURCES.length)return Promise.reject(Error(t("archiveUnavailableDesc")));
-var base=DATA_SOURCES[index];
-return fetchJson(base+"latest.json"+CACHE_BUST).then(function(latest){
-return fetchJson(base+"history.json"+CACHE_BUST).catch(function(){return[]}).then(function(history){return{latest:latest,history:history,base:base}})
-}).catch(function(){return loadArchive(index+1)})
-}
-function buildLangSelect(){var sel=$("langSelect");if(!sel)return;sel.innerHTML="";LOCALES.forEach(function(l){var o=document.createElement("option");o.value=l;o.textContent=NATIVE[l]||l;sel.appendChild(o)});sel.value=lang;sel.addEventListener("change",function(){setLocale(this.value,true)})}
-function applyPack(p,loc,save){pack=p;lang=(p&&p._locale)||loc;if(save){try{localStorage.setItem("cyclemark.lang",lang)}catch(e){}}if($("langSelect"))$("langSelect").value=lang;applyStatic()}
-function loadPack(loc,base){base=base||0;return fetchJson(I18N_BASES[base]+loc+".json"+CACHE_BUST).catch(function(err){if(base+1<I18N_BASES.length)return loadPack(loc,base+1);throw err})}
-function setLocale(loc,save){if(LOCALES.indexOf(loc)<0)loc="en";return loadPack(loc).then(function(p){applyPack(p,loc,save)}).catch(function(){if(loc!=="en")return loadPack("en").then(function(p){applyPack(p,"en",save)}).catch(function(){return null});return null})}
-function detectLocale(){var q=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}if(q&&LOCALES.indexOf(q)>=0)return q;try{var s=localStorage.getItem("cyclemark.lang");if(s&&LOCALES.indexOf(s)>=0)return s}catch(e){}var navs=navigator.languages||[navigator.language||"en"];for(var i=0;i<navs.length;i++){var l=(navs[i]||"").toLowerCase();if(l.indexOf("zh")===0)return/hant|tw|hk|mo/.test(l)?"zh-Hant":"zh-Hans";if(l.indexOf("ja")===0)return"ja";if(l.indexOf("ko")===0)return"ko";if(l.indexOf("fr")===0)return"fr";if(l.indexOf("ru")===0)return"ru";if(l.indexOf("es")===0)return"es";if(l.indexOf("ar")===0)return"ar";if(l.indexOf("th")===0)return"th";if(l.indexOf("bn")===0)return"bn";if(l.indexOf("id")===0||l.indexOf("in-")===0)return"id"}return"en"}
-function applyStatic(){
-var nodes=document.querySelectorAll("[data-i18n]");for(var i=0;i<nodes.length;i++)nodes[i].textContent=t(nodes[i].getAttribute("data-i18n"));
-var arias=document.querySelectorAll("[data-i18n-aria]");for(var j=0;j<arias.length;j++)arias[j].setAttribute("aria-label",t(arias[j].getAttribute("data-i18n-aria")));
-document.documentElement.lang=localeTag();document.documentElement.dir=(pack&&pack._dir==="rtl")?"rtl":"ltr";
-if(latestRecord){renderLatest(latestRecord);if(selectedDate)showDetail(selectedDate,byDate[selectedDate])}
-else if(dataError){text("connection",t("archiveUnavailable"));text("stateDescription",t("archiveUnavailableDesc"));text("asOf",String(dataError.message||dataError));text("bfs",t("notAvailable"))}
-else{text("connection",t("loadingData"));text("asOf",t("asOfWaiting"));text("stateName",t("stateResearch"));text("stateDescription",t("stateLoadingDesc"))}
-if(records.length||dataError)renderCalendar();
-if(records.length){buildChartRanges();renderChart()}
-}
-applyTheme(currentTheme(),false);
-if($("themeToggle"))$("themeToggle").addEventListener("click",function(){applyTheme(currentTheme()==="light"?"dark":"light",true)});
-buildLangSelect();
-buildChartRanges();
-var resizeTimer=null;
-window.addEventListener("resize",function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(function(){if(records.length)renderChart()},150)});
-setLocale(detectLocale(),false);
-loadArchive(0)
-.then(function(archive){var latest=archive.latest;renderLatest(latest);$("connection").title="Data source: "+archive.base;records=Array.isArray(archive.history)?archive.history:[];if(!records.some(function(r){return r.date===latest.date}))records.push(latest);records.sort(function(a,b){return a.date.localeCompare(b.date)});records.forEach(function(r){byDate[r.date]=r});if(records.length){var last=records[records.length-1];viewDate=new Date(last.date+"T00:00:00Z");viewDate.setDate(1);selectedDate=last.date}renderCalendar();if(selectedDate)showDetail(selectedDate,byDate[selectedDate]);buildChartRanges();renderChart()})
-.catch(function(err){dataError=err;text("connection",t("archiveUnavailable"));text("stateDescription",t("archiveUnavailableDesc"));text("asOf",String(err.message||err));renderCalendar()});
+  var STORE_LANG="cmci.lang", STORE_THEME="cmci.theme";
+  var ZH={
+    brandSub:"加密市场周期智能研究",
+    eyebrow:"独立研究项目",
+    heroTitle:"加密市场周期智能",
+    heroLead:"CMCI 系统研究全球宏观环境、比特币内生供给、Crypto 需求、资本传导与市场行为，用于判断周期所处位置、证据强度，以及仍然未知的部分。",
+    ctaArch:"查看 L1–L6 研究框架",
+    ctaSecondary:"打开 CycleMark BTC · BFS",
+    statusChip:"第一阶段 · 数据基础设施完成",
+    p1:"指标字典与数据源登记",p2:"原始与标准化接入，修订追加",p3:"研究数据集与 L5 用途分区",p4:"按可得时间的历史回放",p5:"质量报告与前视偏差审计",done:"已完成",
+    statusNote:"目前不发布任何公开预测、评分或交易信号。第一阶段仅交付可审计的数据基础。",
+    archTitle:"研究架构",
+    archSub:"六层模型区分外部环境、Crypto 内生驱动、资本传导、市场结果与模型推断；L6 不反向参与驱动力识别。",
+    l1Title:"宏观与全球金融",l1Desc:"央行流动性、政策与实际利率、美元、收益率曲线、信用利差、波动率与金融压力。",
+    l2Title:"比特币内生供给",l2Desc:"减半、发行、矿工经济、长短期持有者供给，以及交易所可用供给。",
+    l3Title:"Crypto 需求驱动",l3Desc:"个人与机构需求、ETF 配置意愿、稳定币使用，以及参与者结构。",
+    l4Title:"资本传导机制",l4Desc:"需求如何变成资金流：ETF/ETP 净流入、稳定币发行、交易所资金与跨市场渠道。",
+    l5Title:"市场表现观测",l5Desc:"价格、成交量、波动率、回撤、市场广度、BTC Dominance、轮动、资金费率、未平仓合约与清算。",
+    l6Title:"周期状态输出",l6Desc:"为模型推断预留：阶段、成熟度、转换风险、证据强度与数据质量状态。第一阶段不开发。",
+    govTitle:"治理规则",
+    g1t:"禁止前视。",g1d:"历史判断只能使用当时已经可获得的数据版本。",
+    g2t:"历史不可改写。",g2d:"原始数据不做原地覆盖，修订以新版本追加。",
+    g3t:"用途隔离。",g3d:"L5 训练、识别、验证分区在事前登记，并执行隔离期校验。",
+    g4t:"L6 隔离。",g4d:"周期状态标签不得反向用于证明产生它的驱动力。",
+    g5t:"证据优先。",g5d:"结论可以成立、不成立或证据不足；必须报告有效独立样本量。",
+    boundaryTitle:"CMCI 不做什么",
+    boundaryText:"CMCI 是环境与风险认知系统，不是交易策略。它不发出买入、卖出、开仓或平仓指令，也不应把单一状态标签当作唯一交易依据。",
+    productsTitle:"产品",
+    cmciDesc:"主线研究项目：从宏观到周期的认知，以及可审计的数据基础设施。",
+    cycleDesc:"二级产品：既有的每日 BTC 周期看板，继续更新并保持公开访问。",
+    tagMain:"主线",tagSecondary:"二级",
+    notice:"CMCI 是研究项目。第一阶段完成了数据字典、接入、分区、回放与审计基础设施，尚未发布经验证的周期阶段或市场状态评分。本站内容不构成投资建议。",
+    repo:"源代码仓库",charter:"项目总纲",requirements:"数据需求",design:"技术设计"
+  };
+  var EN={};
+  var nodes=document.querySelectorAll("[data-i18n]");
+  for(var i=0;i<nodes.length;i++){EN[nodes[i].getAttribute("data-i18n")]=nodes[i].textContent}
+  function current(){
+    try{var saved=localStorage.getItem(STORE_LANG);if(saved)return saved==="zh"?"zh":"en"}catch(e){}
+    return (navigator.language||"en").toLowerCase().indexOf("zh")===0?"zh":"en";
+  }
+  function apply(lang){
+    var dict=lang==="zh"?ZH:EN;
+    for(var i=0;i<nodes.length;i++){var key=nodes[i].getAttribute("data-i18n");if(dict[key]!=null)nodes[i].textContent=dict[key]}
+    document.documentElement.setAttribute("lang",lang==="zh"?"zh-Hans":"en");
+    document.getElementById("langToggle").textContent=lang==="zh"?"EN":"中文";
+    try{localStorage.setItem(STORE_LANG,lang)}catch(e){}
+  }
+  var lang=current();
+  apply(lang);
+  document.getElementById("langToggle").addEventListener("click",function(){lang=lang==="zh"?"en":"zh";apply(lang)});
+
+  var theme=document.documentElement.getAttribute("data-theme")||"dark";
+  var themeButton=document.getElementById("themeToggle");
+  function syncTheme(){themeButton.textContent=theme==="light"?"☾":"☀"}
+  syncTheme();
+  themeButton.addEventListener("click",function(){
+    theme=theme==="light"?"dark":"light";
+    document.documentElement.setAttribute("data-theme",theme);
+    try{localStorage.setItem(STORE_THEME,theme)}catch(e){}
+    syncTheme();
+  });
+
+  // The GitHub Pages mirror only publishes the primary page; send the
+  // secondary-product links to the production host that serves /cyclemark/.
+  var secondary=document.querySelectorAll("[data-secondary-link]");
+  if(/\.github\.io$/i.test(location.hostname)){
+    for(var s=0;s<secondary.length;s++){secondary[s].setAttribute("href","https://cyclemarket.predi.org/cyclemark/")}
+  }
 })();
 </script>
 </body>

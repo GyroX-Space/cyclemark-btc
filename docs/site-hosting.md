@@ -1,23 +1,29 @@
 # Static Dashboard Hosting
 
-The English-language dashboard is in the web directory and reads JSON records from the repository data archive. It is designed for public read-only hosting and manual editorial screenshots. It does not publish to social media.
+The public site hosts two products from one deployment:
+
+- `/` — **CMCI**, the primary research program (`web/index.html`).
+- `/cyclemark/` — **CycleMark BTC · BFS**, the secondary daily dashboard (`web/cyclemark/index.html`), still updating and publicly accessible.
+- `/data/signals/` — the dashboard's published JSON, unchanged.
+
+The English-language dashboard lives in `web/cyclemark/` and reads JSON records from the repository data archive. It is designed for public read-only hosting and manual editorial screenshots. It does not publish to social media.
 
 ## GitHub Pages
 
 1. Open the repository Settings.
 2. Open Pages under the Code and automation section.
 3. Select deployment from a branch.
-4. Select the main branch and the root folder only if the site files are placed at the repository root; otherwise use a GitHub Actions deployment workflow that copies the web directory and data/signals directory into a publish artifact.
+4. Use a GitHub Actions deployment workflow that copies `web/index.html` (CMCI) and `data/signals` into the publish artifact.
 5. Confirm the published URL and test that the latest and history JSON paths return valid JSON.
 
-The current page is in the web directory, so a workflow or a deliberate site-root layout is required before Pages can serve it directly. Do not announce a live URL until the deployment has been verified.
+The Pages mirror serves the CMCI root page. Its secondary-product links resolve to `cyclemarket.predi.org/cyclemark/`, so the dashboard remains reachable from the mirror too. Do not announce a live URL until the deployment has been verified.
 
 ## Server hosting (cyclemarket.predi.org)
 
-Production serves the dashboard from the daily-refresh host as a static site.
+Production serves both products from the daily-refresh host as a static site.
 
 - Web root: `/srv/cyclemark` on the EC2 instance, owned by the cron user.
-- After every refresh, `scripts/run_daily.sh` copies `web/index.html`, `web/i18n/*.json`, and `data/signals/{latest,history}.json` into that directory, so the site matches the 05:05 UTC run without a build or deploy step. The step is skipped on hosts without that directory.
+- After every refresh, `scripts/run_daily.sh` installs `web/index.html` as the root page, `web/cyclemark/index.html` plus `web/i18n/*.json` under `/srv/cyclemark/cyclemark/`, and `data/signals/{latest,history}.json` under `/srv/cyclemark/data/signals/`, so the site matches the 05:05 UTC run without a build or deploy step. The step is skipped on hosts without that directory.
 - The nginx site block lives in `/etc/nginx/conf.d/zz-cyclemark.conf`. The `zz-` prefix matters: nginx makes the first `listen 80` block the default server, so an alphabetically earlier file would capture unmatched hosts, including load-balancer health checks.
 - TLS and host routing are handled by the `*.predi.org` load balancer in front of the instance; nginx listens on port 80 only.
 - DNS: `cyclemarket.predi.org` must resolve to the same load balancer as `predi.org`.
@@ -47,14 +53,14 @@ Cache freshness: nginx sends `Cache-Control: no-cache`, and the page requests JS
 
 ## Languages
 
-All interface text lives in `web/i18n/<locale>.json`; English is the reference pack. To add a language, add a pack with the same keys and register its locale code in `LOCALES` in `web/index.html`. The page follows the browser language on first visit, accepts `?lang=<locale>`, and remembers the choice in localStorage. Packs marked `"_dir": "rtl"` (Arabic) flip the document direction.
+All interface text lives in `web/i18n/<locale>.json`; English is the reference pack. To add a language, add a pack with the same keys and register its locale code in `LOCALES` in `web/cyclemark/index.html`. The page follows the browser language on first visit, accepts `?lang=<locale>`, and remembers the choice in localStorage. Packs marked `"_dir": "rtl"` (Arabic) flip the document direction.
 
 ## Data paths
 
 The dashboard resolves its data from the first source that answers, in this order:
 
-1. `data/signals/` — same-origin, served from `/srv/cyclemark/data/signals/`
-2. `../data/signals/` — used when the page is served under `/web/` with the repository root as document root
+1. `data/signals/` — same-origin, served from `/srv/cyclemark/data/signals/` when the page is at the root
+2. `../data/signals/` — used when the page is served under `/cyclemark/`
 3. `https://raw.githubusercontent.com/GyroX-Space/cyclemark-btc/main/data/signals/` — fallback when only the HTML is deployed
 
 It expects:
