@@ -9,7 +9,4 @@ __pycache__/
 daily.log
 *.egg-info/
 backups/
-data/cmci/*.db
-data/cmci/*.db-wal
-data/cmci/*.db-shm
-data/cmci/raw/
+data/cmci/

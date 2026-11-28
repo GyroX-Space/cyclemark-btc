@@ -29,6 +29,10 @@ class ColumnMapping:
     period_end: str | None = None
     release_time: str | None = None
     vintage_time: str | None = None
+    available_time: str | None = None
+    available_time_precision: str | None = None
+    available_time_method: str | None = None
+    value_text: str | None = None
     unit: str | None = None
     timezone: str | None = None
 
@@ -62,6 +66,10 @@ def map_rows(rows: list[dict[str, Any]], mapping: ColumnMapping) -> list[dict[st
                 "value": _pick(row, mapping.value, required=True),
                 "release_time": _pick(row, mapping.release_time),
                 "vintage_time": _pick(row, mapping.vintage_time),
+                "available_time": _pick(row, mapping.available_time),
+                "available_time_precision": _pick(row, mapping.available_time_precision),
+                "available_time_method": _pick(row, mapping.available_time_method),
+                "value_text": _pick(row, mapping.value_text),
                 "unit": _pick(row, mapping.unit),
                 "timezone": _pick(row, mapping.timezone),
             }
@@ -75,7 +83,9 @@ def _pick(row: dict[str, Any], column: str | None, *, required: bool = False) ->
             raise ImportFailure("必须提供列映射")
         return None
     if column not in row:
-        raise ImportFailure(f"源文件缺少列: {column}")
+        if required:
+            raise ImportFailure(f"源文件缺少列: {column}")
+        return None
     return row[column]
 
 

@@ -35,6 +35,20 @@ L6 (cycle-state model), cycle-transition detection, CCE synthesis, and live infe
 | `data/` | Published market context shared by the dashboard |
 | `docs/` | CMCI specifications and CycleMark documentation |
 
+## First real-data batch
+
+D2–D5 are ingested into the local research database; D1 is implemented and waits for a free FRED API key.
+
+```bash
+python scripts/cmci_first_batch.py --batches d2,d3,d4,d5,derived
+FRED_API_KEY=... python scripts/cmci_first_batch.py --batches d1,derived
+python scripts/cmci_build_core.py
+```
+
+- Dataset `CMCI-CORE-2015` v2 is sealed with training / identification / validation partitions and a 90-day embargo.
+- Coverage, licenses, limitations and audit results: [docs/cmci-first-batch-report.md](docs/cmci-first-batch-report.md).
+- Indicators carry `source_grade`, `measurement_scope`, `proxy_flag`, `license_status` and `coverage_status`; observations carry `ingested_at`, `available_time_precision` and `available_time_method`.
+
 ## Public site
 
 The production site keeps a single deployment and a two-product layout:

@@ -25,6 +25,14 @@ from .registry import Registry, RegistryError
 from .timeutils import TimeFormatError, to_utc_iso, utc_now_iso
 
 _NUMERIC_DATA_TYPES = {"numeric", "count", "ratio", "percent", "percentage"}
+_AVAILABLE_PRECISIONS = {"second", "minute", "date", "unknown"}
+_AVAILABLE_METHODS = {
+    "official_release",
+    "historical_vintage",
+    "conservative_lag",
+    "manual_confirmed",
+    "unknown",
+}
 
 _OBSERVATION_COLUMNS = (
     "observation_id",
@@ -35,6 +43,9 @@ _OBSERVATION_COLUMNS = (
     "observation_period_end",
     "release_time_utc",
     "available_time_utc",
+    "available_time_precision",
+    "available_time_method",
+    "ingested_at_utc",
     "vintage_time_utc",
     "value",
     "value_text",
@@ -76,6 +87,9 @@ class _PreparedRow:
     period_start: str
     period_end: str
     release_time: str | None
+    available_time: str
+    available_precision: str
+    available_method: str
     vintage_time: str
     value: float | None
     value_text: str | None
@@ -292,7 +306,6 @@ class IngestionService:
                 source_id,
                 raw_record_id,
                 prepared_row,
-                available=available,
                 job_id=job_id,
                 actor=actor,
                 revision_reason=revision_reason,
@@ -376,7 +389,26 @@ class IngestionService:
         if row.get("vintage_time") not in (None, ""):
             vintage = to_utc_iso(str(row["vintage_time"]).strip(), field="vintage_time") or vintage
 
+        row_available = available
+        if row.get("available_time") not in (None, ""):
+            row_available = (
+                to_utc_iso(str(row["available_time"]).strip(), field="available_time")
+                or available
+            )
+        available_precision = row.get("available_time_precision")
+        if available_precision in (None, ""):
+            available_precision = "second" if ":" in row_available else "date"
+        if available_precision not in _AVAILABLE_PRECISIONS:
+            raise ValueError(f"available_time_precision 非法: {available_precision!r}")
+        available_method = row.get("available_time_method")
+        if available_method in (None, ""):
+            available_method = "unknown"
+        if available_method not in _AVAILABLE_METHODS:
+            raise ValueError(f"available_time_method 非法: {available_method!r}")
+
         value, value_text = _parse_value(indicator, row.get("value"))
+        if row.get("value_text") not in (None, ""):
+            value_text = str(row["value_text"])
         unit = row.get("unit")
         unit = str(unit).strip() if unit not in (None, "") else indicator.unit
         tz = row.get("timezone")
@@ -387,6 +419,9 @@ class IngestionService:
             period_start=start,
             period_end=end,
             release_time=release,
+            available_time=row_available,
+            available_precision=available_precision,
+            available_method=available_method,
             vintage_time=vintage,
             value=value,
             value_text=value_text,
@@ -402,7 +437,6 @@ class IngestionService:
         raw_record_id: str,
         row: _PreparedRow,
         *,
-        available: str,
         job_id: str,
         actor: str,
         revision_reason: str,
@@ -444,7 +478,10 @@ class IngestionService:
             "observation_period_start": row.period_start,
             "observation_period_end": row.period_end,
             "release_time_utc": row.release_time,
-            "available_time_utc": available,
+            "available_time_utc": row.available_time,
+            "available_time_precision": row.available_precision,
+            "available_time_method": row.available_method,
+            "ingested_at_utc": now,
             "vintage_time_utc": row.vintage_time,
             "value": row.value,
             "value_text": row.value_text,
